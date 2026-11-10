@@ -5,6 +5,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CYCLE COUNT - SCANDIA Botani</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2C6A55" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1613" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cycle Count">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
   --bg:#F1F5F3; --surface:#FFFFFF; --field:#FFFFFF; --ink:#15231E; --ink2:#50625B; --line:#D3DED8;
@@ -40,6 +48,8 @@ h2 .ic{color:var(--accent)}
 .view{display:none;flex-direction:column;gap:14px}
 .view.on{display:flex}
 #app{display:flex;flex-direction:column;gap:14px}
+#dashBody{display:flex;flex-direction:column;gap:14px}
+.kpis{align-items:stretch}
 
 /* navigasi: bawah di ponsel, atas di layar lebar */
 .nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -132,15 +142,18 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 .kpi .k{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);font-weight:600;display:flex;align-items:center;gap:6px}
 .kpi .k .ic{width:15px;height:15px}
 .kpi .v{font:500 26px var(--mono);line-height:1.2}
-.kpi.good .k .ic,.kpi.good .v{color:var(--good)}
-.kpi.warn .k .ic,.kpi.warn .v{color:var(--warn)}
-.kpi.bad .k .ic,.kpi.bad .v{color:var(--bad)}
+.kpi.t-good .k .ic,.kpi.t-good .v{color:var(--good)}
+.kpi.t-warn .k .ic,.kpi.t-warn .v{color:var(--warn)}
+.kpi.t-bad .k .ic,.kpi.t-bad .v{color:var(--bad)}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
 .tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-top:6px}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
 td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
+td:first-child{min-width:120px}
+@media (max-width:520px){td:first-child{min-width:0}th,td{padding:8px 6px}table{font-size:13px}th{font-size:11px;letter-spacing:.03em}.mini{width:48px}.chip{font-size:11.5px;padding:2px 8px}}
+.n{white-space:nowrap}
 .n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
 .mini{display:block;width:70px;height:6px;border-radius:99px;background:var(--mute-bg);overflow:hidden;margin-top:6px;margin-left:auto}
 .mini i{display:block;height:100%;background:var(--good)}
@@ -168,7 +181,7 @@ a.lnk .ic{width:15px;height:15px}
 <div class="wrap">
   <header>
     <div class="logo"><div class="mark"><i data-ic="scan"></i></div><div><div class="brand">SCANDIA Botani</div><h1>CYCLE COUNT</h1></div></div>
-    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><button class="btn sm" id="btnPasang" type="button" hidden>Pasang aplikasi</button><div id="status" class="status" role="status" aria-live="polite"></div></div>
   </header>
 
   <section id="gate" class="card" hidden>
@@ -212,7 +225,7 @@ a.lnk .ic{width:15px;height:15px}
         <form id="formSesi" class="grid" autocomplete="off">
           <label class="f" style="grid-column:1/-1"><span><i data-ic="tag"></i>Nama sesi</span><input id="sNama" type="text" maxlength="80" placeholder="Contoh: Stock Opname Showroom November"></label>
           <label class="f"><span><i data-ic="calendar"></i>Tanggal</span><input id="sTgl" type="date"></label>
-          <label class="f"><span><i data-ic="layers"></i>Cakupan kategori</span><select id="sCakupan"></select></label>
+          <label class="f"><span><i data-ic="layers"></i>Cakupan department</span><select id="sCakupan"></select></label>
           <div style="grid-column:1/-1"><button class="btn" id="btnBuatSesi" type="submit"><i data-ic="plus"></i>Buat sesi</button></div>
         </form>
         <p class="hint">Sesi baru langsung berstatus Berjalan dan bisa dipakai di tab Hitung.</p>
@@ -339,7 +352,7 @@ function hydrate(root){(root||document).querySelectorAll('i[data-ic]').forEach(f
 
 /* Isi API_URL hanya bila halaman ini di-hosting di luar Apps Script (mode kamera langsung).
    Isinya URL web app Apps Script yang berakhiran /exec. Jika dibuka lewat Apps Script, biarkan kosong. */
-var API_URL='https://script.google.com/macros/s/AKfycbxxNQGL-qBC7XrGnErm5G_K2PzlerqNX3zHBeG6JsQInUG18aVyCTUW6HQ6P-zuOBLX/exec';
+var API_URL='';
 var DI_APPS_SCRIPT=typeof google!=='undefined'&&google.script&&google.script.run;
 function rpc(fn){
   var a=[].slice.call(arguments,1);
@@ -490,7 +503,7 @@ function pilih(item,metode,scanned){
   if(!ready())return;
   if(!inScope(item)){
     resetLangkah();
-    $('#langkah').innerHTML='<div class="warn">'+esc(item.nama)+' berkategori '+esc(item.kategori)+', di luar cakupan sesi ini ('+esc(D.cakupan)+').</div>';
+    $('#langkah').innerHTML='<div class="warn">'+esc(item.nama)+' ada di department '+esc(item.kategori)+', di luar cakupan sesi ini ('+esc(D.cakupan)+').</div>';
     beep(false);return;
   }
   var miss=D.miss,simpan=$('#simpanKode')&&$('#simpanKode').checked;
@@ -544,7 +557,7 @@ function updateSimpan(){
   var b=$('#btnSimpan');if(!b)return;
   var q=parseQty($('#qty')&&$('#qty').value);
   var ok=q>0&&(!D.fotoWajib||!!D.foto);
-  if(D.baru&&!($('#bNama')&&$('#bNama').value.trim()))ok=false;
+  if(D.baru&&!($('#bNama')&&$('#bNama').value.trim()&&$('#bKat')&&$('#bKat').value))ok=false;
   b.disabled=!ok||D.menyimpanBaru;
 }
 function updateTotal(){
@@ -585,9 +598,10 @@ function simpanSel(){
 function simpanBaru(){
   var nama=$('#bNama').value.trim(),qty=parseQty($('#qty').value);
   if(!nama){toast('Nama barang wajib diisi.');return}
+  if(!$('#bKat').value){toast('Pilih department dulu.');return}
   if(!(qty>0)){toast('Isi jumlah dengan angka lebih dari 0.');return}
   if(D.fotoWajib&&!D.foto){toast('Ambil foto barang dulu.');return}
-  var payload={idSesi:D.idSesi,nama:nama,deskripsi:$('#bDesk').value.trim(),kategori:$('#bKat').value.trim(),
+  var payload={idSesi:D.idSesi,nama:nama,deskripsi:$('#bDesk').value.trim(),kategori:$('#bKat').value,
     satuan:$('#bSat').value.trim(),barcode:$('#bBar').value.trim(),jumlah:qty,
     petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:fotoB64()};
   D.menyimpanBaru=true;D.pending++;updateSimpan();$('#btnSimpan').lastChild.textContent='Menyimpan…';renderAll();
@@ -617,7 +631,7 @@ function loadBase(){
   return rpc('rekap',D.kode,D.idSesi).then(function(r){
     D.cakupan=r.cakupan;D.dasar={};
     r.rows.forEach(function(x){D.dasar[x.id]={fisik:x.fisik}});
-    $('#cakupan').textContent=D.cakupan?'Cakupan sesi ini: kategori '+D.cakupan+'.':'Cakupan sesi ini: semua kategori.';
+    $('#cakupan').textContent=D.cakupan?'Cakupan sesi ini: department '+D.cakupan+'.':'Cakupan sesi ini: semua department.';
     renderAll();
   }).catch(function(e){showErr(errText(e))});
 }
@@ -640,7 +654,7 @@ function start(){
     var l=lsGet('cc_lok');if(l&&Array.prototype.some.call($('#lokasi').options,function(o){return o.value===l}))$('#lokasi').value=l;
     $('#lokasiLain').value=lsGet('cc_lokx')||'';syncLokasi();
     $('#sTgl').value=hariIni();
-    var kat='<option value="">Semua kategori</option>'+D.kategori.map(function(k){return '<option>'+esc(k)+'</option>'}).join('');
+    var kat='<option value="">Semua department</option>'+D.kategori.map(function(k){return '<option>'+esc(k)+'</option>'}).join('');
     $('#sCakupan').innerHTML=kat;
     var r=running(),saved=lsGet('cc_sesi');
     D.idSesi=r.some(function(s){return s.id===saved})?saved:(r[0]?r[0].id:null);
@@ -721,7 +735,7 @@ function renderLangkah(){
       '<div class="form">'+
       '<label class="f wide">Nama barang<input id="bNama" type="text" autocomplete="off" placeholder="Contoh: Meja Makan Bundar Walnut"></label>'+
       '<label class="f wide">Deskripsi (opsional)<input id="bDesk" type="text" autocomplete="off" placeholder="Ukuran, warna, bahan"></label>'+
-      '<label class="f">Kategori<input id="bKat" type="text" autocomplete="off" value="'+esc(kat)+'" placeholder="Produk Baru"'+(kat?' readonly':'')+'></label>'+
+      '<label class="f">Department<select id="bKat"'+(kat?' disabled':'')+'>'+(kat?'<option>'+esc(kat)+'</option>':'<option value="">Pilih department…</option>'+D.kategori.map(function(k){return '<option>'+esc(k)+'</option>'}).join(''))+'</select></label>'+
       '<label class="f">Satuan<input id="bSat" type="text" autocomplete="off" value="unit"></label>'+
       '<label class="f">Barcode (bila ada)<input id="bBar" type="text" autocomplete="off" value="'+esc(D.baru.barcode)+'"></label></div>'+
       stepFoto('Foto barang')+
@@ -732,7 +746,7 @@ function renderLangkah(){
 }
 function renderHasil(list,scanned,title){
   var box=$('#hasil');
-  if(!list.length){box.innerHTML='<p class="hint">Tidak ada barang yang cocok'+(D.cakupan?' di kategori '+esc(D.cakupan):'')+'.</p>';return}
+  if(!list.length){box.innerHTML='<p class="hint">Tidak ada barang yang cocok'+(D.cakupan?' di department '+esc(D.cakupan):'')+'.</p>';return}
   box.innerHTML=(title?'<p class="hint">'+esc(title)+'</p>':'')+'<div class="res">'+list.map(function(b){
     var d=D.dasar[b.id]||{};
     return '<button type="button" data-pick="'+esc(b.id)+'" data-scan="'+esc(scanned||'')+'"><div class="nm">'+esc(b.nama)+'</div>'+
@@ -758,7 +772,7 @@ function renderSesiList(){
   if(!all.length){box.innerHTML='<div class="card empty">'+ic('calendar')+'<b>Belum ada sesi</b><span>Buat sesi pertama dengan formulir di atas.</span></div>';return}
   box.innerHTML=all.map(function(s){
     var run=s.status==='Berjalan';
-    var info='<span>'+ic('calendar')+' '+esc(tglLabel(s.tanggal))+'</span><span>'+ic('layers')+' '+esc(s.cakupan||'Semua kategori')+'</span>'+(!run&&s.selesaiPada?'<span>'+ic('flag')+' Selesai '+esc(s.selesaiPada)+'</span>':'');
+    var info='<span>'+ic('calendar')+' '+esc(tglLabel(s.tanggal))+'</span><span>'+ic('layers')+' '+esc(s.cakupan||'Semua department')+'</span>'+(!run&&s.selesaiPada?'<span>'+ic('flag')+' Selesai '+esc(s.selesaiPada)+'</span>':'');
     var acts=run?
       '<button class="btn sm" data-act="hitung" data-id="'+esc(s.id)+'" type="button">'+ic('barcode')+'Hitung</button>'+
       '<button class="btn ghost sm" data-act="dash" data-id="'+esc(s.id)+'" type="button">'+ic('chart')+'Dashboard</button>'+
@@ -857,7 +871,7 @@ function renderDash(){
   var d=D.dash,box=$('#dashBody');if(!d)return;
   var s=d.sesi,k=ringkas(d.rows),n=k.inn.length,run=s.status==='Berjalan';
   var h='';
-  h+='<div class="banner '+(run?'run':'done')+'">'+ic(run?'clock':'check')+'<div><b>'+esc(s.nama)+'</b> · '+esc(tglLabel(s.tanggal))+' · '+esc(s.cakupan||'Semua kategori')+'<br>'+
+  h+='<div class="banner '+(run?'run':'done')+'">'+ic(run?'clock':'check')+'<div><b>'+esc(s.nama)+'</b> · '+esc(tglLabel(s.tanggal))+' · '+esc(s.cakupan||'Semua department')+'<br>'+
     (run?'Sesi masih berjalan. Angka di bawah masih sementara dan bisa berubah.':
       'Sesi selesai'+(s.selesaiPada?' pada '+esc(s.selesaiPada):'')+'. '+(d.snapshot?'Hasil akhir terkunci dan tidak ikut berubah bila stok sistem diperbarui.':'Hasil akhir belum tersimpan di sheet Hasil_Sesi, jadi angka diambil dari data terkini.'))+'</div></div>';
   var pDih=n?Math.round(k.dih/n*100):0;
@@ -867,19 +881,19 @@ function renderDash(){
     '<div class="legend"><span style="--c:var(--good)">Sesuai '+k.c.Sesuai+'</span><span style="--c:var(--warn)">Lebih '+k.c.Lebih+'</span><span style="--c:var(--bad)">Kurang '+k.c.Kurang+'</span><span style="--c:var(--mute)">Belum dihitung '+k.c['Belum dihitung']+'</span></div></div>';
   var tile=function(cls,icn,lab,v){return '<div class="kpi '+cls+'"><div class="k">'+ic(icn)+lab+'</div><div class="v">'+v+'</div></div>'};
   h+='<div class="kpis">'+
-    tile('','box','Barang',n)+tile('','check','Dihitung',k.dih)+tile('good','target','Akurasi',k.akurasi+'%')+
-    tile('good','check','Sesuai',k.c.Sesuai)+tile('warn','up','Lebih',k.c.Lebih)+tile('bad','down','Kurang',k.c.Kurang)+
-    tile('','clock','Belum',k.c['Belum dihitung'])+tile(k.bersih<0?'bad':(k.bersih>0?'warn':'good'),'sigma','Selisih bersih',sgn(k.bersih))+
+    tile('','box','Barang',n)+tile('','check','Dihitung',k.dih)+tile('t-good','target','Akurasi',k.akurasi+'%')+
+    tile('t-good','check','Sesuai',k.c.Sesuai)+tile('t-warn','up','Lebih',k.c.Lebih)+tile('t-bad','down','Kurang',k.c.Kurang)+
+    tile('','clock','Belum',k.c['Belum dihitung'])+tile(k.bersih<0?'t-bad':(k.bersih>0?'t-warn':'t-good'),'sigma','Selisih bersih',sgn(k.bersih))+
     tile('','alert','Selisih mutlak',fmt(k.mutlak))+tile('','plus','Produk baru',k.baru)+'</div>';
-  h+='<div class="card"><h2>'+ic('layers')+'Hasil per kategori</h2>'+(k.kat.length?'<div class="tw"><table><thead><tr><th>Kategori</th><th class="n">Barang</th><th class="n">Dihitung</th><th class="n">Sesuai</th><th class="n">Selisih bersih</th><th class="n">Akurasi</th></tr></thead><tbody>'+
+  h+='<div class="card"><h2>'+ic('layers')+'Hasil per department</h2>'+(k.kat.length?'<div class="tw"><table><thead><tr><th>Department</th><th class="n">Dihitung</th><th class="n">Selisih</th><th class="n">Akurasi</th></tr></thead><tbody>'+
     k.kat.map(function(x){var a=x.dih?Math.round(x.ok/x.dih*100):0;
-      return '<tr><td>'+esc(x.nama)+'</td><td class="n">'+x.n+'</td><td class="n">'+x.dih+'</td><td class="n">'+x.ok+'</td><td class="n">'+sgn(r3(x.bersih))+'</td><td class="n">'+a+'%<span class="mini"><i style="width:'+a+'%"></i></span></td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada data.</p>')+'</div>';
+      return '<tr><td>'+esc(x.nama)+'</td><td class="n">'+x.dih+' / '+x.n+'</td><td class="n">'+sgn(r3(x.bersih))+'</td><td class="n">'+a+'%<span class="mini"><i style="width:'+a+'%"></i></span></td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada data.</p>')+'</div>';
   h+='<div class="card"><div class="toolbar"><h2 style="margin:0">'+ic('list')+'Hasil per barang</h2><input id="dCari" type="text" placeholder="Cari barang…" aria-label="Cari di hasil" value="'+esc(D.cariDash)+'"></div>'+
     '<div class="seg" id="fDash" role="group" aria-label="Filter hasil" style="margin-top:10px">'+
     [['semua','Semua'],['selisih','Selisih'],['Belum dihitung','Belum'],['Sesuai','Sesuai'],['baru','Baru']].map(function(f){return '<button data-f="'+f[0]+'" aria-pressed="'+(D.fr===f[0])+'">'+f[1]+'</button>'}).join('')+'</div>'+
     '<div id="dTabel"></div></div>';
   h+='<div class="two"><div class="card"><h2>'+ic('user')+'Per petugas</h2>'+
-    (d.petugas.length?'<div class="tw"><table><thead><tr><th>Petugas</th><th class="n">Entri</th><th class="n">Unit</th><th>Terakhir</th></tr></thead><tbody>'+d.petugas.map(function(p){return '<tr><td>'+esc(p.nama)+'</td><td class="n">'+p.entri+'</td><td class="n">'+fmt(p.unit)+'</td><td>'+esc((p.akhir||'').slice(5))+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada hitungan.</p>')+'</div>'+
+    (d.petugas.length?'<div class="tw"><table><thead><tr><th>Petugas</th><th class="n">Entri</th><th class="n">Unit</th><th>Terakhir</th></tr></thead><tbody>'+d.petugas.map(function(p){return '<tr><td>'+esc(p.nama)+'</td><td class="n">'+p.entri+'</td><td class="n">'+fmt(p.unit)+'</td><td>'+esc((p.akhir||'').slice(11))+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada hitungan.</p>')+'</div>'+
     '<div class="card"><h2>'+ic('pin')+'Per lokasi</h2>'+
     (d.lokasi.length?'<div class="tw"><table><thead><tr><th>Lokasi</th><th class="n">Entri</th><th class="n">Unit</th></tr></thead><tbody>'+d.lokasi.map(function(p){return '<tr><td>'+esc(p.nama)+'</td><td class="n">'+p.entri+'</td><td class="n">'+fmt(p.unit)+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada hitungan.</p>')+'</div></div>';
   h+='<p class="hint" style="text-align:center">'+d.entri+' entri hitungan · '+d.foto+' foto bukti tersimpan di Drive</p>';
@@ -901,13 +915,12 @@ function renderDashTabel(){
   if(D.fr==='selisih')f.sort(function(a,b){return Math.abs(b.sel)-Math.abs(a.sel)});
   var tot=f.length;f=f.slice(0,500);
   document.querySelectorAll('#fDash button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===D.fr))});
-  $('#dTabel').innerHTML=f.length?'<div class="tw"><table><thead><tr><th>Barang</th><th class="n">Sistem</th><th class="n">Fisik</th><th class="n">Selisih</th><th>Status</th><th>Foto</th></tr></thead><tbody>'+
+  $('#dTabel').innerHTML=f.length?'<div class="tw"><table><thead><tr><th>Barang</th><th class="n">Sistem</th><th class="n">Fisik</th><th class="n">Selisih</th></tr></thead><tbody>'+
     f.map(function(r){
       var cls=r.status==='Belum dihitung'?'Belum':r.status;
-      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+'</div><div class="meta"><span class="mono">'+esc(r.id)+'</span><span>'+esc(r.kategori)+'</span></div></td>'+
-        '<td class="n">'+fmt(r.stok)+' '+esc(r.satuan)+'</td><td class="n">'+(r.fisik==null?'–':fmt(r.fisik)+' '+esc(r.satuan))+'</td>'+
-        '<td class="n">'+sgn(r.sel)+'</td><td><span class="chip c-'+cls+'">'+esc(r.status)+'</span></td>'+
-        '<td>'+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Lihat</a>':'–')+'</td></tr>';
+      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+'</div><div class="meta"><span class="chip c-'+cls+'">'+esc(r.status)+'</span><span class="mono">'+esc(r.id)+'</span><span>'+esc(r.satuan)+'</span>'+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Foto</a>':'')+'</div></td>'+
+        '<td class="n">'+fmt(r.stok)+'</td><td class="n">'+fmt(r.fisik)+'</td>'+
+        '<td class="n"><b>'+sgn(r.sel)+'</b></td></tr>';
     }).join('')+'</tbody></table></div>'+(tot>500?'<p class="hint">Menampilkan 500 dari '+tot+' barang. Gunakan filter atau pencarian.</p>':''):'<p class="hint">Tidak ada data untuk filter ini.</p>';
 }
 function csvSel(v){
@@ -917,7 +930,7 @@ function csvSel(v){
 }
 function unduhCsv(){
   var d=D.dash;if(!d){toast('Belum ada data untuk diunduh.');return}
-  var head=['ID_Barang','Nama_Barang','Kategori','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Jumlah_Entri','Foto_URL'];
+  var head=['ID_Barang','Nama_Barang','Department','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Jumlah_Entri','Foto_URL'];
   var lines=[head.join(';')];
   d.rows.forEach(function(r){
     if(r.status==='Di luar cakupan')return;
@@ -1076,6 +1089,18 @@ $('#langkah').addEventListener('keydown',function(e){
     else toast(D.fotoWajib&&!D.foto?'Ambil foto dulu, lalu isi jumlah.':'Isi jumlah dengan angka lebih dari 0.');
   }
 });
+
+/* PWA: tombol pasang dan service worker (hanya di hosting https, tidak di Apps Script) */
+var tundaPasang=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();tundaPasang=e;$('#btnPasang').hidden=false});
+window.addEventListener('appinstalled',function(){tundaPasang=null;$('#btnPasang').hidden=true;toast('Aplikasi terpasang di layar utama.')});
+$('#btnPasang').addEventListener('click',function(){
+  if(!tundaPasang)return;
+  tundaPasang.prompt();tundaPasang.userChoice.then(function(){tundaPasang=null;$('#btnPasang').hidden=true});
+});
+if(!DI_APPS_SCRIPT&&'serviceWorker' in navigator&&location.protocol==='https:'){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+}
 
 hydrate();
 start();
