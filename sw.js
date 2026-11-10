@@ -1,5 +1,5 @@
 /* Service worker CYCLE COUNT: cangkang aplikasi tersimpan, data tetap lewat internet. */
-var VERSI = 'cc-v1';
+var VERSI = 'cc-v2';
 var INTI = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {
