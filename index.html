@@ -352,7 +352,7 @@ function hydrate(root){(root||document).querySelectorAll('i[data-ic]').forEach(f
 
 /* Isi API_URL hanya bila halaman ini di-hosting di luar Apps Script (mode kamera langsung).
    Isinya URL web app Apps Script yang berakhiran /exec. Jika dibuka lewat Apps Script, biarkan kosong. */
-var API_URL='';
+var API_URL='https://script.google.com/macros/s/AKfycbxxNQGL-qBC7XrGnErm5G_K2PzlerqNX3zHBeG6JsQInUG18aVyCTUW6HQ6P-zuOBLX/exec';
 var DI_APPS_SCRIPT=typeof google!=='undefined'&&google.script&&google.script.run;
 function rpc(fn){
   var a=[].slice.call(arguments,1);
