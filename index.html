@@ -83,9 +83,22 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 .stephead{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .stephead .ic{width:17px;height:17px}
-.kode{display:flex;gap:8px;max-width:360px}
-.kode input{font:500 15px var(--mono);min-height:40px}
-.camrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.kode{display:flex;gap:8px}
+.kode input{flex:1 1 auto;width:auto;min-width:0;font:500 15px var(--mono);min-height:44px}
+.kode .btn{min-height:44px}
+.scanbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scanbtns .btn{width:100%;min-height:46px}
+.scanbtns .main{grid-column:1/-1;min-height:54px;font-size:16px}
+.sep{display:flex;align-items:center;gap:12px;margin:16px 0 12px;color:var(--ink2);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+.fgap{margin-top:14px}
+.kpis.kpis3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis3 .kpi{padding:10px}
+.kpis3 .kpi .k{font-size:11px;letter-spacing:.03em}
+.kpis3 .kpi .v{font-size:22px}
+.cekhead{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
+.cekhead .nm{font-size:18px}
+.sesirow .meta{margin-top:3px}
 #kamPanel{margin-top:10px}
 #reader{width:100%;max-width:440px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000;min-height:120px}
 .hit{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;background:var(--soft);border-radius:10px;padding:12px 14px}
@@ -209,6 +222,7 @@ a.lnk .ic{width:15px;height:15px}
       <button role="tab" data-tab="dash" aria-selected="false"><i data-ic="dashboard"></i><span>Dashboard</span></button>
       <button role="tab" data-tab="sesi" aria-selected="false"><i data-ic="calendar"></i><span>Sesi</span></button>
       <button role="tab" data-tab="hitung" aria-selected="false"><i data-ic="barcode"></i><span>Hitung</span></button>
+      <button role="tab" data-tab="cek" aria-selected="false"><i data-ic="clipboard"></i><span>Cek Stok</span></button>
     </nav>
 
     <!-- ================= DASHBOARD ================= -->
@@ -261,11 +275,8 @@ a.lnk .ic{width:15px;height:15px}
 
         <div class="card">
           <div class="stephead"><i data-ic="barcode"></i>1. Cari barang</div>
-          <label class="f" style="max-width:360px"><span><i data-ic="keyboard"></i>Ketik kode manual</span>
-            <div class="kode"><input id="kodeIn" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Kode barcode" aria-label="Ketik kode manual"><button class="btn sm" id="btnKode" type="button"><i data-ic="search"></i>Cari</button></div>
-          </label>
-          <div class="camrow">
-            <button class="btn" id="btnKam" type="button"><i data-ic="camera"></i>Scan kamera</button>
+          <div class="scanbtns">
+            <button class="btn main" id="btnKam" type="button"><i data-ic="camera"></i>Scan kamera</button>
             <button class="btn ghost" id="btnBaca" type="button"><i data-ic="image"></i>Baca dari foto</button>
             <button class="btn ghost" id="btnBaru" type="button"><i data-ic="box"></i>Produk baru</button>
           </div>
@@ -274,18 +285,20 @@ a.lnk .ic{width:15px;height:15px}
             <p id="kamMsg" class="hint"></p>
             <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
           </div>
-          <p class="hint">Alur: kode atau scan, foto barang, lalu jumlah. Barcode 1 dicoba dulu, lalu Barcode 2, lalu cari deskripsi. Tanpa barcode, pakai Produk baru.</p>
+          <div class="sep"><span>atau cari manual</span></div>
+          <label class="f"><span><i data-ic="keyboard"></i>Ketik kode manual</span>
+            <div class="kode"><input id="kodeIn" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Kode barcode" aria-label="Ketik kode manual"><button class="btn" id="btnKode" type="button"><i data-ic="search"></i>Cari</button></div>
+          </label>
+          <label class="f fgap"><span><i data-ic="search"></i>Cari berdasarkan deskripsi</span>
+            <input id="cari" type="text" autocomplete="off" placeholder="Contoh: sofa abu 3 dudukan" aria-label="Cari barang">
+          </label>
+          <div id="hasil"></div>
+          <p class="hint">Alur: kode atau scan, foto barang, lalu jumlah. Barcode 1 dicoba dulu, lalu Barcode 2. Tanpa barcode, pakai Produk baru.</p>
           <p id="barangInfo" class="hint" hidden></p>
           <div id="miss"></div>
         </div>
 
         <div id="langkah"></div>
-
-        <div class="card">
-          <h2><i data-ic="search"></i>Cari berdasarkan deskripsi</h2>
-          <input id="cari" type="text" autocomplete="off" placeholder="Ketik nama, deskripsi, atau ID. Contoh: sofa abu 3 dudukan" aria-label="Cari barang">
-          <div id="hasil"></div>
-        </div>
 
         <div class="card">
           <label class="f" style="max-width:420px"><span><i data-ic="calendar"></i>Sesi</span><select id="sesi" aria-label="Pilih sesi"></select></label>
@@ -298,6 +311,27 @@ a.lnk .ic{width:15px;height:15px}
           <div id="log" class="log" style="margin-top:6px"><span class="hint">Belum ada hitungan.</span></div>
         </div>
       </div>
+    </section>
+
+    <!-- ================= CEK STOK ================= -->
+    <section id="vCek" class="view">
+      <div class="card">
+        <div class="stephead"><i data-ic="clipboard"></i>Cek stok barang</div>
+        <div class="scanbtns">
+          <button class="btn main" id="cekKamBtn" type="button"><i data-ic="camera"></i>Scan kamera</button>
+        </div>
+        <div id="cekKam" hidden>
+          <div id="readerCek"></div>
+          <p id="cekKamMsg" class="hint"></p>
+          <button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button>
+        </div>
+        <div class="sep"><span>atau cari manual</span></div>
+        <label class="f"><span><i data-ic="keyboard"></i>Kode barcode, nama, atau deskripsi</span>
+          <div class="kode"><input id="cekIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ketik lalu tekan Cari" aria-label="Cari barang untuk cek stok"><button class="btn" id="cekCariBtn" type="button"><i data-ic="search"></i>Cari</button></div>
+        </label>
+        <div id="cekHasil"></div>
+      </div>
+      <div id="cekDetail"></div>
     </section>
   </main>
 </div>
@@ -344,6 +378,7 @@ var P={
   unlock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>',
   play:'<path d="M6 3l14 9-14 9z"/>',
   flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/>',
+  clipboard:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
   box:'<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
   link:'<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
   layers:'<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
@@ -439,12 +474,12 @@ function lookup(code){
   return out;
 }
 function inScope(b){return !D.cakupan||b.kategori===D.cakupan}
-function cari(q){
+function cari(q,semuaDept){
   var t=String(q||'').toLowerCase().split(/\s+/).filter(Boolean);
   if(!t.length)return [];
   var res=[];
   D.barang.forEach(function(b){
-    if(!inScope(b))return;
+    if(!semuaDept&&!inScope(b))return;
     var nama=b.nama.toLowerCase();
     var h=(nama+' '+b.deskripsi+' '+b.kategori+' '+b.id+' '+b.barcode1+' '+b.barcode2).toLowerCase();
     var s=0;
@@ -751,7 +786,7 @@ function tampilApp(list){
     D.dashId=D.sesi.some(function(s){return s.id===sd})?sd:null;
     refreshSesiUI();
     var tab=lsGet('cc_tab');
-    if(tab!=='dash'&&tab!=='sesi'&&tab!=='hitung')tab=D.sesi.length?'hitung':'sesi';
+    if(tab!=='dash'&&tab!=='sesi'&&tab!=='hitung'&&tab!=='cek')tab=D.sesi.length?'hitung':'sesi';
     if(tab==='hitung'&&!D.idSesi&&D.sesi.length)tab='dash';
     setTab(tab);
     if(D.idSesi){$('#cakupan').textContent='Memuat data sesi…';loadBase()}
@@ -799,11 +834,12 @@ function refreshSesiUI(){
 }
 function setTab(t){
   D.tab=t;lsSet('cc_tab',t);
-  if(t!=='hitung')tutupKamera();
+  tutupKamera();
   document.querySelectorAll('.nav button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.tab===t))});
   $('#vDash').classList.toggle('on',t==='dash');
   $('#vSesi').classList.toggle('on',t==='sesi');
   $('#vHitung').classList.toggle('on',t==='hitung');
+  $('#vCek').classList.toggle('on',t==='cek');
   if(t==='dash')D.q.then(loadDash);
   if(t==='sesi')renderSesiList();
   window.scrollTo(0,0);
@@ -1083,6 +1119,95 @@ function unduhCsv(){
   }catch(e){toast('Unduhan tidak didukung di halaman ini.')}
 }
 
+/* ---------- tab Cek Stok ---------- */
+function renderCekHasil(list,title){
+  var box=$('#cekHasil');
+  if(!list.length){box.innerHTML='<p class="hint">Barang tidak ditemukan di master.</p>';return}
+  box.innerHTML=(title?'<p class="hint">'+esc(title)+'</p>':'')+'<div class="res">'+list.map(function(b){
+    return '<button type="button" data-cekpick="'+esc(b.id)+'"><div class="nm">'+esc(b.nama)+'</div>'+
+      '<div class="meta"><span class="mono">'+esc(b.id)+'</span><span>'+esc(b.kategori)+'</span></div>'+
+      (b.deskripsi?'<div class="desc">'+esc(b.deskripsi)+'</div>':'')+'</button>';
+  }).join('')+'</div>';
+}
+function cekCari(){
+  var v=$('#cekIn').value.trim();
+  if(!v){toast('Ketik kode atau nama barang dulu.');$('#cekIn').focus();return}
+  if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return}
+  cekTemukan(v,true);
+}
+function cekTemukan(v,boleh){
+  var items=[],seen={};
+  lookup(v).forEach(function(h){if(!seen[h.item.id]){seen[h.item.id]=1;items.push(h.item)}});
+  if(items.length===1){cekPilih(items[0]);return true}
+  if(items.length>1){$('#cekDetail').innerHTML='';renderCekHasil(items,'Kode cocok dengan beberapa barang. Pilih yang benar:');return true}
+  if(!boleh)return false;
+  $('#cekDetail').innerHTML='';
+  renderCekHasil(cari(v,true),'Hasil pencarian nama atau deskripsi:');
+  return true;
+}
+function cekPilih(item){
+  var tok=D.cekTok=(D.cekTok||0)+1;
+  $('#cekHasil').innerHTML='';
+  $('#cekDetail').innerHTML='<div class="card hint">Memuat stok…</div>';
+  rpc('cekStok',D.kode,item.id).then(function(r){
+    if(tok!==D.cekTok)return;
+    renderCek(item,r);
+  },function(e){
+    if(tok!==D.cekTok)return;
+    $('#cekDetail').innerHTML='<div class="card err">Gagal memuat stok: '+esc(String((e&&e.message)||e))+'</div>';
+  });
+}
+function renderCek(item,r){
+  var sesi=r.sesi||[],t=sesi[0];
+  var stokTeks=r.stok==null?'–':fmt(r.stok);
+  var cat=!r.adaData?'Data Stok_Toko masih kosong, jadi stok sistem belum bisa dibandingkan.':(!r.diToko?'Barang ini tidak ada di daftar stok toko.':'');
+  var sel=(r.stok!=null&&t)?r3(t.fisik-r.stok):null;
+  var tone=sel==null?'':(sel===0?'t-good':(sel>0?'t-warn':'t-bad'));
+  var bc=[item.barcode1,item.barcode2].filter(Boolean).join(' / ');
+  var h='<div class="card"><div class="cekhead"><div class="nm">'+esc(item.nama)+'</div>'+
+    '<div class="meta"><span class="mono">'+esc(item.id)+'</span>'+(item.kategori?'<span>'+esc(item.kategori)+'</span>':'')+(item.satuan?'<span>'+esc(item.satuan)+'</span>':'')+(bc?'<span class="mono">'+esc(bc)+'</span>':'')+'</div></div>'+
+    (item.deskripsi?'<div class="descbox"><div class="dk">'+ic('info')+'Deskripsi</div><div class="dv">'+esc(item.deskripsi)+'</div></div>':'')+
+    '<div class="kpis kpis3" style="margin-top:12px">'+
+      '<div class="kpi"><span class="k">'+ic('box')+'Stok sistem</span><span class="v">'+stokTeks+'</span></div>'+
+      '<div class="kpi"><span class="k">'+ic('check')+'Fisik terakhir</span><span class="v">'+(t?fmt(t.fisik):'–')+'</span></div>'+
+      '<div class="kpi '+tone+'"><span class="k">'+ic('chart')+'Selisih</span><span class="v">'+sgn(sel)+'</span></div>'+
+    '</div>'+
+    (cat?'<p class="hint">'+esc(cat)+'</p>':'')+
+    (t?'<p class="hint">Hitungan terakhir: '+esc(t.nama)+(t.terakhir?' · '+esc(t.terakhir):'')+'</p>':'<p class="hint">Barang ini belum pernah dihitung di sesi mana pun.</p>')+'</div>';
+  if(sesi.length){
+    h+='<div class="card"><h2>'+ic('list')+'Hitung fisik per sesi</h2><div class="tw"><table><thead><tr><th>Sesi</th><th class="n">Fisik</th><th class="n">Entri</th></tr></thead><tbody>'+
+      sesi.map(function(x){
+        return '<tr class="sesirow"><td><div class="nm">'+esc(x.id+' · '+x.nama)+'</div><div class="meta"><span>'+esc(x.status)+'</span>'+(x.tanggal?'<span>'+esc(tglLabel(x.tanggal))+'</span>':'')+'</div>'+
+          '<div class="meta">'+x.lokasi.map(function(l){return '<span>'+esc(l.nama)+': '+fmt(l.unit)+'</span>'}).join('')+'</div></td>'+
+          '<td class="n"><b>'+fmt(x.fisik)+'</b></td><td class="n">'+x.entri+'</td></tr>';
+      }).join('')+'</tbody></table></div></div>';
+  }
+  $('#cekDetail').innerHTML=h;
+}
+function bukaKameraCek(){
+  if(!window.Html5Qrcode){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
+  if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return}
+  if(camAktif)return;
+  $('#cekKam').hidden=false;$('#cekKamMsg').textContent='Membuka kamera…';
+  try{cam=new Html5Qrcode('readerCek',{formatsToSupport:formatBarcode(),useBarCodeDetectorIfSupported:true,verbose:false})}
+  catch(e){$('#cekKamMsg').textContent='Kamera tidak bisa dimulai di perangkat ini. Ketik kodenya manual.';return}
+  cam.start({facingMode:'environment'},{fps:10,qrbox:function(w){var ww=Math.max(180,Math.min(w-24,340));return {width:ww,height:Math.round(ww*0.45)}}},
+    function(text){
+      var now=Date.now();
+      if(text===camLast.code&&now-camLast.t<2500)return;
+      camLast={code:text,t:now};
+      try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
+      if(cekTemukan(text,false)){beep(true);tutupKamera()}
+      else{beep(false);$('#cekKamMsg').textContent='Barcode '+text+' tidak ada di master. Arahkan ke barcode lain.'}
+    },function(){}).then(function(){
+      camAktif=true;$('#cekKamMsg').textContent='Arahkan kamera ke barcode.';
+    },function(err){
+      camAktif=false;
+      var m=String((err&&err.message)||err||'');
+      $('#cekKamMsg').textContent=/permission|notallowed|denied/i.test(m)?'Kamera diblokir. Izinkan akses kamera di browser, atau buka lewat alamat hosting.':'Kamera gagal dibuka. Ketik kodenya manual.';
+    });
+}
+
 /* ---------- kamera barcode ---------- */
 var cam=null,camAktif=false,camLast={code:'',t:0};
 function formatBarcode(){
@@ -1126,7 +1251,7 @@ function ubahSenter(){
   Promise.resolve(senterCtl.apply(on)).then(function(){D.senterOn=on;tampilSenter(on)},function(){toast('Senter tidak bisa dinyalakan di perangkat ini.')});
 }
 function tutupKamera(){
-  $('#kamPanel').hidden=true;$('#btnSenter').hidden=true;senterCtl=null;
+  $('#kamPanel').hidden=true;$('#cekKam').hidden=true;$('#btnSenter').hidden=true;senterCtl=null;
   if(cam&&camAktif){
     camAktif=false;
     var c=cam;
@@ -1193,6 +1318,10 @@ $('#gateForm').addEventListener('submit',function(e){
 $('#lihatPin').addEventListener('change',function(e){$('#pin').type=e.target.checked?'text':'password'});
 $('#kodeIn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();cariKode()}});
 $('#btnKode').addEventListener('click',cariKode);
+$('#cekIn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();cekCari()}});
+$('#cekCariBtn').addEventListener('click',cekCari);
+$('#cekKamBtn').addEventListener('click',bukaKameraCek);
+$('#cekTutup').addEventListener('click',tutupKamera);
 $('#cari').addEventListener('input',function(e){
   var q=e.target.value;
   if(!q.trim()){$('#hasil').innerHTML='';return}
@@ -1241,6 +1370,8 @@ document.addEventListener('click',function(e){
   var g=e.target.closest('[data-goto]');if(g){setTab(g.dataset.goto);return}
   var a=e.target.closest('[data-act]');if(a){aksiSesi(a.dataset.act,a.dataset.id);return}
   var f=e.target.closest('#fDash button');if(f){D.fr=f.dataset.f;renderDashTabel();return}
+  var cp=e.target.closest('[data-cekpick]');
+  if(cp){var ci=D.byId[cp.dataset.cekpick];if(ci)cekPilih(ci);return}
   var p=e.target.closest('[data-pick]');
   if(p){var it=D.byId[p.dataset.pick];if(it){D.dariKamera=false;pilih(it,'Pencarian',p.dataset.scan||'')}return}
   var u=e.target.closest('[data-ulang]');
