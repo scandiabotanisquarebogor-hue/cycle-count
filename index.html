@@ -546,7 +546,7 @@ var EN={
 'Kamera tidak ditemukan di perangkat ini.':'No camera was found on this device.','Kamera gagal dibuka. Pakai tombol Baca dari foto.':'The camera failed to open. Use the Read from photo button.','Membaca barcode…':'Reading barcode…',
 'Barcode tidak terbaca. Foto lebih dekat, terang, dan lurus.':'The barcode could not be read. Take the photo closer, brighter, and straight on.','Isi username dan password.':'Enter username and password.','Isi kode akses dan username.':'Enter the access code and username.',
 'Isi username.':'Enter a username.','Memproses foto…':'Processing photo…','Ambil foto dulu, lalu isi jumlah.':'Take the photo first, then enter the quantity.','Aplikasi terpasang di layar utama.':'App installed on your home screen.','Akun dihapus.':'Account deleted.',
-'Bahasa':'Language','Ringkasan kondisi':'Condition Summary','Alasan':'Reason','Tulis alasan kondisi Lainnya…':'Write the reason for the Other condition…','Kondisi barang':'Item condition',
+'Bahasa':'Language','Scan ulang':'Scan again','Terbaca tapi belum yakin. Tahan kamera tetap dan jaga jarak sekitar 15-25 cm.':'Read but not certain. Hold the camera steady about 15-25 cm away.','Ringkasan kondisi':'Condition Summary','Alasan':'Reason','Tulis alasan kondisi Lainnya…':'Write the reason for the Other condition…','Kondisi barang':'Item condition',
 '3. Isi jumlah dan kondisi':'3. Enter quantity and condition','Jumlah dan kondisi':'Quantity and condition','Isi alasan untuk kondisi Lainnya.':'Enter a reason for the Other condition.',
 'Qty_Lainnya':'Qty_Other','Alasan wajib diisi untuk kondisi Lainnya.':'A reason is required for the Other condition.','Kondisi barang tidak valid.':'Invalid item condition.','Alasan maksimal 200 karakter.':'The reason is at most 200 characters.','Hitung fisik per sesi':'Physical Count by Session','Bahasa Indonesia':'Indonesian','Ya,':'Yes,','Foto bukti':'Proof photo','Memuat…':'Loading…','Terjadi kesalahan':'An error occurred','(Anda)':'(You)',' (Anda)':' (You)',
 /* pesan dari server */
@@ -1377,7 +1377,7 @@ function renderMiss(){
   if(!D.miss){box.innerHTML='';return}
   box.innerHTML='<div class="miss"><div><b>Kode tidak dikenali:</b> <span class="mono">'+esc(D.miss)+'</span><br>Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat nama di bawah, atau tambahkan sebagai produk baru.</div>'+
     '<label><input type="checkbox" id="simpanKode"><span>Bila saya memilih barang dari pencarian, simpan kode ini ke barang tersebut (mengisi kolom barcode yang masih kosong)</span></label>'+
-    '<div class="acts" style="margin-top:0"><button class="btn sm" id="btnBaruMiss" type="button">'+ic('box')+'Tambah sebagai produk baru</button><button class="btn ghost sm" id="batalMiss" type="button">'+ic('x')+'Batal</button></div></div>';
+    '<div class="acts" style="margin-top:0">'+(D.dariKamera?'<button class="btn sm" id="btnScanUlang" type="button">'+ic('camera')+'Scan ulang</button>':'')+'<button class="btn sm" id="btnBaruMiss" type="button">'+ic('box')+'Tambah sebagai produk baru</button><button class="btn ghost sm" id="batalMiss" type="button">'+ic('x')+'Batal</button></div></div>';
 }
 function stepFoto(judul){
   return '<div class="stepbox"><div class="stephead">'+ic('camera')+judul+'</div><div class="fotorow"><div id="fotoBox" class="prev">'+
@@ -1743,23 +1743,63 @@ function renderCek(item,r){
   }
   $('#cekDetail').innerHTML=h;
 }
+/* ---------- ketelitian pembacaan barcode ---------- */
+function gs1Ok(t){
+  var s=0,n=t.length;
+  for(var i=0;i<n-1;i++){var d=t.charCodeAt(n-2-i)-48;s+=d*(i%2===0?3:1)}
+  return ((10-(s%10))%10)===t.charCodeAt(n-1)-48;
+}
+var camPrev={code:'',t:0},camHintT=0;
+/* Mengembalikan kode bila bacaan sudah meyakinkan, selain itu null.
+   Kode yang ada di master langsung diterima. Kode yang tidak dikenal harus terbaca sama 2 kali berturut-turut,
+   dan kode angka standar (12-14 digit) harus lolos cek digit supaya bacaan keliru tidak dianggap produk baru. */
+function bacaStabil(text,hint){
+  var t=String(text==null?'':text).trim();if(!t)return null;
+  if(lookup(t).length){camPrev={code:'',t:0};return t}
+  var now=Date.now();
+  if(/^\d+$/.test(t)&&t.length>=12&&t.length<=14&&!gs1Ok(t)){
+    if(now-camHintT>1500){camHintT=now;hint('Terbaca tapi belum yakin. Tahan kamera tetap dan jaga jarak sekitar 15-25 cm.')}
+    camPrev={code:'',t:0};return null;
+  }
+  if(t===camPrev.code&&now-camPrev.t<2000){camPrev={code:'',t:0};return t}
+  camPrev={code:t,t:now};return null;
+}
+function qrboxBarcode(w,h){var ww=Math.max(200,Math.min(w-16,420));return {width:ww,height:Math.max(90,Math.min(Math.round(ww*0.5),h-8))}}
+function mulaiKamera(c,onDecode){
+  var hi={fps:15,qrbox:qrboxBarcode,videoConstraints:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}};
+  return c.start({facingMode:'environment'},hi,onDecode,function(){}).catch(function(e){
+    var m=String((e&&e.message)||e||'');
+    if(/permission|notallowed|denied|notfound|no camera/i.test(m))throw e;
+    return c.start({facingMode:'environment'},{fps:10,qrbox:qrboxBarcode},onDecode,function(){});
+  });
+}
+function tuneKamera(sel){
+  try{
+    var v=document.querySelector(sel),tr=v&&v.srcObject&&v.srcObject.getVideoTracks&&v.srcObject.getVideoTracks()[0];
+    if(!tr||!tr.applyConstraints||!tr.getCapabilities)return;
+    var cap=tr.getCapabilities(),adv=[];
+    if(cap.focusMode&&cap.focusMode.indexOf('continuous')>=0)adv.push({focusMode:'continuous'});
+    if(adv.length)tr.applyConstraints({advanced:adv}).catch(function(){});
+  }catch(e){}
+}
 function bukaKameraCek(){
   if(!window.Html5Qrcode){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
   if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return}
   if(camAktif)return;
   $('#cekKam').hidden=false;$('#cekKamMsg').textContent='Membuka kamera…';
-  try{cam=new Html5Qrcode('readerCek',{formatsToSupport:formatBarcode(),useBarCodeDetectorIfSupported:true,verbose:false})}
+  try{cam=new Html5Qrcode('readerCek',{formatsToSupport:formatBarcode(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false})}
   catch(e){$('#cekKamMsg').textContent='Kamera tidak bisa dimulai di perangkat ini. Ketik kodenya manual.';return}
-  cam.start({facingMode:'environment'},{fps:10,qrbox:function(w){var ww=Math.max(180,Math.min(w-24,340));return {width:ww,height:Math.round(ww*0.45)}}},
+  mulaiKamera(cam,
     function(text){
       var now=Date.now();
+      text=bacaStabil(text,function(m){$('#cekKamMsg').textContent=m});if(!text)return;
       if(text===camLast.code&&now-camLast.t<2500)return;
       camLast={code:text,t:now};
       try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
       if(cekTemukan(text,false)){beep(true);tutupKamera()}
       else{beep(false);$('#cekKamMsg').textContent='Barcode '+text+' tidak ada di master. Arahkan ke barcode lain.'}
-    },function(){}).then(function(){
-      camAktif=true;$('#cekKamMsg').textContent='Arahkan kamera ke barcode.';senterBtn='#cekSenter';senterSel='#readerCek video';siapkanSenter();
+    }).then(function(){
+      camAktif=true;$('#cekKamMsg').textContent='Arahkan kamera ke barcode.';senterBtn='#cekSenter';senterSel='#readerCek video';siapkanSenter();tuneKamera('#readerCek video');
     },function(err){
       camAktif=false;
       var m=String((err&&err.message)||err||'');
@@ -1772,7 +1812,7 @@ var cam=null,camAktif=false,camLast={code:'',t:0};
 function formatBarcode(){
   var F=window.Html5QrcodeSupportedFormats;
   if(!F)return undefined;
-  return [F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E,F.CODE_128,F.CODE_39,F.CODE_93,F.ITF,F.QR_CODE];
+  return [F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E,F.CODE_128,F.CODE_39,F.QR_CODE];
 }
 function camMsg(m,bad){var e=$('#kamMsg');e.textContent=m||'';e.className='hint'+(bad?' err':'')}
 var senterCtl=null,senterBtn='#btnSenter',senterSel='#reader video';
@@ -1824,20 +1864,17 @@ function bukaKamera(){
   resetLangkah();
   $('#kamPanel').hidden=false;camMsg('Membuka kamera…');
   try{
-    cam=new Html5Qrcode('reader',{formatsToSupport:formatBarcode(),useBarCodeDetectorIfSupported:true,verbose:false});
+    cam=new Html5Qrcode('reader',{formatsToSupport:formatBarcode(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false});
   }catch(e){camMsg('Kamera tidak bisa dimulai di perangkat ini. Pakai tombol Baca dari foto.',true);return}
-  cam.start({facingMode:'environment'},{
-    fps:10,
-    qrbox:function(w){var ww=Math.max(180,Math.min(w-24,340));return {width:ww,height:Math.round(ww*0.45)}},
-    experimentalFeatures:{useBarCodeDetectorIfSupported:true}
-  },function(text){
+  mulaiKamera(cam,function(text){
     var now=Date.now();
+    text=bacaStabil(text,camMsg);if(!text)return;
     if(text===camLast.code&&now-camLast.t<2500)return;
     camLast={code:text,t:now};
     try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
     onScan(text,true);
-  },function(){}).then(function(){
-    camAktif=true;camMsg('Arahkan kamera ke barcode.');senterBtn='#btnSenter';senterSel='#reader video';siapkanSenter();
+  }).then(function(){
+    camAktif=true;camMsg('Arahkan kamera ke barcode.');senterBtn='#btnSenter';senterSel='#reader video';siapkanSenter();tuneKamera('#reader video');
   },function(err){
     camAktif=false;
     var m=String((err&&err.message)||err||'');
@@ -2021,6 +2058,7 @@ document.addEventListener('click',function(e){
   var td=e.target.closest('[data-tidak]');
   if(td){var h2=D.log[Number(td.dataset.tidak)];if(h2){h2.konf=false;renderLog()}return}
   var b=e.target.closest('button');var id=b?b.id:'';
+  if(id==='btnScanUlang'){D.miss=null;renderMiss();bukaKamera();return}
   if(id==='batalMiss'){D.miss=null;renderMiss();$('#kodeIn').focus();return}
   if(id==='btnBaruMiss'){D.dariKamera=false;bukaBaru(D.miss);return}
   if(id==='btnMuatBarang'){infoBarang();muatBarang();return}
