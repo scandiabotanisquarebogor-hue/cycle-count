@@ -45,8 +45,10 @@ header{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;al
 .who{font-size:12.5px;color:var(--ink2)}
 .ibtn{width:42px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 .ibtn:hover{border-color:var(--accent);color:var(--accent)}
-.authcard{max-width:420px;margin:20px auto 0;width:100%;display:flex;flex-direction:column;gap:14px}
+.authcard{max-width:420px;margin:24px auto 0;width:100%;display:flex;flex-direction:column;gap:14px}
 .authcard form{display:flex;flex-direction:column;gap:12px}
+body.auth header{display:none}
+body.auth .authcard{margin-top:min(12vh,110px)}
 .authlogo{display:flex;justify-content:center}.authlogo svg{width:min(320px,92%);height:auto}
 .authcard .center{text-align:center;margin:0}
 .linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline;padding:6px}
@@ -71,6 +73,8 @@ header{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;al
 .lrow:last-child{border-bottom:0}
 .lrow .nm{font-weight:600;overflow-wrap:anywhere}
 .lacts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.hint.pesan-err{color:var(--bad,#c0392b);font-weight:600}
+.hint.pesan-ok{color:var(--accent);font-weight:600}
 .qedit{width:84px!important;min-height:38px!important;padding:6px 8px!important;text-align:right}
 .brand{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
 h1{margin:0;font-size:24px;letter-spacing:.05em;line-height:1.1}
@@ -223,7 +227,7 @@ a.lnk .ic{width:15px;height:15px}
 .konf{background:var(--warn-bg);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:14px}
 .chk{display:flex;gap:8px;align-items:flex-start}
 
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;max-width:min(92vw,420px);font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;max-width:min(92vw,420px);font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
 .toast.on{opacity:1}
 @media (min-width:720px){.toast{bottom:24px}}
 @media (max-width:520px){h1{font-size:21px}}
@@ -241,7 +245,7 @@ a.lnk .ic{width:15px;height:15px}
   </header>
 
   <section id="gate" class="card authcard" hidden>
-    <div class="authlogo"><svg viewBox="56 280 304 170" role="img" aria-label="SCANDIA Stock Opname"><g class="k" fill-rule="evenodd"><path d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g transform="translate(0 9)"><path d="M250.8 416.6 251.5 417.4 266.1 417.4 272.9 415.8 276.5 413.9 280.1 410.9 283.5 405.9 284.5 402.2 283.8 401.6 251.4 401.6 250.8 402.2ZM319.1 374.4 318 375.8 312 390 311.6 391.6 301.2 416 301.2 416.9 302 417.4 313.1 417.2 314.1 416 316.1 410.5 316.9 409.9 331.5 409.8 332.6 410.4 334.9 416.4 335.8 417.2 347.4 417.2 347.9 416.5 330.8 375.2 329.6 374.2ZM324.2 389.6 325 390 328.4 398 328.5 399.2 328.1 399.6 321.6 399.8 320.6 399.1 320.6 398.4ZM227.5 374.5 227.1 375.2 227.4 389.9 228.4 390.5 239.1 390.2 239.6 389.5 239.5 374.8 238.9 374.2ZM194.9 374.5 194.5 375.2 194.5 416.2 195.1 417.2 205.8 417.4 206.6 416.8 206.6 395.8 207.2 395.2 224.4 416.9 225.2 417.4 238.8 417.4 239.5 416.8 239.6 402.5 239.2 401.9 228.4 401.6 227.5 401.2 221.6 394.4 209.4 378.4 206 374.5ZM164 374.4 163 375.6 146.1 416 146.1 416.9 146.8 417.4 157.6 417.4 158.6 416.6 161 410.5 162 409.8 176.2 409.8 177.6 410.6 179.6 416.1 180.6 417.4 192.2 417.2 192.6 416.9 192.5 415.8 175.5 375.2 174.2 374.2ZM169.1 389.9 169.9 390.1 173.1 398.4 173.1 399.2 172.6 399.6 165.8 399.6 165.4 399.2 165.6 397.6ZM126.2 374.2 121.6 375.1 116.9 377 113.9 379.1 110.8 382.2 108.5 385.8 106.9 389.9 106.1 394.1 106.2 398.6 107 402.2 108.4 405.9 110.9 409.6 114.5 413.1 117.6 415.1 122.5 416.9 125.1 417.4 130.1 417.4 134.2 416.6 138.8 414.8 142.9 411.6 145.1 409 145.4 407.6 144.6 406.8 137.5 401.9 136.4 402.2 134.9 403.9 132.4 405.6 129.5 406.5 126.5 406.5 123.2 405.4 120.6 403 118.9 399.8 118.2 395.1 119.2 390.9 122 387.2 123.1 386.4 126.2 385.1 129.1 385 130.6 385.4 133.6 386.9 136.4 389.4 137.5 389.5 144.5 384.1 145.2 383.2 145.2 382.5 140.9 378 137.1 376 133.1 374.8 129.9 374.2ZM78.5 375.5 74.2 377.9 72 380.2 70.9 382.2 69.9 385.9 70 390.6 71.8 394.4 74.1 396.8 76.2 398 81.1 399.9 90.4 402.4 92.1 403.8 92.4 405.2 91.2 406.6 89.6 407.4 85.5 407.4 79.8 405.8 74.6 402.8 74.1 402.9 68.6 409.2 68.2 410.5 69.1 411.5 72.8 413.9 77 415.8 80.4 416.8 84.5 417.4 90 417.4 93.6 416.8 96.1 415.9 99 414.4 102 411.5 103.9 408 104.4 403 103.8 399.2 101.5 396 97.9 393.4 91.2 391 83.9 389.1 82.2 388 81.9 386.2 82.5 385.2 83.9 384.4 88.9 384.4 92 385.4 97.2 388 98.1 387.4 102.6 381.1 102.9 379.9 101.9 378.8 98.6 376.9 92.1 374.8 90.2 374.8 88.6 374.2 83.8 374.2ZM250.9 374.8 250.8 389.5 251.4 390.4 284 390.5 284.9 389.8 284 386.4 280.8 381 277.1 377.9 274 376.1 270.9 375 267 374.2 251.9 374.1ZM287.6 374 286.9 375.1 286.9 416.5 287.9 417.4 298.1 417.4 299 416.5 298.9 374.6 298.4 374 297.6 373.9Z"/></g></g><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.2"/><path d="M160.9 336.1H254.9" stroke-width="2.2"/></g><text class="s" x="209.5" y="448" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-size="13" font-weight="600" letter-spacing="5.2">STOCK OPNAME</text></svg></div>
+    <div class="authlogo"><svg viewBox="56 280 304 170" role="img" aria-label="SCANDIA Cycle Count"><g class="k" fill-rule="evenodd"><path d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g transform="translate(0 9)"><path d="M250.8 416.6 251.5 417.4 266.1 417.4 272.9 415.8 276.5 413.9 280.1 410.9 283.5 405.9 284.5 402.2 283.8 401.6 251.4 401.6 250.8 402.2ZM319.1 374.4 318 375.8 312 390 311.6 391.6 301.2 416 301.2 416.9 302 417.4 313.1 417.2 314.1 416 316.1 410.5 316.9 409.9 331.5 409.8 332.6 410.4 334.9 416.4 335.8 417.2 347.4 417.2 347.9 416.5 330.8 375.2 329.6 374.2ZM324.2 389.6 325 390 328.4 398 328.5 399.2 328.1 399.6 321.6 399.8 320.6 399.1 320.6 398.4ZM227.5 374.5 227.1 375.2 227.4 389.9 228.4 390.5 239.1 390.2 239.6 389.5 239.5 374.8 238.9 374.2ZM194.9 374.5 194.5 375.2 194.5 416.2 195.1 417.2 205.8 417.4 206.6 416.8 206.6 395.8 207.2 395.2 224.4 416.9 225.2 417.4 238.8 417.4 239.5 416.8 239.6 402.5 239.2 401.9 228.4 401.6 227.5 401.2 221.6 394.4 209.4 378.4 206 374.5ZM164 374.4 163 375.6 146.1 416 146.1 416.9 146.8 417.4 157.6 417.4 158.6 416.6 161 410.5 162 409.8 176.2 409.8 177.6 410.6 179.6 416.1 180.6 417.4 192.2 417.2 192.6 416.9 192.5 415.8 175.5 375.2 174.2 374.2ZM169.1 389.9 169.9 390.1 173.1 398.4 173.1 399.2 172.6 399.6 165.8 399.6 165.4 399.2 165.6 397.6ZM126.2 374.2 121.6 375.1 116.9 377 113.9 379.1 110.8 382.2 108.5 385.8 106.9 389.9 106.1 394.1 106.2 398.6 107 402.2 108.4 405.9 110.9 409.6 114.5 413.1 117.6 415.1 122.5 416.9 125.1 417.4 130.1 417.4 134.2 416.6 138.8 414.8 142.9 411.6 145.1 409 145.4 407.6 144.6 406.8 137.5 401.9 136.4 402.2 134.9 403.9 132.4 405.6 129.5 406.5 126.5 406.5 123.2 405.4 120.6 403 118.9 399.8 118.2 395.1 119.2 390.9 122 387.2 123.1 386.4 126.2 385.1 129.1 385 130.6 385.4 133.6 386.9 136.4 389.4 137.5 389.5 144.5 384.1 145.2 383.2 145.2 382.5 140.9 378 137.1 376 133.1 374.8 129.9 374.2ZM78.5 375.5 74.2 377.9 72 380.2 70.9 382.2 69.9 385.9 70 390.6 71.8 394.4 74.1 396.8 76.2 398 81.1 399.9 90.4 402.4 92.1 403.8 92.4 405.2 91.2 406.6 89.6 407.4 85.5 407.4 79.8 405.8 74.6 402.8 74.1 402.9 68.6 409.2 68.2 410.5 69.1 411.5 72.8 413.9 77 415.8 80.4 416.8 84.5 417.4 90 417.4 93.6 416.8 96.1 415.9 99 414.4 102 411.5 103.9 408 104.4 403 103.8 399.2 101.5 396 97.9 393.4 91.2 391 83.9 389.1 82.2 388 81.9 386.2 82.5 385.2 83.9 384.4 88.9 384.4 92 385.4 97.2 388 98.1 387.4 102.6 381.1 102.9 379.9 101.9 378.8 98.6 376.9 92.1 374.8 90.2 374.8 88.6 374.2 83.8 374.2ZM250.9 374.8 250.8 389.5 251.4 390.4 284 390.5 284.9 389.8 284 386.4 280.8 381 277.1 377.9 274 376.1 270.9 375 267 374.2 251.9 374.1ZM287.6 374 286.9 375.1 286.9 416.5 287.9 417.4 298.1 417.4 299 416.5 298.9 374.6 298.4 374 297.6 373.9Z"/></g></g><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.2"/><path d="M160.9 336.1H254.9" stroke-width="2.2"/></g><text class="s" x="209.5" y="448" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-size="14" font-weight="600" letter-spacing="6.4">CYCLE COUNT</text></svg></div>
     <p id="authIntro" class="hint center"></p>
     <form id="formMasuk">
       <label class="f"><span><i data-ic="user"></i>Username</span><input id="mUser" type="text" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
@@ -314,7 +318,7 @@ a.lnk .ic{width:15px;height:15px}
                 <option value="">Pilih lokasi…</option><option>Showroom</option><option>Warehouse</option><option>Office</option><option>Rack</option><option>Lainnya</option>
               </select></label>
             <label class="f" id="lokasiLainWrap" hidden><span><i data-ic="pin"></i>Lokasi lainnya</span><input id="lokasiLain" type="text" maxlength="80" placeholder="Ketik lokasi, mis. Gudang belakang" autocomplete="off"></label>
-            <div class="f"><span><i data-ic="user"></i>Petugas</span><div class="combo" id="petCombo"><input id="petugas" type="text" role="combobox" aria-expanded="false" aria-controls="petList" aria-autocomplete="list" placeholder="Nama petugas" autocomplete="off" autocapitalize="words"><button type="button" class="eye" id="petBtn" aria-label="Buka daftar petugas" tabindex="-1" hidden><i data-ic="chevron"></i></button><div id="petList" class="combolist" role="listbox" hidden></div></div><span id="petHint" class="hint" style="text-transform:none;letter-spacing:0;font-weight:400;margin:0" hidden></span></div>
+            <label class="f"><span><i data-ic="user"></i>Petugas</span><input id="petugas" type="text" readonly tabindex="-1" aria-label="Petugas (akun yang sedang login)" placeholder="Petugas"></label>
           </div>
         </div>
 
@@ -385,13 +389,8 @@ a.lnk .ic{width:15px;height:15px}
     <div class="sheethead"><h2 id="pgJudul"><i data-ic="settings"></i>Pengaturan</h2><button class="ibtn" id="pgTutup" type="button" aria-label="Tutup"><i data-ic="x"></i></button></div>
     <div class="sheetbody">
       <section>
-        <h3><i data-ic="user"></i>Daftar petugas</h3>
-        <p class="hint" style="margin:0">Hanya nama di daftar ini yang bisa dipilih pada kolom Petugas di tab Hitung. Kalau daftar kosong, petugas mengetik namanya sendiri.</p>
-        <form id="formPetugas"><div class="kode"><input id="pgNama" type="text" maxlength="60" placeholder="Nama petugas" autocomplete="off" aria-label="Nama petugas baru"><button class="btn" type="submit"><i data-ic="plus"></i>Tambah</button></div></form>
-        <div id="pgPetugas"></div>
-      </section>
-      <section>
         <h3><i data-ic="users"></i>Akun pengguna</h3>
+        <p class="hint" style="margin:0">Nama akun yang sedang login otomatis menjadi nama petugas pada setiap hitungan.</p>
         <div id="pgPengguna"></div>
         <form id="formPengguna">
           <b id="pgFormJudul" style="font-size:14px">Tambah akun</b>
@@ -399,6 +398,7 @@ a.lnk .ic{width:15px;height:15px}
           <label class="f" id="pgPeranWrap"><span><i data-ic="shield"></i>Peran</span><select id="pgPeran"><option value="User">User (tanpa tombol pengaturan)</option><option value="Admin">Admin (bisa mengatur)</option></select></label>
           <label class="f"><span><i data-ic="lock"></i>Password</span><div class="pw"><input id="pgPw" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="eye" data-eye="pgPw" aria-label="Tampilkan password" aria-pressed="false"><i data-ic="eye"></i></button></div></label>
           <label class="f"><span><i data-ic="lock"></i>Konfirmasi password</span><div class="pw"><input id="pgPw2" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"><button type="button" class="eye" data-eye="pgPw2" aria-label="Tampilkan password" aria-pressed="false"><i data-ic="eye"></i></button></div></label>
+          <p id="pgPesan" class="hint" role="alert" aria-live="assertive" style="margin:0" hidden></p>
           <div class="lacts"><button class="btn" id="pgSimpanAkun" type="submit"><i data-ic="plus"></i>Tambah akun</button><button class="btn ghost" id="pgBatalReset" type="button" hidden>Batal</button></div>
         </form>
       </section>
@@ -480,7 +480,7 @@ function hydrate(root){(root||document).querySelectorAll('i[data-ic]').forEach(f
 
 /* Isi API_URL hanya bila halaman ini di-hosting di luar Apps Script (mode kamera langsung).
    Isinya URL web app Apps Script yang berakhiran /exec. Jika dibuka lewat Apps Script, biarkan kosong. */
-var API_URL='https://script.google.com/macros/s/AKfycbxxNQGL-qBC7XrGnErm5G_K2PzlerqNX3zHBeG6JsQInUG18aVyCTUW6HQ6P-zuOBLX/exec';
+var API_URL='';
 var DI_APPS_SCRIPT=typeof google!=='undefined'&&google.script&&google.script.run;
 function rpcRaw(fn){
   var a=[].slice.call(arguments,1);
@@ -524,7 +524,7 @@ function tglLabel(s){
 }
 function nomorSesi(s){var m=/(\d+)/.exec(s.id);return m?Number(m[1]):0}
 
-var D={kode:lsGet('cc_kode')||'',user:null,petugasList:[],habis:false,sesi:[],kategori:[],barang:[],byId:{},idx:new Map(),idSesi:null,cakupan:'',fotoWajib:true,
+var D={kode:lsGet('cc_kode')||'',user:null,habis:false,sesi:[],kategori:[],barang:[],byId:{},idx:new Map(),idSesi:null,cakupan:'',fotoWajib:true,
   dasar:{},sel:null,baru:null,foto:null,miss:null,dariKamera:false,tunda:null,menyimpanBaru:false,
   q:Promise.resolve(),pending:0,log:[],lastOk:null,tab:'hitung',
   cariLog:'',senterOn:false,barangSiap:false,barangSegar:false,baseSiap:false,dashId:null,dash:null,dashTok:0,fr:'semua',cariDash:'',konf:null,sibuk:false};
@@ -625,12 +625,8 @@ function ready(){
   if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return false}
   if(!D.baseSiap){toast('Data sesi masih dimuat. Tunggu sebentar.');return false}
   if(!$('#petugas').value.trim()){
-    toast('Isi nama petugas dulu. Kode terakhir akan diproses setelah itu.');
-    $('#petugas').setAttribute('aria-invalid','true');$('#petugas').focus();return false;
-  }
-  if(D.petugasList.length&&!petCanon($('#petugas').value)){
-    toast('Pilih nama petugas dari daftar.');
-    $('#petugas').setAttribute('aria-invalid','true');$('#petugas').focus();return false;
+    toast('Nama petugas kosong. Silakan masuk lagi.');
+    return false;
   }
   if($('#lokasi').value==='Lainnya'&&!$('#lokasiLain').value.trim()){
     toast('Ketik lokasi pada kolom Lokasi lainnya.');
@@ -871,7 +867,6 @@ function tampilApp(list){
   var prev=D.idSesi;
   if(!uiAwal){
     uiAwal=true;
-    var sp=lsGet('cc_petugas')||'';$('#petugas').value=D.petugasList.length?petCanon(sp):sp;petugasSegar();
     var l=lsGet('cc_lok');if(l&&Array.prototype.some.call($('#lokasi').options,function(o){return o.value===l}))$('#lokasi').value=l;
     $('#lokasiLain').value=lsGet('cc_lokx')||'';syncLokasi();
     $('#sTgl').value=hariIni();isiCakupan();
@@ -894,20 +889,20 @@ function tampilApp(list){
 function start(){
   $('#err').hidden=true;
   if(!tokenAda()){showLogin();return}
+  document.body.classList.remove('auth');
   var cache=null;
   if(!uiAwal&&lsGet('cc_ok')==='1'){
     try{cache=JSON.parse(lsGet('cc_sesicache')||'null')}catch(e){}
     try{D.user=JSON.parse(lsGet('cc_user')||'null')}catch(e){}
-    try{D.petugasList=JSON.parse(lsGet('cc_petlist')||'[]')}catch(e){}
   }
   if(cache&&cache.length&&D.user){D.fotoWajib=lsGet('cc_foto')!=='0';applyAuthUI();tampilApp(cache)}
   muatBarang();
   rpc('mulaiCepat',D.kode).then(function(d){
     D.fotoWajib=d.fotoWajib!==false;lsSet('cc_foto',D.fotoWajib?'1':'0');
-    D.user=d.user;D.petugasList=d.petugas||[];
-    lsSet('cc_ok','1');lsSet('cc_user',JSON.stringify(d.user));lsSet('cc_petlist',JSON.stringify(D.petugasList));
+    D.user=d.user;
+    lsSet('cc_ok','1');lsSet('cc_user',JSON.stringify(d.user));
     applyAuthUI();
-    tampilApp(d.sesi);petugasSegar();
+    tampilApp(d.sesi);
   }).catch(function(e){
     var m=errText(e);
     if(/masuk lagi/i.test(m))return;
@@ -926,6 +921,7 @@ function sesiHabis(){
 function applyAuthUI(){
   var u=D.user,adm=!!u&&u.peran==='Admin';
   $('#who').textContent=u?u.username+' · '+u.peran:'';
+  $('#petugas').value=u?u.username:'';
   $('#btnKeluar').hidden=!u;$('#btnPengaturan').hidden=!adm;
   if(!adm)tutupPengaturan();
 }
@@ -938,6 +934,7 @@ function modeAuth(m){
 }
 function showLogin(pesan){
   $('#loading').hidden=true;$('#app').hidden=true;$('#err').hidden=true;$('#gate').hidden=false;
+  document.body.classList.add('auth');
   applyAuthUI();modeAuth('masuk');
   $('#authErr').textContent=pesan||'';
   rpc('statusAkun').then(function(st){
@@ -950,78 +947,25 @@ function selesaiLogin(r){
   D.kode=r.token;D.user=r.user;D.habis=false;
   lsSet('cc_kode',D.kode);lsSet('cc_user',JSON.stringify(r.user));
   ['mUser','mPw','dKode','dUser','dPw','dPw2'].forEach(function(i){$('#'+i).value=''});
-  authBusy(false);$('#gate').hidden=true;$('#loading').hidden=false;
+  authBusy(false);$('#gate').hidden=true;document.body.classList.remove('auth');$('#loading').hidden=false;
   start();
 }
 function keluar(){
-  ['cc_kode','cc_ok','cc_user','cc_sesicache','cc_petlist'].forEach(function(k){lsSet(k,'')});
+  ['cc_kode','cc_ok','cc_user','cc_sesicache','cc_petlist','cc_petugas'].forEach(function(k){lsSet(k,'')});
   location.reload();
-}
-
-/* ---------- dropdown petugas ---------- */
-function petCanon(v){
-  var l=String(v||'').trim().toLowerCase();
-  for(var i=0;i<D.petugasList.length;i++)if(D.petugasList[i].toLowerCase()===l)return D.petugasList[i];
-  return '';
-}
-function petItems(){
-  var v=$('#petugas').value.trim().toLowerCase();
-  if(!v||petCanon(v))return D.petugasList;
-  return D.petugasList.filter(function(n){return n.toLowerCase().indexOf(v)>=0});
-}
-var petIdx=-1;
-function petBuka(){
-  if(!D.petugasList.length)return;
-  var items=petItems(),cur=petCanon($('#petugas').value);petIdx=-1;
-  $('#petList').innerHTML=items.length?items.map(function(n,i){
-    return '<div role="option" id="pet'+i+'" data-pet="'+esc(n)+'" aria-selected="'+(n===cur?'true':'false')+'">'+esc(n)+'</div>';
-  }).join(''):'<div class="kosong">Tidak ada petugas yang cocok.</div>';
-  $('#petList').hidden=false;$('#petugas').setAttribute('aria-expanded','true');
-}
-function petTutup(){$('#petList').hidden=true;$('#petugas').setAttribute('aria-expanded','false');petIdx=-1}
-function petPilih(n){
-  var el=$('#petugas');el.value=n;petTutup();el.removeAttribute('aria-invalid');
-  el.dispatchEvent(new Event('change',{bubbles:true}));
-}
-function petSorot(d){
-  var o=$('#petList').querySelectorAll('[role=option]');if(!o.length)return;
-  petIdx=(petIdx+d+o.length)%o.length;
-  Array.prototype.forEach.call(o,function(x,i){x.setAttribute('aria-selected',i===petIdx?'true':'false')});
-  o[petIdx].scrollIntoView({block:'nearest'});
-}
-function petugasSegar(){
-  var ada=D.petugasList.length>0,el=$('#petugas');
-  $('#petBtn').hidden=!ada;
-  el.placeholder=ada?'Pilih atau cari petugas':'Nama petugas';
-  var h=$('#petHint');
-  if(!ada&&D.user&&D.user.peran==='Admin'){h.hidden=false;h.textContent='Daftar petugas masih kosong. Atur lewat tombol Pengaturan di kanan atas.'}else h.hidden=true;
-  var v=el.value.trim();
-  if(ada&&v){var c=petCanon(v);if(c)el.value=c;else{el.value='';lsSet('cc_petugas','')}}
-  petTutup();
 }
 
 /* ---------- pengaturan (Admin) ---------- */
 function bukaPengaturan(){
   if(!D.user||D.user.peran!=='Admin')return;
   $('#pengaturan').hidden=false;document.body.style.overflow='hidden';
-  D.konfP=null;D.konfU=null;renderPetugasPg();resetFormAkun();
+  D.konfU=null;resetFormAkun();
   $('#pgPengguna').innerHTML='<span class="hint">Memuat akun…</span>';
   rpc('daftarPengguna',D.kode).then(function(r){D.pengguna=r.pengguna;renderPengguna()},function(e){
     $('#pgPengguna').innerHTML='<span class="hint err">'+esc(errText(e))+'</span>';
   });
 }
 function tutupPengaturan(){$('#pengaturan').hidden=true;document.body.style.overflow=''}
-function renderPetugasPg(){
-  $('#pgPetugas').innerHTML=D.petugasList.length?D.petugasList.map(function(n,i){
-    var k=D.konfP===n;
-    return '<div class="lrow"><span class="nm">'+esc(n)+'</span><span class="lacts">'+(k?
-      '<span class="hint" style="margin:0">Hapus?</span><button class="btn danger sm" data-pgya="'+i+'" type="button">Ya</button><button class="btn ghost sm" data-pgtidak="1" type="button">Tidak</button>':
-      '<button class="btn ghost sm" data-pghapus="'+i+'" type="button" aria-label="Hapus '+esc(n)+'">'+ic('trash')+'Hapus</button>')+'</span></div>';
-  }).join(''):'<span class="hint">Belum ada petugas. Tambahkan nama di atas.</span>';
-}
-function petugasBerubah(list){
-  D.petugasList=list;lsSet('cc_petlist',JSON.stringify(list));D.konfP=null;renderPetugasPg();petugasSegar();
-}
 function renderPengguna(){
   var me=D.user&&D.user.username;
   $('#pgPengguna').innerHTML=(D.pengguna||[]).map(function(u){
@@ -1032,8 +976,14 @@ function renderPengguna(){
         '<button class="btn ghost sm" data-pghapususer="'+esc(u.username)+'" type="button">'+ic('trash')+'Hapus</button>'))+'</span></div>';
   }).join('')||'<span class="hint">Belum ada akun.</span>';
 }
+function pgPesan(teks,baik){
+  var p=$('#pgPesan');p.textContent=teks||'';p.hidden=!teks;
+  p.className='hint '+(baik?'pesan-ok':'pesan-err');
+  if(teks)p.scrollIntoView({block:'nearest'});
+}
 function resetFormAkun(){
-  D.resetUser=null;
+  D.resetUser=null;pgPesan('',true);
+  ['pgPw','pgPw2','pgUser'].forEach(function(i){$('#'+i).removeAttribute('aria-invalid')});
   $('#pgFormJudul').textContent='Tambah akun';
   var u=$('#pgUser');u.readOnly=false;u.value='';
   $('#pgPeranWrap').hidden=false;$('#pgBatalReset').hidden=true;
@@ -1581,63 +1531,27 @@ $('#btnPengaturan').addEventListener('click',bukaPengaturan);
 $('#pgTutup').addEventListener('click',tutupPengaturan);
 $('#pengaturan').addEventListener('click',function(e){if(e.target===this)tutupPengaturan()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#pengaturan').hidden)tutupPengaturan()});
-$('#formPetugas').addEventListener('submit',function(e){
-  e.preventDefault();var n=$('#pgNama').value.trim();
-  if(!n){toast('Ketik nama petugas dulu.');return}
-  rpc('tambahPetugas',D.kode,{nama:n}).then(function(r){petugasBerubah(r.petugas);$('#pgNama').value='';toast('Petugas ditambahkan.')},function(er){toast(errText(er))});
-});
 $('#formPengguna').addEventListener('submit',function(e){
   e.preventDefault();var u=$('#pgUser').value.trim(),p=$('#pgPw').value,p2=$('#pgPw2').value;
-  var m=!u?'Isi username.':cekPassword(p,p2);if(m){toast(m);return}
+  var m=!u?'Isi username.':cekPassword(p,p2);
+  if(m){pgPesan(m,false);if(m.indexOf('Konfirmasi')===0){$('#pgPw2').setAttribute('aria-invalid','true');$('#pgPw2').focus()}else if(m.indexOf('Password')===0){$('#pgPw').setAttribute('aria-invalid','true');$('#pgPw').focus()}else $('#pgUser').focus();return}
+  pgPesan('',true);
   if(D.resetUser){
-    rpc('resetPassword',D.kode,{username:u,password:p,konfirmasi:p2}).then(function(){toast('Password '+u+' diperbarui.');resetFormAkun()},function(er){toast(errText(er))});
+    rpc('resetPassword',D.kode,{username:u,password:p,konfirmasi:p2}).then(function(){resetFormAkun();pgPesan('Password '+u+' berhasil diperbarui.',true);toast('Password '+u+' diperbarui.')},function(er){pgPesan(errText(er),false);toast(errText(er))});
   }else{
-    rpc('tambahPengguna',D.kode,{username:u,peran:$('#pgPeran').value,password:p,konfirmasi:p2}).then(function(r){D.pengguna=r.pengguna;renderPengguna();resetFormAkun();toast('Akun '+u.toLowerCase()+' dibuat.')},function(er){toast(errText(er))});
+    rpc('tambahPengguna',D.kode,{username:u,peran:$('#pgPeran').value,password:p,konfirmasi:p2}).then(function(r){D.pengguna=r.pengguna;renderPengguna();resetFormAkun();pgPesan('Akun '+u.toLowerCase()+' berhasil dibuat.',true);toast('Akun '+u.toLowerCase()+' dibuat.')},function(er){pgPesan(errText(er),false);toast(errText(er))});
   }
 });
 $('#pgBatalReset').addEventListener('click',resetFormAkun);
+['pgUser','pgPw','pgPw2'].forEach(function(i){$('#'+i).addEventListener('input',function(){pgPesan('',true);this.removeAttribute('aria-invalid')})});
 $('#pengaturan').addEventListener('click',function(e){
   var t;
-  if((t=e.target.closest('[data-pghapus]'))){D.konfP=D.petugasList[Number(t.dataset.pghapus)];renderPetugasPg();return}
-  if((t=e.target.closest('[data-pgya]'))){
-    var n=D.petugasList[Number(t.dataset.pgya)];
-    rpc('hapusPetugas',D.kode,{nama:n}).then(function(r){petugasBerubah(r.petugas);toast('Petugas dihapus.')},function(er){toast(errText(er))});return}
-  if(e.target.closest('[data-pgtidak]')){D.konfP=null;D.konfU=null;renderPetugasPg();renderPengguna();return}
+  if(e.target.closest('[data-pgtidak]')){D.konfU=null;renderPengguna();return}
   if((t=e.target.closest('[data-pgreset]'))){mulaiReset(t.dataset.pgreset);return}
   if((t=e.target.closest('[data-pghapususer]'))){D.konfU=t.dataset.pghapususer;renderPengguna();return}
   if((t=e.target.closest('[data-pgyauser]'))){
-    rpc('hapusPengguna',D.kode,{username:t.dataset.pgyauser}).then(function(r){D.pengguna=r.pengguna;D.konfU=null;renderPengguna();toast('Akun dihapus.')},function(er){D.konfU=null;renderPengguna();toast(errText(er))});return}
+    rpc('hapusPengguna',D.kode,{username:t.dataset.pgyauser}).then(function(r){D.pengguna=r.pengguna;D.konfU=null;renderPengguna();toast('Akun dihapus.')},function(er){D.konfU=null;renderPengguna();pgPesan(errText(er),false);toast(errText(er))});return}
 });
-/* dropdown petugas */
-(function(){
-  var el=$('#petugas');
-  el.addEventListener('focus',function(){if(D.petugasList.length){el.select();petBuka()}});
-  el.addEventListener('click',petBuka);
-  el.addEventListener('input',petBuka);
-  el.addEventListener('keydown',function(e){
-    if(e.key==='ArrowDown'){e.preventDefault();if($('#petList').hidden)petBuka();petSorot(1)}
-    else if(e.key==='ArrowUp'){e.preventDefault();petSorot(-1)}
-    else if(e.key==='Escape')petTutup();
-    else if(e.key==='Enter'&&D.petugasList.length&&!$('#petList').hidden){
-      e.preventDefault();var it=petItems(),o=$('#petList').querySelectorAll('[data-pet]');
-      if(petIdx>=0&&o[petIdx])petPilih(o[petIdx].dataset.pet);else if(it.length)petPilih(it[0]);
-    }
-  });
-  el.addEventListener('blur',function(){setTimeout(function(){
-    petTutup();
-    if(!D.petugasList.length)return;
-    var v=el.value.trim();if(!v)return;
-    var c=petCanon(v);
-    if(c){if(el.value!==c){el.value=c;el.dispatchEvent(new Event('change',{bubbles:true}))}return}
-    var m=petItems();
-    if(m.length===1)petPilih(m[0]);
-    else{var lama=petCanon(lsGet('cc_petugas'));el.value=lama;toast('Pilih nama petugas dari daftar.')}
-  },150)});
-  $('#petList').addEventListener('mousedown',function(e){e.preventDefault()});
-  $('#petList').addEventListener('click',function(e){var o=e.target.closest('[data-pet]');if(o)petPilih(o.dataset.pet)});
-  $('#petBtn').addEventListener('mousedown',function(e){e.preventDefault()});
-  $('#petBtn').addEventListener('click',function(){if($('#petList').hidden){el.focus();petBuka()}else petTutup()});
-})();
 /* edit jumlah di riwayat */
 $('#log').addEventListener('input',function(e){
   var q=e.target.closest('[data-editqty]');if(q){var en=D.log[Number(q.dataset.editqty)];if(en)en.editVal=q.value}
@@ -1666,13 +1580,6 @@ $('#dashSesi').addEventListener('change',function(e){D.dashId=e.target.value;lsS
 $('#btnDashMuat').addEventListener('click',function(){D.q.then(loadDash)});
 $('#btnCsv').addEventListener('click',unduhCsv);
 $('#formSesi').addEventListener('submit',function(e){e.preventDefault();buatSesi()});
-$('#petugas').addEventListener('input',function(e){e.target.removeAttribute('aria-invalid')});
-$('#petugas').addEventListener('change',function(e){
-  if(D.petugasList.length&&!petCanon(e.target.value))return;
-  lsSet('cc_petugas',e.target.value.trim());
-  var c=D.tunda;D.tunda=null;
-  if(c&&e.target.value.trim())onScan(c,false);
-});
 $('#lokasi').addEventListener('change',function(e){
   lsSet('cc_lok',e.target.value);syncLokasi();
   if(e.target.value==='Lainnya')$('#lokasiLain').focus();
