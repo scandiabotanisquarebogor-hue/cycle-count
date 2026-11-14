@@ -52,6 +52,13 @@ header{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;al
 .authcard{max-width:420px;margin:24px auto 0;width:100%;display:flex;flex-direction:column;gap:14px}
 .authcard form{display:flex;flex-direction:column;gap:12px}
 body.auth header{display:none}
+.lang{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);height:42px}
+.lang button{font:700 13px inherit;font-family:inherit;color:var(--ink2);background:none;border:0;min-width:40px;padding:0 10px;cursor:pointer;letter-spacing:.04em}
+.lang button+button{border-left:1.5px solid var(--line)}
+.lang button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.gatelang{display:flex;justify-content:flex-end;margin-bottom:-6px}
+.gatelang .lang{height:36px}
+@media (max-width:520px){header{row-gap:8px}.hright{width:100%;align-items:stretch}.hbtns{flex-wrap:nowrap}.hbtns .who{margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hrow{justify-content:space-between}}
 body.auth .authcard{margin-top:min(12vh,110px)}
 .authlogo{display:flex;justify-content:center}.authlogo{padding:4px 0 2px}.authlogo svg{width:min(210px,66%);height:auto}
 .authcard .center{text-align:center;margin:0}
@@ -160,6 +167,14 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 .qtyrow{display:flex;align-items:center;gap:10px}
 .qtyrow input{max-width:160px;font:500 24px var(--mono);text-align:right;min-height:52px}
 .sat{color:var(--ink2);font-size:14px}
+.kondrow{flex-wrap:wrap}
+.kondrow input{max-width:112px;font-size:22px}
+.kondrow .kondsel{flex:1 1 150px;min-width:0}
+.kondrow select{width:100%;min-height:52px}
+.kondalasan{margin-top:10px}
+.kpis.kondk{grid-template-columns:repeat(2,1fr)}
+@media (min-width:620px){.kpis.kondk{grid-template-columns:repeat(4,1fr)}}
+.kon{font-weight:700;color:var(--bad)}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}
 .form .wide{grid-column:1/-1}
@@ -243,12 +258,13 @@ a.lnk .ic{width:15px;height:15px}
   <header>
     <div class="logo"><svg class="lg" viewBox="159.9 286.1 96.0 94.0" aria-hidden="true"><path class="k" fill-rule="evenodd" d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.6"/><path d="M160.9 336.1H254.9" stroke-width="2.6"/></g></svg><div><div class="brand">SCANDIA Botani</div><h1>CYCLE COUNT</h1></div></div>
     <div class="hright">
-      <div class="hbtns"><span id="who" class="who"></span><button class="ibtn" id="btnPengaturan" type="button" aria-label="Pengaturan" title="Pengaturan" hidden><i data-ic="settings"></i></button><button class="ibtn" id="btnKeluar" type="button" aria-label="Keluar" title="Keluar" hidden><i data-ic="logout"></i></button></div>
+      <div class="hbtns"><span id="who" class="who"></span><div class="lang" role="group" aria-label="Bahasa"><button type="button" data-lang="id" aria-pressed="true" title="Bahasa Indonesia">ID</button><button type="button" data-lang="en" aria-pressed="false" title="English">EN</button></div><button class="ibtn" id="btnPengaturan" type="button" aria-label="Pengaturan" title="Pengaturan" hidden><i data-ic="settings"></i></button><button class="ibtn" id="btnKeluar" type="button" aria-label="Keluar" title="Keluar" hidden><i data-ic="logout"></i></button></div>
       <div class="hrow"><button class="btn sm" id="btnPasang" type="button" hidden>Pasang aplikasi</button><div id="status" class="status" role="status" aria-live="polite"></div></div>
     </div>
   </header>
 
   <section id="gate" class="card authcard" hidden>
+    <div class="gatelang"><div class="lang" role="group" aria-label="Bahasa"><button type="button" data-lang="id" aria-pressed="true" title="Bahasa Indonesia">ID</button><button type="button" data-lang="en" aria-pressed="false" title="English">EN</button></div></div>
     <div class="authlogo"><svg viewBox="60 285 296 166" role="img" aria-label="SCANDIA Cycle Count"><g class="k" fill-rule="evenodd"><path d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g transform="translate(0 9)"><path d="M250.8 416.6 251.5 417.4 266.1 417.4 272.9 415.8 276.5 413.9 280.1 410.9 283.5 405.9 284.5 402.2 283.8 401.6 251.4 401.6 250.8 402.2ZM319.1 374.4 318 375.8 312 390 311.6 391.6 301.2 416 301.2 416.9 302 417.4 313.1 417.2 314.1 416 316.1 410.5 316.9 409.9 331.5 409.8 332.6 410.4 334.9 416.4 335.8 417.2 347.4 417.2 347.9 416.5 330.8 375.2 329.6 374.2ZM324.2 389.6 325 390 328.4 398 328.5 399.2 328.1 399.6 321.6 399.8 320.6 399.1 320.6 398.4ZM227.5 374.5 227.1 375.2 227.4 389.9 228.4 390.5 239.1 390.2 239.6 389.5 239.5 374.8 238.9 374.2ZM194.9 374.5 194.5 375.2 194.5 416.2 195.1 417.2 205.8 417.4 206.6 416.8 206.6 395.8 207.2 395.2 224.4 416.9 225.2 417.4 238.8 417.4 239.5 416.8 239.6 402.5 239.2 401.9 228.4 401.6 227.5 401.2 221.6 394.4 209.4 378.4 206 374.5ZM164 374.4 163 375.6 146.1 416 146.1 416.9 146.8 417.4 157.6 417.4 158.6 416.6 161 410.5 162 409.8 176.2 409.8 177.6 410.6 179.6 416.1 180.6 417.4 192.2 417.2 192.6 416.9 192.5 415.8 175.5 375.2 174.2 374.2ZM169.1 389.9 169.9 390.1 173.1 398.4 173.1 399.2 172.6 399.6 165.8 399.6 165.4 399.2 165.6 397.6ZM126.2 374.2 121.6 375.1 116.9 377 113.9 379.1 110.8 382.2 108.5 385.8 106.9 389.9 106.1 394.1 106.2 398.6 107 402.2 108.4 405.9 110.9 409.6 114.5 413.1 117.6 415.1 122.5 416.9 125.1 417.4 130.1 417.4 134.2 416.6 138.8 414.8 142.9 411.6 145.1 409 145.4 407.6 144.6 406.8 137.5 401.9 136.4 402.2 134.9 403.9 132.4 405.6 129.5 406.5 126.5 406.5 123.2 405.4 120.6 403 118.9 399.8 118.2 395.1 119.2 390.9 122 387.2 123.1 386.4 126.2 385.1 129.1 385 130.6 385.4 133.6 386.9 136.4 389.4 137.5 389.5 144.5 384.1 145.2 383.2 145.2 382.5 140.9 378 137.1 376 133.1 374.8 129.9 374.2ZM78.5 375.5 74.2 377.9 72 380.2 70.9 382.2 69.9 385.9 70 390.6 71.8 394.4 74.1 396.8 76.2 398 81.1 399.9 90.4 402.4 92.1 403.8 92.4 405.2 91.2 406.6 89.6 407.4 85.5 407.4 79.8 405.8 74.6 402.8 74.1 402.9 68.6 409.2 68.2 410.5 69.1 411.5 72.8 413.9 77 415.8 80.4 416.8 84.5 417.4 90 417.4 93.6 416.8 96.1 415.9 99 414.4 102 411.5 103.9 408 104.4 403 103.8 399.2 101.5 396 97.9 393.4 91.2 391 83.9 389.1 82.2 388 81.9 386.2 82.5 385.2 83.9 384.4 88.9 384.4 92 385.4 97.2 388 98.1 387.4 102.6 381.1 102.9 379.9 101.9 378.8 98.6 376.9 92.1 374.8 90.2 374.8 88.6 374.2 83.8 374.2ZM250.9 374.8 250.8 389.5 251.4 390.4 284 390.5 284.9 389.8 284 386.4 280.8 381 277.1 377.9 274 376.1 270.9 375 267 374.2 251.9 374.1ZM287.6 374 286.9 375.1 286.9 416.5 287.9 417.4 298.1 417.4 299 416.5 298.9 374.6 298.4 374 297.6 373.9Z"/></g></g><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.2"/><path d="M160.9 336.1H254.9" stroke-width="2.2"/></g><text class="s" x="209.5" y="448" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-size="14" font-weight="600" letter-spacing="6.4">CYCLE COUNT</text></svg></div>
     <p id="authIntro" class="hint center"></p>
     <form id="formMasuk">
@@ -273,7 +289,7 @@ a.lnk .ic{width:15px;height:15px}
   <main id="app" hidden>
     <nav class="nav" role="tablist" aria-label="Menu utama">
       <button role="tab" data-tab="dash" aria-selected="false"><i data-ic="dashboard"></i><span>Dashboard</span></button>
-      <button role="tab" data-tab="sesi" aria-selected="false"><i data-ic="calendar"></i><span>Sesi</span></button>
+      <button role="tab" data-tab="sesi" aria-selected="false"><i data-ic="calendar"></i><span data-en="Sessions">Sesi</span></button>
       <button role="tab" data-tab="hitung" aria-selected="false"><i data-ic="barcode"></i><span>Hitung</span></button>
       <button role="tab" data-tab="cek" aria-selected="false"><i data-ic="clipboard"></i><span>Cek Stok</span></button>
       <button role="tab" data-tab="hasil" aria-selected="false"><i data-ic="list"></i><span>Hasil</span></button>
@@ -320,7 +336,7 @@ a.lnk .ic{width:15px;height:15px}
           <div class="grid">
             <label class="f"><span><i data-ic="pin"></i>Lokasi</span>
               <select id="lokasi" aria-label="Lokasi">
-                <option value="">Pilih lokasi…</option><option>Showroom</option><option>Warehouse</option><option>Office</option><option>Rack</option><option>Lainnya</option>
+                <option value="">Pilih lokasi…</option><option value="Showroom">Showroom</option><option value="Warehouse">Warehouse</option><option value="Office">Office</option><option value="Rack">Rack</option><option value="Lainnya">Lainnya</option>
               </select></label>
             <label class="f" id="lokasiLainWrap" hidden><span><i data-ic="pin"></i>Lokasi lainnya</span><input id="lokasiLain" type="text" maxlength="80" placeholder="Ketik lokasi, mis. Gudang belakang" autocomplete="off"></label>
             <label class="f"><span><i data-ic="user"></i>Petugas</span><input id="petugas" type="text" readonly tabindex="-1" aria-label="Petugas (akun yang sedang login)" placeholder="Petugas"></label>
@@ -343,11 +359,10 @@ a.lnk .ic{width:15px;height:15px}
           <label class="f"><span><i data-ic="keyboard"></i>Ketik kode manual</span>
             <div class="kode"><input id="kodeIn" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Kode barcode" aria-label="Ketik kode manual"><button class="btn" id="btnKode" type="button"><i data-ic="search"></i>Cari</button></div>
           </label>
-          <label class="f fgap"><span><i data-ic="search"></i>Cari berdasarkan deskripsi</span>
-            <input id="cari" type="text" autocomplete="off" placeholder="Contoh: sofa abu 3 dudukan" aria-label="Cari barang">
+          <label class="f fgap"><span><i data-ic="search"></i>Cari berdasarkan nama</span>
+            <input id="cari" type="text" autocomplete="off" placeholder="Contoh: sofa 3 dudukan" aria-label="Cari barang">
           </label>
           <div id="hasil"></div>
-          <p class="hint">Alur: kode atau scan, foto barang, lalu jumlah. Barcode 1 dicoba dulu, lalu Barcode 2. Tanpa barcode, pakai Produk baru.</p>
           <p id="barangInfo" class="hint" hidden></p>
           <div id="miss"></div>
         </div>
@@ -394,7 +409,7 @@ a.lnk .ic{width:15px;height:15px}
           <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
         </div>
         <div class="sep"><span>atau cari manual</span></div>
-        <label class="f"><span><i data-ic="keyboard"></i>Kode barcode, nama, atau deskripsi</span>
+        <label class="f"><span><i data-ic="keyboard"></i>Kode barcode atau nama</span>
           <div class="kode"><input id="cekIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ketik lalu tekan Cari" aria-label="Cari barang untuk cek stok"><button class="btn" id="cekCariBtn" type="button"><i data-ic="search"></i>Cari</button></div>
         </label>
         <div id="cekHasil"></div>
@@ -434,7 +449,217 @@ a.lnk .ic{width:15px;height:15px}
 'use strict';
 var $=function(s){return document.querySelector(s)};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-var nf=new Intl.NumberFormat('id-ID',{maximumFractionDigits:3});
+/* ---------- bahasa / language (ID, EN) ---------- */
+var LANG=(function(){var v=lsGet0('cc_lang');return v==='en'?'en':'id'})();
+function lsGet0(k){try{return localStorage.getItem(k)}catch(e){return null}}
+var EN={
+'Pengaturan':'Settings','Keluar':'Log out','Tutup':'Close','Pasang aplikasi':'Install app','Memuat data…':'Loading data…','Menu utama':'Main menu',
+'Hasil':'Results','Cek Stok':'Stock Check','Hitung':'Count','Masuk':'Log in','Kode akses':'Access code','Username baru':'New username','Konfirmasi password':'Confirm password',
+'Buat akun':'Create account','Tampilkan password':'Show password','Sembunyikan password':'Hide password','mis. budi.santoso':'e.g. budi.santoso',
+'Belum punya akun? Daftar':"Don't have an account? Sign up",'Sudah punya akun? Masuk':'Already have an account? Log in',
+'Belum ada akun. Akun pertama yang Anda buat otomatis menjadi Admin.':'No accounts yet. The first account you create automatically becomes Admin.',
+'Buat akun baru. Kode akses diberikan oleh Admin.':'Create a new account. The access code is provided by the Admin.','Masuk dengan akun Anda.':'Log in with your account.',
+'Lihat hasil sesi':'View session results','Pilih sesi untuk dashboard':'Select session for dashboard','Muat ulang':'Reload','Unduh CSV':'Download CSV',
+'Buat sesi baru':'Create new session','Nama sesi':'Session name','Contoh: Stock Opname Showroom November':'Example: Showroom Stock Opname November','Tanggal':'Date',
+'Cakupan department':'Department scope','Buat sesi':'Create session','Sesi baru langsung berstatus Berjalan dan bisa dipakai di tab Hitung.':'A new session starts as In progress and can be used in the Count tab.',
+'Belum ada sesi yang berjalan':'No session in progress','Buat sesi dulu di tab Sesi, lalu kembali ke sini untuk mulai menghitung.':'Create a session in the Sessions tab first, then come back here to start counting.',
+'Ke tab Sesi':'Go to Sessions tab','Lokasi':'Location','Pilih lokasi…':'Select location…','Lainnya':'Other','Lokasi lainnya':'Other location','Ketik lokasi, mis. Gudang belakang':'Type a location, e.g. Back warehouse',
+'Petugas':'Staff','Petugas (akun yang sedang login)':'Staff (logged-in account)','1. Cari barang':'1. Find item','Scan kamera':'Scan with camera','Baca dari foto':'Read from photo','Produk baru':'New product',
+'Senter':'Flashlight','Tutup kamera':'Close camera','atau cari manual':'or search manually','Ketik kode manual':'Enter code manually','Kode barcode':'Barcode','Cari':'Search',
+'Cari berdasarkan nama':'Search by name','Contoh: sofa 3 dudukan':'Example: 3-seater sofa','Cari barang':'Search item','Sesi':'Session','Pilih sesi':'Select session',
+"Riwayat sesi ini":"This session's history",'Cari di riwayat: nama, kode, barcode, petugas':'Search history: name, code, barcode, staff','Cari di riwayat':'Search history','Belum ada hitungan.':'No counts yet.',
+'Hasil per barang, sesi':'Item results · session','Pilih sesi untuk hasil per barang':'Select session for item results','Cek stok barang':'Check item stock',
+'Kode barcode atau nama':'Barcode or name','Ketik lalu tekan Cari':'Type, then press Search','Cari barang untuk cek stok':'Search item for stock check',
+'Akun pengguna':'User accounts','Nama akun yang sedang login otomatis menjadi nama petugas pada setiap hitungan.':'The logged-in account name is automatically used as the staff name on every count.',
+'Tambah akun':'Add account','huruf kecil, angka, titik':'lowercase letters, numbers, dots','Peran':'Role','User (tanpa tombol pengaturan)':'User (no settings button)','Admin (bisa mengatur)':'Admin (can manage settings)','Batal':'Cancel',
+'Foto tidak bisa dibaca. Ambil ulang.':'The photo could not be read. Retake it.','Foto bukti barang':'Item proof photo','Ulangi foto':'Retake photo','Lainnya: ':'Other: ',
+'Pilih sesi dulu.':'Select a session first.','Daftar barang masih dimuat. Tunggu sebentar.':'The item list is still loading. Please wait.','Data sesi masih dimuat. Tunggu sebentar.':'Session data is still loading. Please wait.',
+'Nama petugas kosong. Silakan masuk lagi.':'Staff name is empty. Please log in again.','Ketik lokasi pada kolom Lokasi lainnya.':'Enter a location in the Other location field.',
+'Kode cocok dengan beberapa barang. Pilih yang benar:':'The code matches several items. Choose the correct one:','Ketik kodenya dulu.':'Enter the code first.',
+'Isi jumlah dengan angka lebih dari 0.':'Enter a quantity greater than 0.','Ambil foto bukti dulu.':'Take the proof photo first.','Hitungan masuk antrean simpan.':'Count added to the save queue.',
+'Nama barang wajib diisi.':'Item name is required.','Pilih department dulu.':'Select a department first.','Ambil foto barang dulu.':'Take the item photo first.','Menyimpan…':'Saving…',
+'Simpan produk baru':'Save new product','Isi jumlah dengan angka lebih dari 0. Untuk membuang hitungan, pakai Hapus.':'Enter a quantity greater than 0. To discard a count, use Delete.',
+'Berhasil dihapus.':'Deleted successfully.','Memuat data sesi…':'Loading session data…','Berjalan':'In progress','Semua department':'All departments','Coba lagi':'Try again',
+'Memuat daftar barang…':'Loading item list…','Daftar barang belum bisa diperbarui. Memakai data tersimpan.':'The item list could not be refreshed. Using saved data.',
+'Tidak bisa terhubung ke server. Menampilkan data tersimpan.':'Cannot connect to the server. Showing saved data.',
+'Tidak bisa terhubung ke server. Periksa internet dan pengaturan akses web app (Anyone).':'Cannot connect to the server. Check your internet and the web app access setting (Anyone).',
+'Sesi login berakhir. Silakan masuk lagi.':'Your login session has expired. Please log in again.','Memuat akun…':'Loading accounts…','Ubah password':'Change password','Hapus akun?':'Delete account?','Ya':'Yes','Tidak':'No','Hapus':'Delete',
+'Belum ada akun.':'No accounts yet.','Simpan password':'Save password','Password minimal 6 karakter.':'Password must be at least 6 characters.','Konfirmasi password tidak sama.':'Password confirmation does not match.',
+'Menyimpan':'Saving','Tersimpan':'Saved','Selesai':'Completed','Kode tidak dikenali:':'Code not recognized:',
+'Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat nama di bawah, atau tambahkan sebagai produk baru.':'It matches neither Barcode 1 nor Barcode 2. Find the item using the name search below, or add it as a new product.',
+'Bila saya memilih barang dari pencarian, simpan kode ini ke barang tersebut (mengisi kolom barcode yang masih kosong)':'If I pick an item from the search, save this code to that item (fills the empty barcode column)',
+'Tambah sebagai produk baru':'Add as new product','Belum ada foto':'No photo yet','Ambil foto':'Take photo','Foto bersifat opsional.':'Photo is optional.',
+
+'2. Foto bukti barang':'2. Proof photo','Jumlah barang':'Item quantity','Simpan hitungan':'Save count',
+'Barang ini belum ada di daftar. Stok sistem diisi 0 dan ditandai perlu verifikasi.':'This item is not in the list yet. System stock is set to 0 and flagged for verification.',
+'Nama barang':'Item name','Contoh: Meja Makan Bundar Walnut':'Example: Round Walnut Dining Table',
+'Pilih department…':'Select department…','Satuan':'Unit','Barcode (bila ada)':'Barcode (if any)','Foto barang':'Item photo','Jumlah':'Quantity','Gagal':'Failed',
+'Belum ada hitungan di sesi ini.':'No counts in this session yet.','Tidak ada riwayat yang cocok dengan pencarian.':'No history matches your search.','Menghapus…':'Deleting…','Jumlah baru':'New quantity',
+'Simpan':'Save','Hapus produk baru ini?':'Delete this new product?','Hapus hitungan ini?':'Delete this count?','Ya, hapus':'Yes, delete','Ubah':'Edit',
+'Belum ada sesi':'No sessions yet','Buat sesi pertama dengan formulir di atas.':'Create your first session using the form above.','Dashboard':'Dashboard','Selesaikan':'Finish',
+'Lihat hasil':'View results','Buka kembali':'Reopen','Selesaikan sesi ini?':'Finish this session?','Hitungan dikunci dan hasil akhir disimpan ke sheet Hasil_Sesi. Anda masih bisa membukanya kembali.':'Counting is locked and the final results are saved to the Hasil_Sesi sheet. You can still reopen it later.',
+'Perbarui Stok_Sistem di sheet Barang sesuai hasil hitung fisik (hanya barang yang sudah dihitung)':'Update Stok_Sistem in the Barang sheet to match the physical count (only items that have been counted)',
+'Ya, selesaikan':'Yes, finish','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
+'Ya, buka kembali':'Yes, reopen','Isi nama sesi dulu.':'Enter a session name first.','Pilih tanggal.':'Select a date.','Menyelesaikan sesi…':'Finishing session…','Membuka kembali sesi…':'Reopening session…',
+'Sesi selesai.':'Session finished.','Sesi dibuka kembali.':'Session reopened.','Hasil stock opname akan tampil di sini.':'Stock opname results will appear here.',
+'Buat sesi di tab Sesi.':'Create a session in the Sessions tab.','Hasil per barang akan tampil di sini.':'Item results will appear here.','Memuat hasil…':'Loading results…',
+'Di luar cakupan':'Out of scope','Belum dihitung':'Not counted','(tanpa kategori)':'(no category)','Sesuai':'Match','Sesi masih berjalan. Angka di bawah masih sementara dan bisa berubah.':'The session is still in progress. The figures below are provisional and may change.',
+'Sesi selesai':'Session finished','Hasil akhir terkunci dan tidak ikut berubah bila stok sistem diperbarui.':'Final results are locked and will not change if system stock is updated.',
+'Hasil akhir belum tersimpan di sheet Hasil_Sesi, jadi angka diambil dari data terkini.':'The final results are not saved in the Hasil_Sesi sheet, so figures are taken from current data.',
+'Stok sistem toko belum tersedia (sheet Stok_Toko kosong), jadi selisih belum bisa dihitung. Yang tampil hanya barang yang sudah dihitung.':'Store system stock is not available (the Stok_Toko sheet is empty), so variance cannot be calculated. Only counted items are shown.',
+'Progres penghitungan':'Counting progress','Komposisi hasil':'Result breakdown','Lebih':'Over','Kurang':'Short','Belum':'Pending','Akurasi':'Accuracy','Dihitung':'Counted','Barang di toko':'Items in store',
+'Selisih bersih':'Net variance','Selisih mutlak':'Absolute variance','Selisih':'Variance','Di luar stok toko':'Outside store stock','Hasil per department':'Department Summary',
+'Belum ada data.':'No data yet.','Per petugas':'Staff Summary','Entri':'Entries','Unit':'Units','Terakhir':'Last','Per lokasi':'Location Summary','Belum ada hitungan':'No counts yet',
+'Sesi masih berjalan. Angka masih sementara dan bisa berubah.':'The session is still in progress. Figures are provisional and may change.','Hasil per barang':'Item Results',
+'Cari nama, ID, atau barcode…':'Search name, ID, or barcode…','Cari di hasil':'Search results','Filter hasil':'Filter results','Semua':'All','Baru':'New','Di luar stok':'Outside stock',
+'Barang':'Item','Sistem':'System','Fisik':'Physical','Foto':'Photo','Tidak ada data untuk filter ini.':'No data for this filter.','Belum ada data untuk diunduh.':'No data to download yet.',
+'ID_Barang':'Item_ID','Nama_Barang':'Item_Name','Satuan_Barang':'Unit','Stok_Sistem':'System_Stock','Stok_Fisik':'Physical_Stock','Produk_Baru':'New_Product','Di_Luar_Stok':'Outside_Store_Stock','Jumlah_Entri':'Entry_Count','Foto_URL':'Photo_URL',
+'Unduhan tidak didukung di halaman ini.':'Downloads are not supported on this page.','Barang tidak ditemukan di master.':'Item not found in the master.','Ketik kode atau nama barang dulu.':'Enter an item code or name first.',
+'Hasil pencarian nama:':'Search results by name:','Memuat stok…':'Loading stock…','Data Stok_Toko masih kosong, jadi stok sistem belum bisa dibandingkan.':'The Stok_Toko data is still empty, so system stock cannot be compared yet.',
+'Barang ini tidak ada di daftar stok toko.':'This item is not in the store stock list.','Deskripsi':'Description','Stok sistem':'System stock','Fisik terakhir':'Latest physical count',
+'Barang ini belum pernah dihitung di sesi mana pun.':'This item has not been counted in any session yet.','Sesi':'Session','Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.':'The camera library has not loaded. Check your internet connection and reload.',
+'Membuka kamera…':'Opening camera…','Kamera tidak bisa dimulai di perangkat ini. Ketik kodenya manual.':'The camera cannot start on this device. Enter the code manually.','Arahkan kamera ke barcode.':'Point the camera at a barcode.',
+'Kamera diblokir. Izinkan akses kamera di browser, atau buka lewat alamat hosting.':'The camera is blocked. Allow camera access in the browser, or open the app from the hosting address.',
+'Kamera gagal dibuka. Ketik kodenya manual.':'The camera failed to open. Enter the code manually.','Senter menyala':'Flashlight on','Senter tidak bisa dinyalakan di perangkat ini.':'The flashlight cannot be turned on for this device.',
+'Kamera tidak bisa dimulai di perangkat ini. Pakai tombol Baca dari foto.':'The camera cannot start on this device. Use the Read from photo button.',
+'Kamera diblokir. Izinkan akses kamera di browser. Bila halaman dibuka dari alamat script.google.com, kamera memang diblokir Google: buka lewat alamat hosting atau pakai Baca dari foto.':'The camera is blocked. Allow camera access in the browser. If the page is opened from script.google.com, Google blocks the camera: open it from the hosting address or use Read from photo.',
+'Kamera tidak ditemukan di perangkat ini.':'No camera was found on this device.','Kamera gagal dibuka. Pakai tombol Baca dari foto.':'The camera failed to open. Use the Read from photo button.','Membaca barcode…':'Reading barcode…',
+'Barcode tidak terbaca. Foto lebih dekat, terang, dan lurus.':'The barcode could not be read. Take the photo closer, brighter, and straight on.','Isi username dan password.':'Enter username and password.','Isi kode akses dan username.':'Enter the access code and username.',
+'Isi username.':'Enter a username.','Memproses foto…':'Processing photo…','Ambil foto dulu, lalu isi jumlah.':'Take the photo first, then enter the quantity.','Aplikasi terpasang di layar utama.':'App installed on your home screen.','Akun dihapus.':'Account deleted.',
+'Bahasa':'Language','Ringkasan kondisi':'Condition Summary','Alasan':'Reason','Tulis alasan kondisi Lainnya…':'Write the reason for the Other condition…','Kondisi barang':'Item condition',
+'3. Isi jumlah dan kondisi':'3. Enter quantity and condition','Jumlah dan kondisi':'Quantity and condition','Isi alasan untuk kondisi Lainnya.':'Enter a reason for the Other condition.',
+'Qty_Lainnya':'Qty_Other','Alasan wajib diisi untuk kondisi Lainnya.':'A reason is required for the Other condition.','Kondisi barang tidak valid.':'Invalid item condition.','Alasan maksimal 200 karakter.':'The reason is at most 200 characters.','Hitung fisik per sesi':'Physical Count by Session','Bahasa Indonesia':'Indonesian','Ya,':'Yes,','Foto bukti':'Proof photo','Memuat…':'Loading…','Terjadi kesalahan':'An error occurred','(Anda)':'(You)',' (Anda)':' (You)',
+/* pesan dari server */
+'Akun tidak ditemukan. Silakan masuk lagi.':'Account not found. Please log in again.','Akun tidak ditemukan.':'Account not found.','Anda tidak bisa menghapus akun yang sedang dipakai.':'You cannot delete the account you are currently using.',
+'Barang belum dipilih.':'No item selected.','Barang ini sudah diverifikasi, jadi tidak bisa dihapus dari sini.':'This item has been verified, so it cannot be deleted from here.','Barang tidak ada di master produk.':'The item is not in the product master.',
+'Barang tidak ditemukan.':'Item not found.','Barcode itu sudah terdaftar di master barang. Cari barangnya di daftar.':'That barcode is already registered in the item master. Find the item in the list.',
+'Barcode_1 dan Barcode_2 barang ini sudah terisi.':'Barcode_1 and Barcode_2 of this item are already filled.','Berkas foto tidak valid. Ambil ulang foto.':'Invalid photo file. Retake the photo.',
+'Daftar petugas penuh (maksimal 300).':'The staff list is full (maximum 300).','Foto barang wajib diambil.':'The item photo is required.','Foto bukti wajib diambil.':'The proof photo is required.',
+'Foto terlalu besar. Ambil ulang foto.':'The photo is too large. Retake it.','Hanya Admin yang boleh melakukan ini.':'Only Admins can do this.','Hanya produk baru yang bisa dihapus dari sini.':'Only new products can be deleted from here.',
+'Hitungan tidak ditemukan. Mungkin sudah dihapus.':'Count not found. It may have been deleted.','Jumlah harus lebih dari 0.':'Quantity must be greater than 0.','Jumlah tidak valid.':'Invalid quantity.','Kode akses salah.':'Incorrect access code.',
+'Kode itu sudah terdaftar di master produk.':'That code is already registered in the product master.','Kode kosong.':'Code is empty.','Nama petugas maksimal 60 karakter.':'Staff name is at most 60 characters.','Nama petugas wajib diisi.':'Staff name is required.',
+'Nama sesi maksimal 80 karakter.':'Session name is at most 80 characters.','Nama sesi wajib diisi.':'Session name is required.','Password terlalu panjang.':'Password is too long.',
+'Pendaftaran belum aktif. Isi KODE_AKSES (minimal 6 karakter) di Code.gs.':'Registration is not active. Set KODE_AKSES (at least 6 characters) in Code.gs.','Perintah tidak dikenal.':'Unknown command.','Petugas sudah ada di daftar.':'Staff is already in the list.',
+'Produk baru tidak ditemukan. Mungkin sudah dihapus.':'New product not found. It may have been deleted.','Produk ini juga dihitung di sesi lain, jadi tidak bisa dihapus.':'This product is also counted in another session, so it cannot be deleted.',
+'Sesi ini tidak dalam status Selesai.':'This session is not in Completed status.','Sesi login tidak berlaku. Silakan masuk lagi.':'Your login session is not valid. Please log in again.','Sesi tidak ditemukan atau sudah selesai.':'Session not found or already finished.',
+'Sesi tidak ditemukan.':'Session not found.','Tanggal tidak valid.':'Invalid date.','Terlalu banyak percobaan gagal. Tunggu 10 menit lalu coba lagi.':'Too many failed attempts. Wait 10 minutes and try again.','Tidak bisa menghapus Admin terakhir.':'The last Admin cannot be deleted.',
+'Username 3-30 karakter: huruf kecil, angka, titik, garis bawah atau strip.':'Username must be 3-30 characters: lowercase letters, numbers, dots, underscores or hyphens.','Username atau password salah.':'Incorrect username or password.','Username sudah dipakai.':'Username is already taken.',
+'Terlalu banyak percobaan pendaftaran. Tunggu 10 menit lalu coba lagi.':'Too many sign-up attempts. Wait 10 minutes and try again.'
+};
+var EN_RE=[
+[/^Kode disimpan sebagai Barcode (\d) untuk (.+)$/,function(m){return 'Code saved as Barcode '+m[1]+' for '+m[2]}],
+[/^Produk baru disimpan dengan ID (.+?)\.$/,function(m){return 'New product saved with ID '+m[1]+'.'}],
+[/^Jumlah diubah dari (.+) menjadi (.+)\.$/,function(m){return 'Quantity changed from '+m[1]+' to '+m[2]+'.'}],
+[/^Sesi (\S+) dibuat\. Tekan Hitung untuk mulai\.$/,function(m){return 'Session '+m[1]+' created. Tap Count to start.'}],
+[/^Sesi selesai\. Stok sistem diperbarui untuk (\d+) barang\.$/,function(m){return 'Session finished. System stock updated for '+m[1]+' items.'}],
+[/^Cakupan sesi ini: department (.+)\.$/,function(m){return 'Session scope: department '+m[1]+'.'}],
+[/^Cakupan sesi ini: semua department\.$/,function(){return 'Session scope: all departments.'}],
+[/^(.*), di luar cakupan sesi ini \((.*)\)\.$/,function(m){return m[1]+', outside this session\'s scope ('+m[2]+').'}],
+[/^(.*) ada di department (.*)$/,function(m){return m[1]+' is in department '+m[2]}],
+[/^Tidak ada barang yang cocok(?: di department (.+))?\.?$/,function(m){return 'No matching items'+(m[1]?' in department '+m[1]:'')+'.'}],
+[/^(Kode belum disimpan|Gagal menyimpan|Gagal mengubah|Gagal menghapus|Gagal membuat sesi|Gagal memuat stok|Daftar barang gagal dimuat|Data sesi gagal dimuat|Gagal): (.+?)( Muat ulang halaman\.)?$/,function(m){
+  var h={'Kode belum disimpan':'Code not saved','Gagal menyimpan':'Failed to save','Gagal mengubah':'Failed to edit','Gagal menghapus':'Failed to delete','Gagal membuat sesi':'Failed to create session','Gagal memuat stok':'Failed to load stock','Daftar barang gagal dimuat':'Failed to load the item list','Data sesi gagal dimuat':'Failed to load session data','Gagal':'Failed'};
+  return h[m[1]]+': '+trx(m[2])+(m[3]?' Reload the page.':'')}],
+[/^Password (\S+) berhasil diperbarui\.$/,function(m){return 'Password for '+m[1]+' updated successfully.'}],
+[/^Password (\S+) diperbarui\.$/,function(m){return 'Password for '+m[1]+' updated.'}],
+[/^Akun (\S+) berhasil dibuat\.$/,function(m){return 'Account '+m[1]+' created successfully.'}],
+[/^Ubah password: (.+)$/,function(m){return 'Change password: '+m[1]}],
+[/^Dikenali lewat: (.+)$/,function(m){return 'Matched by: '+m[1]}],
+[/^Dihitung (.+)$/,function(m){return 'Counted '+m[1]}],
+[/^Sudah dihitung sesi ini:\s*(.*)$/,function(m){return 'Already counted this session: '+m[1]}],
+[/^Hitungan terakhir: (.+)$/,function(m){return 'Latest count: '+m[1]}],
+[/^\((\d+) entri\)$/,function(m){return '('+m[1]+(m[1]==='1'?' entry)':' entries)')}],
+[/^(\d+) entri\)$/,function(m){return m[1]+(m[1]==='1'?' entry)':' entries)')}],
+[/^ ?entri\)$/,function(){return ' entries)'}],
+[/^Menampilkan 100 dari (\d+) entri\. Gunakan pencarian untuk mempersempit\.$/,function(m){return 'Showing 100 of '+m[1]+' entries. Use search to narrow down.'}],
+[/^Menampilkan 500 dari (\d+) barang\. Gunakan filter atau pencarian\.$/,function(m){return 'Showing 500 of '+m[1]+' items. Use the filter or search.'}],
+[/^(\d+) entri hitungan · (\d+) foto bukti tersimpan di Drive$/,function(m){return m[1]+' count entries · '+m[2]+' proof photos saved in Drive'}],
+[/^Selesai (.+)$/,function(m){return 'Finished '+m[1]}],
+[/^Barcode (.+) tidak ada di master\. Arahkan ke barcode lain\.$/,function(m){return 'Barcode '+m[1]+' is not in the master. Point the camera at another barcode.'}],
+[/^(.+) \(Selesai\)$/,function(m){return m[1]+' (Completed)'}],
+[/^(.+) \(Berjalan\)$/,function(m){return m[1]+' (In progress)'}],
+[/^(\d+) barang \((\d+)%\)$/,function(m){return m[1]+' items ('+m[2]+'%)'}],
+[/^ ?barang \((\d+)%\)$/,function(m){return ' items ('+m[1]+'%)'}],
+[/^(Sesuai|Lebih|Kurang|Dihitung|Belum dihitung) (.+)$/,function(m){return trx(m[1])+' '+m[2]}],
+[/^Akun (.+) dihapus\.$/,function(m){return 'Account '+m[1]+' deleted.'}]
+];
+function trx(s){return LANG==='en'?trEn(s):s}
+function trEn(s){
+  if(s==null)return s;
+  var m=/^(\s*)([\s\S]*?)(\s*)$/.exec(String(s));
+  var core=m[2];if(!core)return s;
+  if(Object.prototype.hasOwnProperty.call(EN,core))return m[1]+EN[core]+m[3];
+  if(Object.prototype.hasOwnProperty.call(EN,s))return EN[s];
+  for(var i=0;i<EN_RE.length;i++){var r=EN_RE[i][0].exec(core);if(r)return m[1]+EN_RE[i][1](r)+m[3]}
+  return s;
+}
+EN_RE.push([/^Sesi selesai pada ([^.]+)\.$/,function(m){return 'Session finished on '+m[1]+'.'}]);
+var SKIP_CLS=/(^|\s)(nm|desc|dv|sname|qedit)(\s|$)/;
+var ATTRS=['placeholder','aria-label','title','alt'];
+var tNodes=new WeakMap(),i18nObs=null,i18nBusy=false;
+function skipEl(el){
+  for(var e=el;e&&e.nodeType===1;e=e.parentNode){
+    if(e.classList&&(e.classList.contains('chip')||e.classList.contains('ringk')))return false;
+    var n=e.nodeName;if(n==='SCRIPT'||n==='STYLE'||n==='TEXTAREA'||n==='NOSCRIPT')return true;
+    if(e.getAttribute&&e.getAttribute('translate')==='no')return true;
+    if(e.className&&typeof e.className==='string'&&SKIP_CLS.test(e.className)&&n!=='BUTTON')return true;
+  }
+  return false;
+}
+function tNode(n){
+  var v=n.nodeValue,rec=tNodes.get(n);
+  if(rec&&v===rec.t)return;
+  var p=n.parentNode;if(!p||skipEl(p))return;
+  var o=v,t=(p.getAttribute&&p.getAttribute('data-en')&&o.trim())?o.replace(o.trim(),p.getAttribute('data-en')):trEn(o);
+  if(t!==o){n.nodeValue=t;tNodes.set(n,{o:o,t:t})}else tNodes.delete(n);
+}
+function tAttrs(el){
+  if(!el.getAttribute||skipEl(el))return;
+  ATTRS.forEach(function(a){
+    var v=el.getAttribute(a);if(v==null)return;
+    var rec=el.__o&&el.__o[a];if(rec&&v===rec.t)return;
+    var t=trEn(v);
+    if(t!==v){(el.__o=el.__o||{})[a]={o:v,t:t};el.setAttribute(a,t)}else if(el.__o)delete el.__o[a];
+  });
+}
+function tTree(root){
+  if(!root)return;
+  if(root.nodeType===3){tNode(root);return}
+  if(root.nodeType!==1)return;
+  tAttrs(root);
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,null),n;
+  while((n=w.nextNode())){if(n.nodeType===3)tNode(n);else tAttrs(n)}
+}
+function uTree(){
+  var w=document.createTreeWalker(document.body,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,null),n;
+  while((n=w.nextNode())){
+    if(n.nodeType===3){var r=tNodes.get(n);if(r&&n.nodeValue===r.t){n.nodeValue=r.o;tNodes.delete(n)}}
+    else if(n.__o){for(var a in n.__o){if(n.getAttribute(a)===n.__o[a].t)n.setAttribute(a,n.__o[a].o)}n.__o=null}
+  }
+}
+function i18nStart(){
+  if(i18nObs)return;
+  i18nObs=new MutationObserver(function(recs){
+    if(LANG!=='en'||i18nBusy)return;
+    i18nBusy=true;i18nObs.disconnect();
+    try{recs.forEach(function(r){
+      if(r.type==='characterData')tNode(r.target);
+      else if(r.type==='attributes')tAttrs(r.target);
+      else r.addedNodes.forEach(function(n){tTree(n)});
+    })}finally{i18nBusy=false;i18nObs.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTRS})}
+  });
+  i18nObs.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTRS});
+}
+function bulanEn(){return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}
+function bulanId(){return ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']}
+function locNum(){return LANG==='en'?'en-US':'id-ID'}
+function locTime(){return LANG==='en'?'en-GB':'id-ID'}
+EN_RE.push([/^Lainnya (\d.*)$/,function(m){return 'Other '+m[1]}]);
+EN_RE.push([/^Lainnya: (.+)$/,function(m){return 'Other: '+m[1]}]);
+EN_RE.push([/^(\d+) dari (\d+) barang \((\d+)%\)$/,function(m){return m[1]+' of '+m[2]+' items ('+m[3]+'%)'}]);
+EN_RE.push([/^Sesi selesai(?: pada (.+?))?\. (Hasil akhir .+)$/,function(m){return 'Session finished'+(m[1]?' on '+m[1]:'')+'. '+trEn(m[2])}]);
+EN_RE.push([/^(\d+) barang, (\d+) dihitung, (\d+) sesuai, (\d+) lebih, (\d+) kurang, (\d+) belum dihitung$/,function(m){return m[1]+' items, '+m[2]+' counted, '+m[3]+' match, '+m[4]+' over, '+m[5]+' short, '+m[6]+' not counted'}]);
+var nf=new Intl.NumberFormat(locNum(),{maximumFractionDigits:3});
 function fmt(n){return n==null?'–':nf.format(n)}
 function sgn(n){return n==null?'–':(n>0?'+':'')+nf.format(n)}
 function r3(n){return Math.round(n*1000)/1000}
@@ -442,7 +667,9 @@ function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function parseQty(v){
   v=String(v==null?'':v).trim().replace(/\s/g,'');if(!v)return NaN;
-  if(v.indexOf(',')>=0)v=v.replace(/\./g,'').replace(',','.');
+  if(LANG==='en'&&v.indexOf(',')>=0){
+    if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(v))v=v.replace(/,/g,'');else if(v.indexOf('.')<0)v=v.replace(',','.');
+  }else if(v.indexOf(',')>=0)v=v.replace(/\./g,'').replace(',','.');
   var n=Number(v);return isFinite(n)?n:NaN;
 }
 
@@ -538,7 +765,7 @@ function beep(ok){
 function hariIni(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
 function tglLabel(s){
   var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||'');if(!m)return s||'';
-  var b=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  var b=LANG==='en'?bulanEn():bulanId();
   return Number(m[3])+' '+b[Number(m[2])-1]+' '+m[1];
 }
 function nomorSesi(s){var m=/(\d+)/.exec(s.id);return m?Number(m[1]):0}
@@ -585,7 +812,7 @@ function cari(q,semuaDept){
   D.barang.forEach(function(b){
     if(!semuaDept&&!inScope(b))return;
     var nama=b.nama.toLowerCase();
-    var h=(nama+' '+b.deskripsi+' '+b.kategori+' '+b.id+' '+b.barcode1+' '+b.barcode2).toLowerCase();
+    var h=(nama+' '+b.kategori+' '+b.id+' '+b.barcode1+' '+b.barcode2).toLowerCase();
     var s=0;
     for(var i=0;i<t.length;i++){
       if(h.indexOf(t[i])<0)return;
@@ -712,6 +939,7 @@ function updateSimpan(){
   var b=$('#btnSimpan');if(!b)return;
   var q=parseQty($('#qty')&&$('#qty').value);
   var ok=q>0&&(!D.fotoWajib||!!D.foto);
+  var kv=kondVal();if(kv.kondisi==='Lainnya'&&!kv.alasan)ok=false;
   if(D.baru&&!($('#bNama')&&$('#bNama').value.trim()&&$('#bKat')&&$('#bKat').value))ok=false;
   b.disabled=!ok||D.menyimpanBaru;
 }
@@ -722,9 +950,10 @@ function updateTotal(){
 function kameraLagi(){if(D.dariKamera)bukaKamera();else $('#kodeIn').focus()}
 
 function buatEntri(item,qty,metode,scanned,foto){
-  return {t:new Date(),nama:item.nama,qty:qty,metode:metode,st:'wait',itemId:item.id,idSesi:D.idSesi,kind:'scan',barcode:scanned||'',petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),
+  var kv=kondVal();
+  return {kondisi:kv.kondisi,alasan:kv.alasan,t:new Date(),nama:item.nama,qty:qty,metode:metode,st:'wait',itemId:item.id,idSesi:D.idSesi,kind:'scan',barcode:scanned||'',petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),
     payload:{idSesi:D.idSesi,idBarang:item.id,barcode:scanned||'',jumlah:qty,metode:metode,
-      petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:foto||''}};
+      petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:foto||'',kondisi:kv.kondisi,alasan:kv.alasan}};
 }
 function kirim(ent){
   var d=D.dasar[ent.itemId]||(D.dasar[ent.itemId]={fisik:null});
@@ -738,11 +967,13 @@ function kirim(ent){
   }).then(function(){D.pending--;renderAll()});
   renderAll();
 }
+function alasanOk(){var kv=kondVal();if(kv.kondisi==='Lainnya'&&!kv.alasan){toast('Isi alasan untuk kondisi Lainnya.');var a=$('#kondAlasan');if(a)a.focus();return false}return true}
 function simpanSel(){
   var s=D.sel,it=s&&D.byId[s.id];if(!it)return;
   var qty=parseQty($('#qty').value);
   if(!(qty>0)){toast('Isi jumlah dengan angka lebih dari 0.');return}
   if(D.fotoWajib&&!D.foto){toast('Ambil foto bukti dulu.');return}
+  if(!alasanOk())return;
   var ent=buatEntri(it,qty,s.metode,s.scanned,fotoB64());
   D.log.unshift(ent);
   kirim(ent);
@@ -756,13 +987,15 @@ function simpanBaru(){
   if(!$('#bKat').value){toast('Pilih department dulu.');return}
   if(!(qty>0)){toast('Isi jumlah dengan angka lebih dari 0.');return}
   if(D.fotoWajib&&!D.foto){toast('Ambil foto barang dulu.');return}
-  var payload={idSesi:D.idSesi,nama:nama,deskripsi:$('#bDesk').value.trim(),kategori:$('#bKat').value,
+  if(!alasanOk())return;
+  var kv=kondVal();
+  var payload={idSesi:D.idSesi,nama:nama,kategori:$('#bKat').value,
     satuan:$('#bSat').value.trim(),barcode:$('#bBar').value.trim(),jumlah:qty,
-    petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:fotoB64()};
+    petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:fotoB64(),kondisi:kv.kondisi,alasan:kv.alasan};
   D.menyimpanBaru=true;D.pending++;updateSimpan();$('#btnSimpan').lastChild.textContent='Menyimpan…';renderAll();
   rpc('tambahProdukBaru',D.kode,payload).then(function(r){
     var it=r.item;D.barang.push(it);buildIdx();D.dasar[it.id]={fisik:qty};
-    D.log.unshift({t:new Date(),nama:it.nama+' ('+it.id+')',qty:qty,metode:'Produk baru',st:'ok',itemId:it.id,idSesi:payload.idSesi,kind:'baru',serverId:r.id,barcode:payload.barcode,petugas:payload.petugas,lokasi:payload.lokasi});
+    D.log.unshift({t:new Date(),nama:it.nama+' ('+it.id+')',qty:qty,metode:'Produk baru',st:'ok',itemId:it.id,idSesi:payload.idSesi,kind:'baru',serverId:r.id,barcode:payload.barcode,petugas:payload.petugas,lokasi:payload.lokasi,kondisi:kv.kondisi,alasan:kv.alasan});
     D.lastOk=new Date();
     D.menyimpanBaru=false;D.pending--;resetLangkah();renderAll();
     toast('Produk baru disimpan dengan ID '+it.id+'.');kameraLagi();
@@ -810,7 +1043,7 @@ function loadBase(){
     D.cakupan=r.cakupan;D.dasar={};
     Object.keys(r.fisik||{}).forEach(function(k){D.dasar[k]={fisik:r.fisik[k]}});
     D.log=(r.riwayat||[]).map(function(x){
-      return {t:x.t,itemId:x.itemId,nama:null,qty:x.jumlah,metode:x.metode,petugas:x.petugas,lokasi:x.lokasi,barcode:x.barcode,
+      return {t:x.t,itemId:x.itemId,nama:null,qty:x.jumlah,metode:x.metode,petugas:x.petugas,lokasi:x.lokasi,barcode:x.barcode,kondisi:x.kondisi,alasan:x.alasan,
         st:'ok',serverId:x.id,idSesi:id,kind:x.metode==='Produk baru'?'baru':'scan'};
     });
     D.baseSiap=true;
@@ -857,7 +1090,7 @@ function infoBarang(msg){
   el.innerHTML=msg?esc(msg)+' <button class="btn ghost sm" id="btnMuatBarang" type="button">'+ic('refresh')+'Coba lagi</button>':'Memuat daftar barang…';
 }
 function terapkanBarang(d){
-  D.barang=d.barang.map(function(a){return {id:a[0],barcode1:a[1],barcode2:a[2],nama:a[3],deskripsi:a[4],kategori:a[5],satuan:a[6]}});
+  D.barang=d.barang.map(function(a){return {id:a[0],barcode1:a[1],barcode2:a[2],nama:a[3],kategori:a[5],satuan:a[6]}});
   D.kategori=d.kategori||[];buildIdx();isiCakupan();D.barangSiap=true;infoBarang();
 }
 /* Daftar barang: tampil seketika dari simpanan perangkat, lalu diperbarui dari server di latar belakang. */
@@ -1026,7 +1259,7 @@ function cekPassword(pw,pw2){
 
 /* ---------- tampilan umum ---------- */
 function renderAll(){
-  $('#status').innerHTML=D.pending?(ic('refresh')+'Menyimpan '+D.pending+'…'):(D.lastOk?(ic('check')+'Tersimpan '+D.lastOk.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})):'');
+  $('#status').innerHTML=D.pending?(ic('refresh')+'Menyimpan '+D.pending+'…'):(D.lastOk?(ic('check')+'Tersimpan '+D.lastOk.toLocaleTimeString(locTime(),{hour:'2-digit',minute:'2-digit'})):'');
   updateTotal();renderLog();
 }
 function refreshSesiUI(){
@@ -1052,7 +1285,7 @@ function setTab(t){
   $('#vHitung').classList.toggle('on',t==='hitung');
   $('#vCek').classList.toggle('on',t==='cek');
   $('#vHasil').classList.toggle('on',t==='hasil');
-  if(t==='hasil')renderHasil();
+  if(t==='hasil')renderHasilTab();
   if(t==='dash'||t==='hasil')D.q.then(loadDash);
   if(t==='sesi')renderSesiList();
   window.scrollTo(0,0);
@@ -1062,7 +1295,7 @@ function setTab(t){
 function renderMiss(){
   var box=$('#miss');
   if(!D.miss){box.innerHTML='';return}
-  box.innerHTML='<div class="miss"><div><b>Kode tidak dikenali:</b> <span class="mono">'+esc(D.miss)+'</span><br>Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat deskripsi di bawah, atau tambahkan sebagai produk baru.</div>'+
+  box.innerHTML='<div class="miss"><div><b>Kode tidak dikenali:</b> <span class="mono">'+esc(D.miss)+'</span><br>Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat nama di bawah, atau tambahkan sebagai produk baru.</div>'+
     '<label><input type="checkbox" id="simpanKode"><span>Bila saya memilih barang dari pencarian, simpan kode ini ke barang tersebut (mengisi kolom barcode yang masih kosong)</span></label>'+
     '<div class="acts" style="margin-top:0"><button class="btn sm" id="btnBaruMiss" type="button">'+ic('box')+'Tambah sebagai produk baru</button><button class="btn ghost sm" id="batalMiss" type="button">'+ic('x')+'Batal</button></div></div>';
 }
@@ -1072,16 +1305,22 @@ function stepFoto(judul){
     '</div><button class="btn" type="button" id="btnBukti">'+ic('camera')+'<span>'+(D.foto?'Ulangi foto':'Ambil foto')+'</span></button></div>'+
     (D.fotoWajib?'':'<p class="hint">Foto bersifat opsional.</p>')+'</div>';
 }
+function kondHtml(satuan){
+  return '<div class="qtyrow kondrow"><input id="qty" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Jumlah barang">'+(satuan?'<span class="sat">'+esc(satuan)+'</span>':'')+
+    '<div class="kondsel"><select id="kond" aria-label="Kondisi barang"><option value="Good">Good</option><option value="Broken">Broken</option><option value="Waste Product">Waste Product</option><option value="Lainnya">Lainnya</option></select></div></div>'+
+    '<div class="kondalasan" id="kondAlasanWrap" hidden><label class="f"><span>'+ic('edit')+'Alasan</span><input id="kondAlasan" type="text" maxlength="200" autocomplete="off" placeholder="Tulis alasan kondisi Lainnya…" aria-label="Alasan"></label></div>';
+}
+function kondVal(){var k=$('#kond');return {kondisi:k?k.value:'Good',alasan:(k&&k.value==='Lainnya'&&$('#kondAlasan'))?$('#kondAlasan').value.trim():''}}
+function kondLabel(e){return !e.kondisi||e.kondisi==='Good'?'':(e.kondisi==='Lainnya'&&e.alasan?'Lainnya: '+e.alasan:e.kondisi)}
 function renderLangkah(){
   var box=$('#langkah');
   if(D.sel){
     var it=D.byId[D.sel.id];if(!it){box.innerHTML='';return}
     box.innerHTML='<div class="card"><div class="hit"><div class="hinfo"><div class="nm">'+esc(it.nama)+'</div>'+
       '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+'</span></div>'+
-      '<div class="descbox"><div class="dk">'+ic('info')+'Deskripsi produk · cocokkan dengan barang fisik</div><div class="dv'+(it.deskripsi?'':' kosong')+'">'+(it.deskripsi?esc(it.deskripsi):'Belum ada deskripsi di master barang.')+'</div></div>'+
       '<div class="meta">Sudah dihitung sesi ini: <b id="totalDihitung">'+fmt((D.dasar[it.id]||{}).fisik||0)+'</b> '+esc(it.satuan)+'</div></div></div>'+
       stepFoto('2. Foto bukti barang')+
-      '<div class="stepbox"><div class="stephead">'+ic('list')+'3. Isi jumlah</div><div class="qtyrow"><input id="qty" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Jumlah barang"><span class="sat">'+esc(it.satuan)+'</span></div></div>'+
+      '<div class="stepbox"><div class="stephead">'+ic('list')+'3. Isi jumlah dan kondisi</div>'+kondHtml(it.satuan)+'</div>'+
       '<div class="acts"><button class="btn" id="btnSimpan" type="button" disabled>'+ic('check')+'<span>Simpan hitungan</span></button><button class="btn ghost" id="btnBatalLangkah" type="button">'+ic('x')+'Batal</button></div></div>';
     updateSimpan();
   }else if(D.baru){
@@ -1089,12 +1328,11 @@ function renderLangkah(){
     box.innerHTML='<div class="card"><h2>'+ic('box')+'Produk baru</h2><p class="hint" style="margin-top:-6px">Barang ini belum ada di daftar. Stok sistem diisi 0 dan ditandai perlu verifikasi.</p>'+
       '<div class="form">'+
       '<label class="f wide">Nama barang<input id="bNama" type="text" autocomplete="off" placeholder="Contoh: Meja Makan Bundar Walnut"></label>'+
-      '<label class="f wide">Deskripsi (opsional)<input id="bDesk" type="text" autocomplete="off" placeholder="Ukuran, warna, bahan"></label>'+
       '<label class="f">Department<select id="bKat"'+(kat?' disabled':'')+'>'+(kat?'<option>'+esc(kat)+'</option>':'<option value="">Pilih department…</option>'+D.kategori.map(function(k){return '<option>'+esc(k)+'</option>'}).join(''))+'</select></label>'+
       '<label class="f">Satuan<input id="bSat" type="text" autocomplete="off" value="unit"></label>'+
       '<label class="f">Barcode (bila ada)<input id="bBar" type="text" autocomplete="off" value="'+esc(D.baru.barcode)+'"></label></div>'+
       stepFoto('Foto barang')+
-      '<div class="stepbox"><div class="stephead">'+ic('list')+'Jumlah</div><div class="qtyrow"><input id="qty" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Jumlah barang"></div></div>'+
+      '<div class="stepbox"><div class="stephead">'+ic('list')+'Jumlah dan kondisi</div>'+kondHtml('')+'</div>'+
       '<div class="acts"><button class="btn" id="btnSimpan" type="button" disabled>'+ic('check')+'<span>Simpan produk baru</span></button><button class="btn ghost" id="btnBatalLangkah" type="button">'+ic('x')+'Batal</button></div></div>';
     updateSimpan();
   }else box.innerHTML='';
@@ -1106,12 +1344,12 @@ function renderHasil(list,scanned,title){
     var d=D.dasar[b.id]||{};
     return '<button type="button" data-pick="'+esc(b.id)+'" data-scan="'+esc(scanned||'')+'"><div class="nm">'+esc(b.nama)+'</div>'+
       '<div class="meta"><span class="mono">'+esc(b.id)+'</span><span>'+esc(b.kategori)+'</span><span>Dihitung '+fmt(d.fisik||0)+' '+esc(b.satuan)+'</span></div>'+
-      (b.deskripsi?'<div class="desc">'+esc(b.deskripsi)+'</div>':'')+'</button>';
+      '</button>';
   }).join('')+'</div>';
 }
 function namaEntri(e){return e.nama||((D.byId[e.itemId]||{}).nama)||e.itemId||''}
 function waktuLog(e){
-  if(e.t instanceof Date)return e.t.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(e.t instanceof Date)return e.t.toLocaleTimeString(locTime(),{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   var m=/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})/.exec(String(e.t||''));
   if(!m)return String(e.t||'');
   return m[1]===hariIni()?m[2]:tglLabel(m[1]).replace(/ \d{4}$/,'')+' '+m[2];
@@ -1141,6 +1379,7 @@ function renderLog(){
       else aksi='<button class="btn ghost sm" data-ubah="'+i+'" type="button">'+ic('edit')+'Ubah</button><button class="btn ghost sm" data-hapus="'+i+'" type="button">'+ic('trash')+'Hapus</button>';
     }
     var sub=[e.petugas,e.lokasi].filter(Boolean).map(esc).join(' · ');
+    var kl=kondLabel(e);if(kl)sub+=(sub?' · ':'')+'<span class="kon">'+esc(kl)+'</span>';
     return '<div><span class="lt">'+esc(waktuLog(e))+' · '+esc(namaEntri(e))+' · <b>'+(e.qty>0?'+':'')+fmt(e.qty)+'</b> · '+esc(e.metode)+
       (sub?'<span class="hint" style="display:block;margin:0;font-size:12.5px">'+sub+'</span>':'')+'</span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="chip c-'+e.st+'">'+T[e.st]+'</span>'+aksi+'</span></div>';
   }).join('')+(tot>100?'<span class="hint">Menampilkan 100 dari '+tot+' entri. Gunakan pencarian untuk mempersempit.</span>':'');
@@ -1169,7 +1408,7 @@ function renderSesiList(){
     }
     return '<div class="card srow"><div class="shead"><div class="sname"><span class="mono" style="color:var(--ink2);font-weight:500">'+esc(s.id)+'</span> '+esc(s.nama)+'</div><span class="chip c-'+esc(s.status)+'">'+esc(s.status)+'</span></div>'+
       '<div class="meta" style="gap:4px 16px">'+info+'</div>'+
-      (!run&&s.ringkasan?'<div class="desc">'+esc(s.ringkasan)+'</div>':'')+
+      (!run&&s.ringkasan?'<div class="desc ringk">'+esc(s.ringkasan)+'</div>':'')+
       '<div class="acts" style="margin-top:4px">'+acts+'</div>'+konf+'</div>';
   }).join('');
 }
@@ -1221,14 +1460,14 @@ function aksiSesi(jenis,id){
 
 /* ---------- tab Dashboard ---------- */
 function loadDash(){
-  var box=$('#dashBody');renderHasil();
+  var box=$('#dashBody');renderHasilTab();
   if(!D.sesi.length){box.innerHTML='<div class="card empty">'+ic('chart')+'<b>Belum ada sesi</b><span>Buat sesi di tab Sesi. Hasil stock opname akan tampil di sini.</span><button class="btn" type="button" data-goto="sesi">'+ic('plus')+'Ke tab Sesi</button></div>';D.dash=null;return Promise.resolve()}
   if(!D.dashId)return Promise.resolve();
   var tok=++D.dashTok;
   box.innerHTML='<div class="card hint">Memuat hasil…</div>';
   return rpc('dashboard',D.kode,D.dashId).then(function(r){
     if(tok!==D.dashTok)return;
-    D.dash=r;gantiSesi(r.sesi);renderDash();renderHasil();
+    D.dash=r;gantiSesi(r.sesi);renderDash();renderHasilTab();
   },function(e){
     if(tok!==D.dashTok)return;
     box.innerHTML='<div class="card err">'+esc(errText(e))+'</div>';
@@ -1270,6 +1509,11 @@ function renderDash(){
     tile('t-good','check','Sesuai',k.c.Sesuai)+tile('t-warn','up','Lebih',k.c.Lebih)+tile('t-bad','down','Kurang',k.c.Kurang)+
     tile('','clock','Belum',k.c['Belum dihitung'])+tile(k.bersih<0?'t-bad':(k.bersih>0?'t-warn':'t-good'),'sigma','Selisih bersih',sgn(k.bersih))+
     tile('','alert','Selisih mutlak',fmt(k.mutlak))+tile('','plus','Produk baru',k.baru)+(k.pembanding?tile('','pin','Di luar stok toko',k.luar):'')+'</div>';
+  var kd=d.kondisi||{good:0,broken:0,waste:0,lain:0};
+  h+='<div class="card"><h2>'+ic('box')+'Ringkasan kondisi</h2><div class="kpis kondk">'+
+    tile('t-good','check','Good',fmt(kd.good))+tile('t-bad','alert','Broken',fmt(kd.broken))+tile('t-bad','trash','Waste Product',fmt(kd.waste))+tile('t-warn','info','Lainnya',fmt(kd.lain))+'</div>'+
+    ((d.kondisiLain||[]).length?'<div class="tw" style="margin-top:12px"><table><thead><tr><th>Barang</th><th class="n">Jumlah</th><th>Alasan</th></tr></thead><tbody>'+
+      d.kondisiLain.map(function(x){var it=D.byId[x.id];return '<tr><td><div class="nm">'+esc(it?it.nama:x.id)+'</div></td><td class="n">'+fmt(x.jumlah)+'</td><td>'+esc(x.alasan)+'</td></tr>'}).join('')+'</tbody></table></div>':'')+'</div>';
   h+='<div class="card"><h2>'+ic('layers')+'Hasil per department</h2>'+(k.kat.length?'<div class="tw"><table><thead><tr><th>Department</th><th class="n">Dihitung</th><th class="n">Selisih</th><th class="n">Akurasi</th></tr></thead><tbody>'+
     k.kat.map(function(x){var a=x.dih?Math.round(x.ok/x.dih*100):0;
       return '<tr><td>'+esc(x.nama)+'</td><td class="n">'+x.dih+' / '+x.n+'</td><td class="n">'+sgn(r3(x.bersih))+'</td><td class="n">'+a+'%<span class="mini"><i style="width:'+a+'%"></i></span></td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada data.</p>')+'</div>';
@@ -1279,9 +1523,9 @@ function renderDash(){
     (d.lokasi.length?'<div class="tw"><table><thead><tr><th>Lokasi</th><th class="n">Entri</th><th class="n">Unit</th></tr></thead><tbody>'+d.lokasi.map(function(p){return '<tr><td>'+esc(p.nama)+'</td><td class="n">'+p.entri+'</td><td class="n">'+fmt(p.unit)+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="hint">Belum ada hitungan.</p>')+'</div></div>';
   h+='<p class="hint" style="text-align:center">'+d.entri+' entri hitungan · '+d.foto+' foto bukti tersimpan di Drive</p>';
   box.innerHTML=h;
-  renderHasil();
+  renderHasilTab();
 }
-function renderHasil(){
+function renderHasilTab(){
   var box=$('#hasilBody');if(!box)return;
   if(!D.sesi.length){
     box.innerHTML='<div class="card empty">'+ic('chart')+'<b>Belum ada sesi</b><span>Buat sesi di tab Sesi. Hasil per barang akan tampil di sini.</span><button class="btn" type="button" data-goto="sesi">'+ic('plus')+'Ke tab Sesi</button></div>';
@@ -1299,6 +1543,10 @@ function renderHasil(){
     [['semua','Semua'],['selisih','Selisih'],['Belum dihitung','Belum'],['Sesuai','Sesuai'],['baru','Baru'],['luar','Di luar stok']].map(function(f){return '<button data-f="'+f[0]+'" aria-pressed="'+(D.fr===f[0])+'">'+f[1]+'</button>'}).join('')+'</div>'+
     '<div id="dTabel"></div></div>';
   renderDashTabel();
+}
+function konChips(k){
+  if(!k)return '';
+  return (k.broken?'<span class="chip c-Kurang">Broken '+fmt(k.broken)+'</span>':'')+(k.waste?'<span class="chip c-Kurang">Waste Product '+fmt(k.waste)+'</span>':'')+(k.lain?'<span class="chip c-Lebih">Lainnya '+fmt(k.lain)+'</span>':'');
 }
 function renderDashTabel(){
   var d=D.dash;if(!d)return;
@@ -1324,7 +1572,7 @@ function renderDashTabel(){
     f.map(function(r){
       var cls=r.status==='Belum dihitung'?'Belum':r.status;
       var it=D.byId[r.id]||{};
-      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+(r.luar&&!r.baru?' <span class="chip c-Luar">Di luar stok</span>':'')+'</div><div class="meta"><span class="chip c-'+cls+'">'+esc(r.status)+'</span><span class="mono">'+esc(r.id)+'</span>'+(it.barcode1||it.barcode2?'<span class="mono">'+esc([it.barcode1,it.barcode2].filter(Boolean).join(' / '))+'</span>':'')+'<span>'+esc(r.satuan)+'</span>'+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Foto</a>':'')+'</div></td>'+
+      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+(r.luar&&!r.baru?' <span class="chip c-Luar">Di luar stok</span>':'')+'</div><div class="meta"><span class="chip c-'+cls+'">'+esc(r.status)+'</span>'+konChips(r.kon)+'<span class="mono">'+esc(r.id)+'</span>'+(it.barcode1||it.barcode2?'<span class="mono">'+esc([it.barcode1,it.barcode2].filter(Boolean).join(' / '))+'</span>':'')+'<span>'+esc(r.satuan)+'</span>'+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Foto</a>':'')+'</div></td>'+
         '<td class="n">'+fmt(r.stok)+'</td><td class="n">'+fmt(r.fisik)+'</td>'+
         '<td class="n"><b>'+sgn(r.sel)+'</b></td></tr>';
     }).join('')+'</tbody></table></div>'+(tot>500?'<p class="hint">Menampilkan 500 dari '+tot+' barang. Gunakan filter atau pencarian.</p>':''):'<p class="hint">Tidak ada data untuk filter ini.</p>';
@@ -1336,11 +1584,11 @@ function csvSel(v){
 }
 function unduhCsv(){
   var d=D.dash;if(!d){toast('Belum ada data untuk diunduh.');return}
-  var head=['ID_Barang','Nama_Barang','Department','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Di_Luar_Stok','Jumlah_Entri','Foto_URL'];
-  var lines=[head.join(';')];
+  var head=['ID_Barang','Nama_Barang','Department','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Di_Luar_Stok','Jumlah_Entri','Foto_URL','Qty_Good','Qty_Broken','Qty_Waste','Qty_Lainnya'];
+  var lines=[head.map(trx).join(';')];
   d.rows.forEach(function(r){
     if(r.status==='Di luar cakupan')return;
-    lines.push([r.id,r.nama,r.kategori,r.satuan,r.stok==null?'':r.stok,r.fisik==null?'':r.fisik,r.sel==null?'':r.sel,r.status,r.baru?'Ya':'',r.luar?'Ya':'',r.entri,r.foto].map(csvSel).join(';'));
+    lines.push([r.id,r.nama,r.kategori,r.satuan,r.stok==null?'':r.stok,r.fisik==null?'':r.fisik,r.sel==null?'':r.sel,trx(r.status),r.baru?trx('Ya'):'',r.luar?trx('Ya'):'',r.entri,r.foto,r.kon?r.kon.good:'',r.kon?r.kon.broken:'',r.kon?r.kon.waste:'',r.kon?r.kon.lain:''].map(csvSel).join(';'));
   });
   try{
     var blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
@@ -1357,7 +1605,7 @@ function renderCekHasil(list,title){
   box.innerHTML=(title?'<p class="hint">'+esc(title)+'</p>':'')+'<div class="res">'+list.map(function(b){
     return '<button type="button" data-cekpick="'+esc(b.id)+'"><div class="nm">'+esc(b.nama)+'</div>'+
       '<div class="meta"><span class="mono">'+esc(b.id)+'</span><span>'+esc(b.kategori)+'</span></div>'+
-      (b.deskripsi?'<div class="desc">'+esc(b.deskripsi)+'</div>':'')+'</button>';
+      '</button>';
   }).join('')+'</div>';
 }
 function cekCari(){
@@ -1373,7 +1621,7 @@ function cekTemukan(v,boleh){
   if(items.length>1){$('#cekDetail').innerHTML='';renderCekHasil(items,'Kode cocok dengan beberapa barang. Pilih yang benar:');return true}
   if(!boleh)return false;
   $('#cekDetail').innerHTML='';
-  renderCekHasil(cari(v,true),'Hasil pencarian nama atau deskripsi:');
+  renderCekHasil(cari(v,true),'Hasil pencarian nama:');
   return true;
 }
 function cekPilih(item){
@@ -1389,6 +1637,7 @@ function cekPilih(item){
   });
 }
 function renderCek(item,r){
+  D.cekLast=[item,r];
   var sesi=r.sesi||[],t=sesi[0];
   var stokTeks=r.stok==null?'–':fmt(r.stok);
   var cat=!r.adaData?'Data Stok_Toko masih kosong, jadi stok sistem belum bisa dibandingkan.':(!r.diToko?'Barang ini tidak ada di daftar stok toko.':'');
@@ -1397,7 +1646,6 @@ function renderCek(item,r){
   var bc=[item.barcode1,item.barcode2].filter(Boolean).join(' / ');
   var h='<div class="card"><div class="cekhead"><div class="nm">'+esc(item.nama)+'</div>'+
     '<div class="meta"><span class="mono">'+esc(item.id)+'</span>'+(item.kategori?'<span>'+esc(item.kategori)+'</span>':'')+(item.satuan?'<span>'+esc(item.satuan)+'</span>':'')+(bc?'<span class="mono">'+esc(bc)+'</span>':'')+'</div></div>'+
-    (item.deskripsi?'<div class="descbox"><div class="dk">'+ic('info')+'Deskripsi</div><div class="dv">'+esc(item.deskripsi)+'</div></div>':'')+
     '<div class="kpis kpis3" style="margin-top:12px">'+
       '<div class="kpi"><span class="k">'+ic('box')+'Stok sistem</span><span class="v">'+stokTeks+'</span></div>'+
       '<div class="kpi"><span class="k">'+ic('check')+'Fisik terakhir</span><span class="v">'+(t?fmt(t.fisik):'–')+'</span></div>'+
@@ -1616,6 +1864,25 @@ $('#sesi').addEventListener('change',function(e){
 });
 $('#dashSesi').addEventListener('change',function(e){D.dashId=e.target.value;lsSet('cc_dash',D.dashId);$('#hasilSesi').value=D.dashId;D.q.then(loadDash)});
 $('#btnDashMuat').addEventListener('click',function(){D.q.then(loadDash)});
+function setLang(l){
+  l=l==='en'?'en':'id';if(l===LANG&&document.documentElement.lang===l)return;
+  LANG=l;lsSet('cc_lang',l);document.documentElement.lang=l;
+  nf=new Intl.NumberFormat(locNum(),{maximumFractionDigits:3});
+  if(l==='en')tTree(document.body);else uTree();
+  document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===l))});
+  try{
+    renderAll();renderSesiList();renderLog();
+    if(D.dash)renderDash();
+    if(D.cekLast&&$('#cekDetail').innerHTML)renderCek(D.cekLast[0],D.cekLast[1]);
+    if(!$('#pengaturan').hidden)renderPengguna();
+  }catch(e){}
+  hydrate();
+}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.lang button');if(b)setLang(b.dataset.lang)});
+document.documentElement.lang=LANG;
+document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===LANG))});
+if(LANG==='en')tTree(document.body);
+i18nStart();
 $('#btnCsv').addEventListener('click',unduhCsv);
 $('#btnHasilCsv').addEventListener('click',unduhCsv);
 $('#btnHasilMuat').addEventListener('click',function(){D.q.then(loadDash)});
@@ -1679,6 +1946,9 @@ document.addEventListener('click',function(e){
   if(id==='btnSimpan'){if(D.baru)simpanBaru();else simpanSel();return}
 });
 $('#langkah').addEventListener('input',function(){updateSimpan()});
+$('#langkah').addEventListener('change',function(e){
+  if(e.target.id==='kond'){var w=$('#kondAlasanWrap');w.hidden=e.target.value!=='Lainnya';if(!w.hidden)$('#kondAlasan').focus();updateSimpan()}
+});
 $('#langkah').addEventListener('keydown',function(e){
   if(e.key==='Enter'&&e.target.id==='qty'){
     e.preventDefault();
