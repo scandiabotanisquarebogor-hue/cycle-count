@@ -1759,11 +1759,11 @@ var camPrev={code:'',t:0},camHintT=0;
 /* Mengembalikan kode bila bacaan sudah meyakinkan, selain itu null.
    Kode yang ada di master langsung diterima. Kode yang tidak dikenal harus terbaca sama 2 kali berturut-turut,
    dan kode angka standar (12-14 digit) harus lolos cek digit supaya bacaan keliru tidak dianggap produk baru. */
-function bacaStabil(text,hint){
+function bacaStabil(text,hint,fmt){
   var t=String(text==null?'':text).trim();if(!t)return null;
   if(lookup(t).length){camPrev={code:'',t:0};return t}
   var now=Date.now();
-  if(/^\d+$/.test(t)&&t.length>=12&&t.length<=14&&!gs1Ok(t)){
+  if(/^\d+$/.test(t)&&t.length>=12&&t.length<=14&&(typeof fmt!=='string'||/^(ean|upc)/.test(fmt))&&!gs1Ok(t)){
     if(now-camHintT>1500){camHintT=now;hint('Terbaca tapi belum yakin. Tahan kamera tetap dan jaga jarak sekitar 15-25 cm.')}
     camPrev={code:'',t:0};return null;
   }
@@ -1811,12 +1811,20 @@ NativeScan.prototype.start=function(cb){
         if(!self.on)return;
         if(!busy&&self.video.readyState>=2){
           busy=true;
-          self.det.detect(self.video).then(function(r){
+          var src=self.video,vw=src.videoWidth,vh=src.videoHeight;
+          if(vw&&vh){
+            /* hanya analisis pita tengah (area bingkai): piksel lebih sedikit = deteksi lebih cepat, detail garis tetap penuh */
+            var cw=Math.round(vw*0.92),ch=Math.round(vh*0.5);
+            if(!self.cv){self.cv=document.createElement('canvas');self.cx=self.cv.getContext('2d')}
+            if(self.cv.width!==cw||self.cv.height!==ch){self.cv.width=cw;self.cv.height=ch}
+            try{self.cx.drawImage(src,Math.round((vw-cw)/2),Math.round((vh-ch)/2),cw,ch,0,0,cw,ch);src=self.cv}catch(e){src=self.video}
+          }
+          self.det.detect(src).then(function(r){
             busy=false;
             if(!self.on||!r||!r.length)return;
             var pick=r[0];
             for(var i=0;i<r.length;i++){if(lookup(r[i].rawValue).length){pick=r[i];break}}
-            if(pick.rawValue)cb(pick.rawValue);
+            if(pick.rawValue)cb(pick.rawValue,pick.format);
           },function(){busy=false});
         }
         var v2=self.video;
@@ -1870,9 +1878,9 @@ function bukaKameraCek(){
   if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return}
   if(camAktif)return;
   $('#cekKam').hidden=false;$('#cekKamMsg').textContent='Membuka kamera…';
-  buatPemindai('readerCek',function(text){
+  buatPemindai('readerCek',function(text,fmt){
       var now=Date.now();
-      text=bacaStabil(text,function(m){$('#cekKamMsg').textContent=m});if(!text)return;
+      text=bacaStabil(text,function(m){$('#cekKamMsg').textContent=m},fmt);if(!text)return;
       if(text===camLast.code&&now-camLast.t<2500)return;
       camLast={code:text,t:now};
       try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
@@ -1943,9 +1951,9 @@ function bukaKamera(){
   if(camAktif)return;
   resetLangkah();
   $('#kamPanel').hidden=false;camMsg('Membuka kamera…');
-  buatPemindai('reader',function(text){
+  buatPemindai('reader',function(text,fmt){
     var now=Date.now();
-    text=bacaStabil(text,camMsg);if(!text)return;
+    text=bacaStabil(text,camMsg,fmt);if(!text)return;
     if(text===camLast.code&&now-camLast.t<2500)return;
     camLast={code:text,t:now};
     try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
