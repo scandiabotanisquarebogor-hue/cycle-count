@@ -379,7 +379,7 @@ a.lnk .ic{width:15px;height:15px}
           <div id="kamPanel" hidden>
             <div id="reader"></div>
             <p id="kamMsg" class="hint"></p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div><button class="btn ghost sm" id="btnZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Perbesar 1x</span></button><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
           </div>
           <div class="sep"><span>atau cari manual</span></div>
           <label class="f"><span><i data-ic="keyboard"></i>Ketik kode manual</span>
@@ -443,7 +443,7 @@ a.lnk .ic{width:15px;height:15px}
         <div id="cekKam" hidden>
           <div id="readerCek"></div>
           <p id="cekKamMsg" class="hint"></p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div><button class="btn ghost sm" id="cekZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Perbesar 1x</span></button><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
         </div>
         <div class="sep"><span>atau cari manual</span></div>
         <label class="f"><span><i data-ic="keyboard"></i>Kode barcode atau nama</span>
@@ -584,6 +584,7 @@ var EN={
 'Terlalu banyak percobaan pendaftaran. Tunggu 10 menit lalu coba lagi.':'Too many sign-up attempts. Wait 10 minutes and try again.'
 };
 var EN_RE=[
+[/^Perbesar ([\d.]+)x$/,function(m){return 'Zoom '+m[1]+'x'}],
 [/^Kode disimpan sebagai Barcode (\d) untuk (.+)$/,function(m){return 'Code saved as Barcode '+m[1]+' for '+m[2]}],
 [/^Produk baru disimpan dengan ID (.+?)\.$/,function(m){return 'New product saved with ID '+m[1]+'.'}],
 [/^Jumlah diubah dari (.+) menjadi (.+)\.$/,function(m){return 'Quantity changed from '+m[1]+' to '+m[2]+'.'}],
@@ -1414,7 +1415,7 @@ function renderLangkah(){
   if(D.sel){
     var it=D.byId[D.sel.id];if(!it){box.innerHTML='';return}
     box.innerHTML='<div class="card"><div class="hit"><div class="hinfo"><div class="nm">'+esc(it.nama)+'</div>'+
-      '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+(D.sel.scanned?' <b class="mono" style="color:var(--ink);font-weight:600">'+esc(D.sel.scanned)+'</b>':'')+'</span></div>'+
+      '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+(D.sel.scanned?' · <b class="mono" style="color:var(--ink);font-weight:600">'+esc(D.sel.scanned)+'</b>':'')+'</span></div>'+
       '<div class="meta">Sudah dihitung sesi ini: <b id="totalDihitung">'+fmt((D.dasar[it.id]||{}).fisik||0)+'</b> '+esc(it.satuan)+'</div></div></div>'+
       stepFoto('2. Foto bukti barang')+
       '<div class="stepbox"><div class="stephead">'+ic('list')+'3. Isi jumlah dan kondisi</div>'+kondHtml(it.satuan)+'</div>'+
@@ -1477,7 +1478,7 @@ function renderLog(){
     }
     var sub=[e.petugas,e.lokasi].filter(Boolean).map(esc).join(' · ');
     var kl=kondLabel(e);if(kl)sub+=(sub?' · ':'')+'<span class="kon">'+esc(kl)+'</span>';
-    return '<div><span class="lt">'+esc(waktuLog(e))+' · '+esc(namaEntri(e))+' · <b>'+(e.qty>0?'+':'')+fmt(e.qty)+'</b> · '+esc(e.metode)+
+    return '<div><span class="lt">'+esc(waktuLog(e))+' · '+esc(namaEntri(e))+' · <b>'+(e.qty>0?'+':'')+fmt(e.qty)+'</b> · '+esc(e.metode)+(e.barcode?' · <b class="mono" style="font-weight:600">'+esc(e.barcode)+'</b>':'')+
       (sub?'<span class="hint" style="display:block;margin:0;font-size:12.5px">'+sub+'</span>':'')+'</span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="chip c-'+e.st+'">'+T[e.st]+'</span>'+aksi+'</span></div>';
   }).join('')+(tot>100?'<span class="hint">Menampilkan 100 dari '+tot+' entri. Gunakan pencarian untuk mempersempit.</span>':'');
 }
@@ -1871,10 +1872,10 @@ function siapkanZoom(btnSel,videoSel){
     var cap=tr&&tr.getCapabilities&&tr.getCapabilities();
     if(!cap||!cap.zoom||!(cap.zoom.max>=1.5))return;
     var z2=Math.min(2,cap.zoom.max),on=false;
-    b.hidden=false;b.querySelector('span').textContent='Zoom 1x';
+    b.hidden=false;b.querySelector('span').textContent='Perbesar 1x';
     b.onclick=function(){
       on=!on;
-      tr.applyConstraints({advanced:[{zoom:on?z2:(cap.zoom.min||1)}]}).then(function(){b.querySelector('span').textContent='Zoom '+(on?(Math.round(z2*10)/10):1)+'x';b.setAttribute('aria-pressed',String(on))},function(){on=!on});
+      tr.applyConstraints({advanced:[{zoom:on?z2:(cap.zoom.min||1)}]}).then(function(){b.querySelector('span').textContent='Perbesar '+(on?(Math.round(z2*10)/10):1)+'x';b.setAttribute('aria-pressed',String(on))},function(){on=!on});
     };
   }catch(e){}
 }
