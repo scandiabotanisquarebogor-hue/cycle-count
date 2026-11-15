@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CYCLE COUNT - SCANDIA Botani</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2C6A55" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0F1613" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#C8552B" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1F1E1D" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cycle Count">
@@ -15,16 +15,16 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
-  --bg:#F1F5F3; --surface:#FFFFFF; --field:#FFFFFF; --ink:#15231E; --ink2:#50625B; --line:#D3DED8;
-  --accent:#2C6A55; --accent-ink:#FFFFFF; --soft:#E2F1EA;
-  --good:#1D7539; --good-bg:#DCF0E2; --warn:#8F5200; --warn-bg:#FBEBCB; --bad:#B3261E; --bad-bg:#FBE0DD; --mute-bg:#E6ECE9; --mute:#9FB0A8;
+  --bg:#F7F5F2; --surface:#FFFFFF; --field:#FFFFFF; --ink:#2B2A29; --ink2:#5F5B57; --line:#E1DBD4;
+  --accent:#C8552B; --accent-ink:#FFFFFF; --soft:#FBE9E0;
+  --good:#3A3836; --good-bg:#E8E4DF; --warn:#7A5200; --warn-bg:#FBEBCB; --bad:#B3261E; --bad-bg:#FBE0DD; --mute-bg:#ECE8E3; --mute:#A8A29A;
   --mono:ui-monospace,Menlo,Consolas,monospace; --r:12px;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#0F1613; --surface:#17211D; --field:#101915; --ink:#E6EEEA; --ink2:#9BACA4; --line:#2D3C36;
-    --accent:#4FC3A5; --accent-ink:#06241D; --soft:#183A32;
-    --good:#6FD08C; --good-bg:#1B3626; --warn:#F0B450; --warn-bg:#3A2D12; --bad:#FF8F86; --bad-bg:#3F1C19; --mute-bg:#202C27; --mute:#5C6E66;
+    --bg:#1F1E1D; --surface:#2A2928; --field:#232221; --ink:#F2EFEB; --ink2:#AAA49C; --line:#3F3C39;
+    --accent:#E8885F; --accent-ink:#2A1208; --soft:#3D2B22;
+    --good:#D5D0C9; --good-bg:#3A3836; --warn:#F0B450; --warn-bg:#3A2D12; --bad:#FF8F86; --bad-bg:#3F1C19; --mute-bg:#2F2D2B; --mute:#6E6962;
     color-scheme:dark;
   }
 }
@@ -169,6 +169,12 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 #readerCek{overflow:hidden;border-radius:10px;background:#000;min-height:120px}
 #reader video,#readerCek video{width:100%;display:block;max-height:60vh;object-fit:cover}
 .scanguide{position:absolute;left:8%;right:8%;top:28%;bottom:28%;border:2px solid rgba(255,255,255,.85);border-radius:10px;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.28)}
+.scanguide.ketat{left:12%;right:12%;top:38%;bottom:38%}
+.scanmode{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 8px;font-size:13px;color:var(--ink2)}
+.scanmode .seg2{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.scanmode button{font:600 13px inherit;font-family:inherit;color:var(--ink2);background:none;border:0;min-height:34px;padding:0 14px;cursor:pointer}
+.scanmode button+button{border-left:1.5px solid var(--line)}
+.scanmode button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 .scanguide i{position:absolute;left:6px;right:6px;top:50%;height:2px;background:#ff4d4d;box-shadow:0 0 6px #ff4d4d;animation:sg 1.4s ease-in-out infinite alternate}
 @keyframes sg{from{top:18%}to{top:82%}}
 #reader{width:100%;max-width:440px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000;min-height:120px}
@@ -367,7 +373,7 @@ a.lnk .ic{width:15px;height:15px}
           </div>
           <div id="kamPanel" hidden>
             <div id="reader"></div>
-            <p id="kamMsg" class="hint"></p>
+            <p id="kamMsg" class="hint"></p><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
             <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
           </div>
           <div class="sep"><span>atau cari manual</span></div>
@@ -431,7 +437,7 @@ a.lnk .ic{width:15px;height:15px}
         </div>
         <div id="cekKam" hidden>
           <div id="readerCek"></div>
-          <p id="cekKamMsg" class="hint"></p>
+          <p id="cekKamMsg" class="hint"></p><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
         </div>
         <div class="sep"><span>atau cari manual</span></div>
@@ -491,7 +497,7 @@ var EN={
 'Belum ada sesi yang berjalan':'No session in progress','Buat sesi dulu di tab Sesi, lalu kembali ke sini untuk mulai menghitung.':'Create a session in the Sessions tab first, then come back here to start counting.',
 'Ke tab Sesi':'Go to Sessions tab','Lokasi':'Location','Pilih lokasi…':'Select location…','Lainnya':'Other','Lokasi lainnya':'Other location','Ketik lokasi, mis. Gudang belakang':'Type a location, e.g. Back warehouse',
 'Petugas':'Staff','Petugas (akun yang sedang login)':'Staff (logged-in account)','1. Cari barang':'1. Find item','Scan kamera':'Scan with camera','Baca dari foto':'Read from photo','Produk baru':'New product',
-'Senter':'Flashlight','Tutup kamera':'Close camera','atau cari manual':'or search manually','Ketik kode manual':'Enter code manually','Kode barcode':'Barcode','Cari':'Search',
+'Senter':'Flashlight','Mode scan':'Scan mode','Ketat':'Tight','Untuk barcode biasa':'For regular barcodes','Untuk barcode kecil atau rapat. Barcode harus pas di bingkai':'For small or dense barcodes. Barcode must fit inside the frame','Tutup kamera':'Close camera','atau cari manual':'or search manually','Ketik kode manual':'Enter code manually','Kode barcode':'Barcode','Cari':'Search',
 'Cari berdasarkan nama':'Search by name','Contoh: sofa 3 dudukan':'Example: 3-seater sofa','Cari barang':'Search item','Sesi':'Session','Pilih sesi':'Select session',
 "Riwayat sesi ini":"This session's history",'Cari di riwayat: nama, kode, barcode, petugas':'Search history: name, code, barcode, staff','Cari di riwayat':'Search history','Belum ada hitungan.':'No counts yet.',
 'Hasil per barang, sesi':'Item results · session','Pilih sesi untuk hasil per barang':'Select session for item results','Cek stok barang':'Check item stock',
@@ -1788,6 +1794,18 @@ function tuneKamera(sel){
     if(adv.length)tr.applyConstraints({advanced:adv}).catch(function(){});
   }catch(e){}
 }
+var SCANMODE='n';try{SCANMODE=localStorage.getItem('cc_scan')==='k'?'k':'n'}catch(e){}
+function terapkanModeScan(){
+  [].forEach.call(document.querySelectorAll('.scanmode button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-sm')===SCANMODE))});
+  [].forEach.call(document.querySelectorAll('.scanguide'),function(g){g.classList.toggle('ketat',SCANMODE==='k')});
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('.scanmode button');if(!b)return;
+  SCANMODE=b.getAttribute('data-sm')==='k'?'k':'n';
+  try{localStorage.setItem('cc_scan',SCANMODE)}catch(x){}
+  terapkanModeScan();
+});
+terapkanModeScan();
 /* ---------- pemindai native (BarcodeDetector): jauh lebih cepat daripada html5-qrcode ---------- */
 function NativeScan(elId){this.el=document.getElementById(elId);this.on=false;this.stream=null;this.timer=0}
 NativeScan.prototype.start=function(cb){
@@ -1796,7 +1814,7 @@ NativeScan.prototype.start=function(cb){
     self.stream=stream;
     var v=document.createElement('video');v.setAttribute('playsinline','');v.setAttribute('muted','');v.muted=true;v.autoplay=true;v.srcObject=stream;
     self.el.innerHTML='';self.el.appendChild(v);self.video=v;
-    var g=document.createElement('div');g.className='scanguide';g.innerHTML='<i></i>';self.el.appendChild(g);
+    var g=document.createElement('div');g.className='scanguide';g.innerHTML='<i></i>';self.el.appendChild(g);terapkanModeScan();
     var want=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','qr_code'];
     var sup=BarcodeDetector.getSupportedFormats?BarcodeDetector.getSupportedFormats():Promise.resolve(want);
     return Promise.resolve(sup).then(function(list){
@@ -1814,7 +1832,7 @@ NativeScan.prototype.start=function(cb){
           var src=self.video,vw=src.videoWidth,vh=src.videoHeight;
           if(vw&&vh){
             /* hanya analisis pita tengah (area bingkai): piksel lebih sedikit = deteksi lebih cepat, detail garis tetap penuh */
-            var cw=Math.round(vw*0.92),ch=Math.round(vh*0.5);
+            var cw=Math.round(vw*(SCANMODE==='k'?0.76:0.92)),ch=Math.round(vh*(SCANMODE==='k'?0.24:0.5));
             if(!self.cv){self.cv=document.createElement('canvas');self.cx=self.cv.getContext('2d')}
             if(self.cv.width!==cw||self.cv.height!==ch){self.cv.width=cw;self.cv.height=ch}
             try{self.cx.drawImage(src,Math.round((vw-cw)/2),Math.round((vh-ch)/2),cw,ch,0,0,cw,ch);src=self.cv}catch(e){src=self.video}
