@@ -353,17 +353,6 @@ a.lnk .ic{width:15px;height:15px}
       </div>
       <div id="hitungIsi" style="display:flex;flex-direction:column;gap:14px">
         <div class="card">
-          <div class="grid">
-            <label class="f"><span><i data-ic="pin"></i>Lokasi</span>
-              <select id="lokasi" aria-label="Lokasi">
-                <option value="">Pilih lokasi…</option><option value="Showroom">Showroom</option><option value="Warehouse">Warehouse</option><option value="Office">Office</option><option value="Rack">Rack</option><option value="Lainnya">Lainnya</option>
-              </select></label>
-            <label class="f" id="lokasiLainWrap" hidden><span><i data-ic="pin"></i>Lokasi lainnya</span><input id="lokasiLain" type="text" maxlength="80" placeholder="Ketik lokasi, mis. Gudang belakang" autocomplete="off"></label>
-            <label class="f"><span><i data-ic="user"></i>Petugas</span><input id="petugas" type="text" readonly tabindex="-1" aria-label="Petugas (akun yang sedang login)" placeholder="Petugas"></label>
-          </div>
-        </div>
-
-        <div class="card">
           <div class="stephead"><i data-ic="barcode"></i>1. Cari barang</div>
           <div class="scanbtns">
             <button class="btn main" id="btnKam" type="button"><i data-ic="camera"></i>Scan kamera</button>
@@ -385,6 +374,17 @@ a.lnk .ic{width:15px;height:15px}
           <div id="hasil"></div>
           <p id="barangInfo" class="hint" hidden></p>
           <div id="miss"></div>
+        </div>
+
+        <div class="card">
+          <div class="grid">
+            <label class="f"><span><i data-ic="pin"></i>Lokasi</span>
+              <select id="lokasi" aria-label="Lokasi">
+                <option value="">Pilih lokasi…</option><option value="Showroom">Showroom</option><option value="Warehouse">Warehouse</option><option value="Office">Office</option><option value="Rack">Rack</option><option value="Lainnya">Lainnya</option>
+              </select></label>
+            <label class="f" id="lokasiLainWrap" hidden><span><i data-ic="pin"></i>Lokasi lainnya</span><input id="lokasiLain" type="text" maxlength="80" placeholder="Ketik lokasi, mis. Gudang belakang" autocomplete="off"></label>
+            <label class="f"><span><i data-ic="user"></i>Petugas</span><input id="petugas" type="text" readonly tabindex="-1" aria-label="Petugas (akun yang sedang login)" placeholder="Petugas"></label>
+          </div>
         </div>
 
         <div id="langkah"></div>
