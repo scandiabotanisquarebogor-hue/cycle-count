@@ -15,6 +15,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232B2A29' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 9l7 7 7-7'/%3E%3C/svg%3E");
   --bg:#F7F5F2; --surface:#FFFFFF; --field:#FFFFFF; --ink:#2B2A29; --ink2:#5F5B57; --line:#E1DBD4;
   --accent:#C8552B; --accent-ink:#FFFFFF; --soft:#FBE9E0;
   --good:#3A3836; --good-bg:#E8E4DF; --warn:#7A5200; --warn-bg:#FBEBCB; --bad:#B3261E; --bad-bg:#FBE0DD; --mute-bg:#ECE8E3; --mute:#A8A29A;
@@ -22,6 +23,7 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
+    --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F2EFEB' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 9l7 7 7-7'/%3E%3C/svg%3E");
     --bg:#1F1E1D; --surface:#2A2928; --field:#232221; --ink:#F2EFEB; --ink2:#AAA49C; --line:#3F3C39;
     --accent:#E8885F; --accent-ink:#2A1208; --soft:#3D2B22;
     --good:#D5D0C9; --good-bg:#3A3836; --warn:#F0B450; --warn-bg:#3A2D12; --bad:#FF8F86; --bad-bg:#3F1C19; --mute-bg:#2F2D2B; --mute:#6E6962;
@@ -128,6 +130,7 @@ h2 .ic{color:var(--accent)}
 label.f,div.f{display:flex;flex-direction:column;gap:5px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);font-weight:600;min-width:0}
 label.f .ic,div.f .ic{width:15px;height:15px;margin-right:4px;vertical-align:-3px}
 select,input[type=text],input[type=password],input[type=date]{font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;min-height:42px;min-width:0;width:100%;text-transform:none;letter-spacing:0;font-weight:400}
+select{-webkit-appearance:none;appearance:none;background-image:var(--chev);background-repeat:no-repeat;background-position:right 14px center;background-size:14px 14px;padding-right:40px!important;cursor:pointer}
 input[readonly]{background:var(--mute-bg)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
@@ -170,11 +173,13 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 #reader video,#readerCek video{width:100%;display:block;max-height:60vh;object-fit:cover}
 .scanguide{position:absolute;left:8%;right:8%;top:28%;bottom:28%;border:2px solid rgba(255,255,255,.85);border-radius:10px;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.28)}
 .scanguide.ketat{left:12%;right:12%;top:38%;bottom:38%}
-.scanmode{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 8px;font-size:13px;color:var(--ink2)}
+.scanmode{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0 8px;font-size:13px;color:var(--ink2)}
 .scanmode .seg2{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
-.scanmode button{font:600 13px inherit;font-family:inherit;color:var(--ink2);background:none;border:0;min-height:34px;padding:0 14px;cursor:pointer}
-.scanmode button+button{border-left:1.5px solid var(--line)}
-.scanmode button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.scanmode>span{font-size:12px;white-space:nowrap}
+.scanmode button[data-sm]{font:600 13px inherit;font-family:inherit;color:var(--ink2);background:none;border:0;min-height:34px;padding:0 11px;cursor:pointer}
+.scanmode .btn.sm{padding:4px 9px;gap:5px;white-space:nowrap}
+.scanmode button[data-sm]+button{border-left:1.5px solid var(--line)}
+.scanmode button[data-sm][aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 .scanguide i{position:absolute;left:6px;right:6px;top:50%;height:2px;background:#ff4d4d;box-shadow:0 0 6px #ff4d4d;animation:sg 1.4s ease-in-out infinite alternate}
 @keyframes sg{from{top:18%}to{top:82%}}
 #reader{width:100%;max-width:440px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000;min-height:120px}
@@ -373,8 +378,8 @@ a.lnk .ic{width:15px;height:15px}
           </div>
           <div id="kamPanel" hidden>
             <div id="reader"></div>
-            <p id="kamMsg" class="hint"></p><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
+            <p id="kamMsg" class="hint"></p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="btnSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="btnTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div><button class="btn ghost sm" id="btnZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button></div>
           </div>
           <div class="sep"><span>atau cari manual</span></div>
           <label class="f"><span><i data-ic="keyboard"></i>Ketik kode manual</span>
@@ -388,6 +393,8 @@ a.lnk .ic{width:15px;height:15px}
           <div id="miss"></div>
         </div>
 
+        <div id="langkah"></div>
+
         <div class="card">
           <div class="grid">
             <label class="f"><span><i data-ic="pin"></i>Lokasi</span>
@@ -398,8 +405,6 @@ a.lnk .ic{width:15px;height:15px}
             <label class="f"><span><i data-ic="user"></i>Petugas</span><input id="petugas" type="text" readonly tabindex="-1" aria-label="Petugas (akun yang sedang login)" placeholder="Petugas"></label>
           </div>
         </div>
-
-        <div id="langkah"></div>
 
         <div class="card">
           <label class="f" style="max-width:420px"><span><i data-ic="calendar"></i>Sesi</span><select id="sesi" aria-label="Pilih sesi"></select></label>
@@ -437,8 +442,8 @@ a.lnk .ic{width:15px;height:15px}
         </div>
         <div id="cekKam" hidden>
           <div id="readerCek"></div>
-          <p id="cekKamMsg" class="hint"></p><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div>
+          <p id="cekKamMsg" class="hint"></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="cekSenter" type="button" aria-pressed="false" hidden><i data-ic="flash"></i><span>Senter</span></button><button class="btn ghost sm" id="cekTutup" type="button"><i data-ic="x"></i>Tutup kamera</button></div><div class="scanmode"><span>Mode scan</span><div class="seg2" role="group" aria-label="Mode scan"><button type="button" data-sm="n" aria-pressed="true" title="Untuk barcode biasa">Normal</button><button type="button" data-sm="k" aria-pressed="false" title="Untuk barcode kecil atau rapat. Barcode harus pas di bingkai">Ketat</button></div><button class="btn ghost sm" id="cekZoom" type="button" aria-pressed="false" hidden><i data-ic="search"></i><span>Zoom 1x</span></button></div>
         </div>
         <div class="sep"><span>atau cari manual</span></div>
         <label class="f"><span><i data-ic="keyboard"></i>Kode barcode atau nama</span>
@@ -1409,7 +1414,7 @@ function renderLangkah(){
   if(D.sel){
     var it=D.byId[D.sel.id];if(!it){box.innerHTML='';return}
     box.innerHTML='<div class="card"><div class="hit"><div class="hinfo"><div class="nm">'+esc(it.nama)+'</div>'+
-      '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+'</span></div>'+
+      '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+(D.sel.scanned?' <b class="mono" style="color:var(--ink);font-weight:600">'+esc(D.sel.scanned)+'</b>':'')+'</span></div>'+
       '<div class="meta">Sudah dihitung sesi ini: <b id="totalDihitung">'+fmt((D.dasar[it.id]||{}).fisik||0)+'</b> '+esc(it.satuan)+'</div></div></div>'+
       stepFoto('2. Foto bukti barang')+
       '<div class="stepbox"><div class="stephead">'+ic('list')+'3. Isi jumlah dan kondisi</div>'+kondHtml(it.satuan)+'</div>'+
@@ -1796,11 +1801,11 @@ function tuneKamera(sel){
 }
 var SCANMODE='n';try{SCANMODE=localStorage.getItem('cc_scan')==='k'?'k':'n'}catch(e){}
 function terapkanModeScan(){
-  [].forEach.call(document.querySelectorAll('.scanmode button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-sm')===SCANMODE))});
+  [].forEach.call(document.querySelectorAll('.scanmode button[data-sm]'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-sm')===SCANMODE))});
   [].forEach.call(document.querySelectorAll('.scanguide'),function(g){g.classList.toggle('ketat',SCANMODE==='k')});
 }
 document.addEventListener('click',function(e){
-  var b=e.target.closest&&e.target.closest('.scanmode button');if(!b)return;
+  var b=e.target.closest&&e.target.closest('.scanmode button[data-sm]');if(!b)return;
   SCANMODE=b.getAttribute('data-sm')==='k'?'k':'n';
   try{localStorage.setItem('cc_scan',SCANMODE)}catch(x){}
   terapkanModeScan();
