@@ -165,6 +165,12 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 .cekhead .nm{font-size:18px}
 .sesirow .meta{margin-top:3px}
 #kamPanel{margin-top:10px}
+#reader,#readerCek{position:relative}
+#readerCek{overflow:hidden;border-radius:10px;background:#000;min-height:120px}
+#reader video,#readerCek video{width:100%;display:block;max-height:60vh;object-fit:cover}
+.scanguide{position:absolute;left:8%;right:8%;top:28%;bottom:28%;border:2px solid rgba(255,255,255,.85);border-radius:10px;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.28)}
+.scanguide i{position:absolute;left:6px;right:6px;top:50%;height:2px;background:#ff4d4d;box-shadow:0 0 6px #ff4d4d;animation:sg 1.4s ease-in-out infinite alternate}
+@keyframes sg{from{top:18%}to{top:82%}}
 #reader{width:100%;max-width:440px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000;min-height:120px}
 .hit{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;background:var(--soft);border-radius:10px;padding:12px 14px}
 .hinfo{min-width:0;flex:1 1 220px}
@@ -1782,15 +1788,72 @@ function tuneKamera(sel){
     if(adv.length)tr.applyConstraints({advanced:adv}).catch(function(){});
   }catch(e){}
 }
+/* ---------- pemindai native (BarcodeDetector): jauh lebih cepat daripada html5-qrcode ---------- */
+function NativeScan(elId){this.el=document.getElementById(elId);this.on=false;this.stream=null;this.timer=0}
+NativeScan.prototype.start=function(cb){
+  var self=this;
+  return navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}}).then(function(stream){
+    self.stream=stream;
+    var v=document.createElement('video');v.setAttribute('playsinline','');v.setAttribute('muted','');v.muted=true;v.autoplay=true;v.srcObject=stream;
+    self.el.innerHTML='';self.el.appendChild(v);self.video=v;
+    var g=document.createElement('div');g.className='scanguide';g.innerHTML='<i></i>';self.el.appendChild(g);
+    var want=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','qr_code'];
+    var sup=BarcodeDetector.getSupportedFormats?BarcodeDetector.getSupportedFormats():Promise.resolve(want);
+    return Promise.resolve(sup).then(function(list){
+      var use=want.filter(function(f){return list.indexOf(f)>=0});
+      if(!use.length)throw new Error('unsupported formats');
+      self.det=new BarcodeDetector({formats:use});
+      return v.play().catch(function(){});
+    }).then(function(){
+      self.on=true;
+      var busy=false;
+      (function tick(){
+        if(!self.on)return;
+        if(!busy&&self.video.readyState>=2){
+          busy=true;
+          self.det.detect(self.video).then(function(r){
+            busy=false;
+            if(!self.on||!r||!r.length)return;
+            var pick=r[0];
+            for(var i=0;i<r.length;i++){if(lookup(r[i].rawValue).length){pick=r[i];break}}
+            if(pick.rawValue)cb(pick.rawValue);
+          },function(){busy=false});
+        }
+        self.timer=setTimeout(tick,50);
+      })();
+    });
+  });
+};
+NativeScan.prototype.stop=function(){
+  this.on=false;clearTimeout(this.timer);
+  try{if(this.stream)this.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}
+  this.stream=null;return Promise.resolve();
+};
+NativeScan.prototype.clear=function(){try{this.el.innerHTML=''}catch(e){}};
+function bisaKamera(){return !!(window.BarcodeDetector&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)||!!window.Html5Qrcode}
+function buatPemindai(elId,cb){
+  function lama(){
+    if(!window.Html5Qrcode)return Promise.reject(new Error('Kamera gagal dibuka.'));
+    var c;try{c=new Html5Qrcode(elId,{formatsToSupport:formatBarcode(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false})}catch(e){return Promise.reject(e)}
+    return mulaiKamera(c,cb).then(function(){return c});
+  }
+  if(window.BarcodeDetector&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    var n=new NativeScan(elId);
+    return n.start(cb).then(function(){return n},function(e){
+      n.stop();n.clear();
+      var m=String((e&&e.message)||e||'')+' '+String((e&&e.name)||'');
+      if(/permission|notallowed|denied|notfound|no camera/i.test(m))throw e;
+      return lama();
+    });
+  }
+  return lama();
+}
 function bukaKameraCek(){
-  if(!window.Html5Qrcode){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
+  if(!bisaKamera()){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
   if(!D.barangSiap){toast('Daftar barang masih dimuat. Tunggu sebentar.');return}
   if(camAktif)return;
   $('#cekKam').hidden=false;$('#cekKamMsg').textContent='Membuka kamera…';
-  try{cam=new Html5Qrcode('readerCek',{formatsToSupport:formatBarcode(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false})}
-  catch(e){$('#cekKamMsg').textContent='Kamera tidak bisa dimulai di perangkat ini. Ketik kodenya manual.';return}
-  mulaiKamera(cam,
-    function(text){
+  buatPemindai('readerCek',function(text){
       var now=Date.now();
       text=bacaStabil(text,function(m){$('#cekKamMsg').textContent=m});if(!text)return;
       if(text===camLast.code&&now-camLast.t<2500)return;
@@ -1798,8 +1861,8 @@ function bukaKameraCek(){
       try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
       if(cekTemukan(text,false)){beep(true);tutupKamera()}
       else{beep(false);$('#cekKamMsg').textContent='Barcode '+text+' tidak ada di master. Arahkan ke barcode lain.'}
-    }).then(function(){
-      camAktif=true;$('#cekKamMsg').textContent='Arahkan kamera ke barcode.';senterBtn='#cekSenter';senterSel='#readerCek video';siapkanSenter();tuneKamera('#readerCek video');
+    }).then(function(c){
+      cam=c;camAktif=true;$('#cekKamMsg').textContent='Arahkan kamera ke barcode.';senterBtn='#cekSenter';senterSel='#readerCek video';siapkanSenter();tuneKamera('#readerCek video');
     },function(err){
       camAktif=false;
       var m=String((err&&err.message)||err||'');
@@ -1858,23 +1921,20 @@ function tutupKamera(){
   }
 }
 function bukaKamera(){
-  if(!window.Html5Qrcode){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
+  if(!bisaKamera()){toast('Pustaka kamera belum termuat. Periksa koneksi internet lalu muat ulang.');return}
   if(!ready())return;
   if(camAktif)return;
   resetLangkah();
   $('#kamPanel').hidden=false;camMsg('Membuka kamera…');
-  try{
-    cam=new Html5Qrcode('reader',{formatsToSupport:formatBarcode(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false});
-  }catch(e){camMsg('Kamera tidak bisa dimulai di perangkat ini. Pakai tombol Baca dari foto.',true);return}
-  mulaiKamera(cam,function(text){
+  buatPemindai('reader',function(text){
     var now=Date.now();
     text=bacaStabil(text,camMsg);if(!text)return;
     if(text===camLast.code&&now-camLast.t<2500)return;
     camLast={code:text,t:now};
     try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
     onScan(text,true);
-  }).then(function(){
-    camAktif=true;camMsg('Arahkan kamera ke barcode.');senterBtn='#btnSenter';senterSel='#reader video';siapkanSenter();tuneKamera('#reader video');
+  }).then(function(c){
+    cam=c;camAktif=true;camMsg('Arahkan kamera ke barcode.');senterBtn='#btnSenter';senterSel='#reader video';siapkanSenter();tuneKamera('#reader video');
   },function(err){
     camAktif=false;
     var m=String((err&&err.message)||err||'');
