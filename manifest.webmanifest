@@ -1,17 +1,32 @@
 {
-  "name": "CYCLE COUNT - SCANDIA Botani",
-  "short_name": "Cycle Count",
-  "description": "Stock opname dengan scan barcode, foto bukti, dan rekap otomatis.",
-  "lang": "id",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#1F1E1D",
-  "theme_color": "#C8552B",
-  "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
-  ]
+ "name": "Monitoring Database · SCANDIA BOTANI",
+ "short_name": "Monitoring",
+ "description": "Monitoring database penjualan SCANDIA BOTANI",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#f6f5f1",
+ "theme_color": "#f6f5f1",
+ "lang": "id",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
 }
