@@ -635,6 +635,8 @@ function trEn(s){
   for(var i=0;i<EN_RE.length;i++){var r=EN_RE[i][0].exec(core);if(r)return m[1]+EN_RE[i][1](r)+m[3]}
   return s;
 }
+EN_RE.push([/^Data elektronik belum lengkap \(Merek\/Model\/No seri\)\. Lengkapi di Master_Aset\.$/,'Electronic data incomplete (Brand/Model/Serial no). Complete it in Master_Aset.']);
+EN_RE.push([/^Merek: (.+)$/,'Brand: $1']);EN_RE.push([/^No seri: (.+)$/,'Serial no: $1']);
 EN_RE.push([/^Sesi selesai pada ([^.]+)\.$/,function(m){return 'Session finished on '+m[1]+'.'}]);
 /* ---- Aset: istilah tambahan + turunan otomatis dari istilah department/Hasil_Sesi ---- */
 (function(){
@@ -642,7 +644,7 @@ EN_RE.push([/^Sesi selesai pada ([^.]+)\.$/,function(m){return 'Session finished
     '1. Cari aset':'1. Find asset','Aset baru':'New asset','Cek jumlah aset':'Check asset quantity','2. Foto bukti aset':'2. Asset proof photo','Foto aset':'Asset photo',
     'Aset ini belum ada di daftar. Jumlah sistem diisi 0 dan ditandai perlu verifikasi.':'This asset is not in the list. System quantity is set to 0 and it is flagged for verification.',
     'Nama aset':'Asset name','Contoh: Kursi Kantor Hitam':'Example: Black Office Chair','Kode QR atau nomor aset (bila ada)':'QR code or asset number (if any)',
-    'Batch number (opsional)':'Batch number (optional)','Simpan aset baru':'Save new asset','Nama aset wajib diisi.':'Asset name is required.','Ambil foto aset dulu.':'Take the asset photo first.',
+    'Batch number (opsional)':'Batch number (optional)','Merek (wajib)':'Brand (required)','Model (wajib)':'Model (required)','Nomor seri (wajib)':'Serial number (required)','Aset elektronik: Merek, Model dan Nomor seri wajib diisi.':'Electronic asset: Brand, Model and Serial number are required.','Simpan aset baru':'Save new asset','Nama aset wajib diisi.':'Asset name is required.','Ambil foto aset dulu.':'Take the asset photo first.',
     'Tidak cocok dengan kode aset mana pun. Cari asetnya lewat nama di bawah, atau tambahkan sebagai aset baru.':'Does not match any asset code. Find the asset by name below, or add it as a new asset.',
     'Tambah sebagai aset baru':'Add as new asset','Jenis opname':'Opname type','Barang dagang':'Merchandise','Aset toko':'Store assets','Aset':'Assets',
     'Aset terdaftar':'Registered assets','Kode aset':'Asset code','Jumlah sistem':'System quantity','Memuat daftar aset…':'Loading asset list…','Kategori':'Category'
@@ -1070,12 +1072,17 @@ function cariKode(){
   inp.value='';onScan(v,false);
 }
 
+function adaElek(k){return D.jenisAktif==='aset'&&/elektronik|electronic|finance|keuangan|(^|[^a-z])it([^a-z]|$)/i.test(k||'')}
+function elekOk(){var k=$('#bKat')?$('#bKat').value:'';if(!adaElek(k))return true;return !!($('#bMerek')&&$('#bMerek').value.trim()&&$('#bModel')&&$('#bModel').value.trim()&&$('#bSeri')&&$('#bSeri').value.trim())}
+function tampilElek(){var b=$('#bElek');if(b)b.hidden=!adaElek($('#bKat')?$('#bKat').value:'')}
+function elekMeta(it){if(!it||D.jenisAktif!=='aset'||!(it.merek||it.model||it.seri))return '';return '<div class="meta">'+(it.merek?'<span>Merek: '+esc(it.merek)+'</span>':'')+(it.model?'<span>Model: '+esc(it.model)+'</span>':'')+(it.seri?'<span>No seri: <b class="mono" style="color:var(--ink);font-weight:600">'+esc(it.seri)+'</b></span>':'')+'</div>'}
 function updateSimpan(){
   var b=$('#btnSimpan');if(!b)return;
   var q=parseQty($('#qty')&&$('#qty').value);
   var ok=q>0&&(!D.fotoWajib||!!D.foto);
   var kv=kondVal();if(kv.kondisi==='Lainnya'&&!kv.alasan)ok=false;
   if(D.baru&&!($('#bNama')&&$('#bNama').value.trim()&&$('#bKat')&&$('#bKat').value))ok=false;
+  if(D.baru&&!elekOk())ok=false;
   b.disabled=!ok||D.menyimpanBaru;
 }
 function updateTotal(){
@@ -1121,12 +1128,13 @@ function simpanBaru(){
   var as=D.jenisAktif==='aset';
   if(!nama){toast(as?'Nama aset wajib diisi.':'Nama barang wajib diisi.');return}
   if(!$('#bKat').value){toast(as?'Pilih kategori dulu.':'Pilih department dulu.');return}
+  if(!elekOk()){toast('Aset elektronik: Merek, Model dan Nomor seri wajib diisi.');return}
   if(!(qty>0)){toast('Isi jumlah dengan angka lebih dari 0.');return}
   if(D.fotoWajib&&!D.foto){toast(as?'Ambil foto aset dulu.':'Ambil foto barang dulu.');return}
   if(!alasanOk())return;
   var kv=kondVal();
   var payload={idSesi:D.idSesi,nama:nama,kategori:$('#bKat').value,
-    satuan:$('#bSat').value.trim(),barcode:$('#bBar').value.trim(),batch:($('#bBatch')?$('#bBatch').value.trim():''),jumlah:qty,
+    satuan:$('#bSat').value.trim(),barcode:$('#bBar').value.trim(),batch:($('#bBatch')?$('#bBatch').value.trim():''),merek:($('#bMerek')?$('#bMerek').value.trim():''),model:($('#bModel')?$('#bModel').value.trim():''),seri:($('#bSeri')?$('#bSeri').value.trim():''),jumlah:qty,
     petugas:$('#petugas').value.trim(),lokasi:lokasiVal(),catatan:'',foto:fotoB64(),kondisi:kv.kondisi,alasan:kv.alasan};
   D.menyimpanBaru=true;D.pending++;updateSimpan();$('#btnSimpan').lastChild.textContent='Menyimpan…';renderAll();
   rpc('tambahProdukBaru',D.kode,payload).then(function(r){
@@ -1257,7 +1265,7 @@ function terapkanFormJenis(){
 }
 function terapkanBarang(d,j){
   var m=D.mst[j];
-  m.barang=d.barang.map(function(a){return {id:a[0],barcode1:a[1],barcode2:a[2],nama:a[3],kategori:a[5],satuan:a[6],lokasi:a[7]||'',batch:a[8]||''}});
+  m.barang=d.barang.map(function(a){return {id:a[0],barcode1:a[1],barcode2:a[2],nama:a[3],kategori:a[5],satuan:a[6],lokasi:a[7]||'',batch:a[8]||'',merek:a[9]||'',model:a[10]||'',seri:a[11]||''}});
   m.kategori=d.kategori||[];m.siap=true;m.err='';
   if(j===D.jenisAktif)aktifkanJenis(j);
   isiCakupan();
@@ -1492,7 +1500,7 @@ function renderLangkah(){
     var it=D.byId[D.sel.id];if(!it){box.innerHTML='';return}
     box.innerHTML='<div class="card"><div class="hit"><div class="hinfo"><div class="nm">'+esc(it.nama)+'</div>'+
       '<div class="meta"><span class="mono">'+esc(it.id)+'</span><span>'+esc(it.kategori)+'</span><span>Dikenali lewat: '+esc(D.sel.metode)+(D.sel.scanned?' · <b class="mono" style="color:var(--ink);font-weight:600">'+esc(D.sel.scanned)+'</b>':'')+'</span></div>'+
-      (D.jenisAktif==='aset'&&(it.lokasi||it.batch)?'<div class="meta">'+(it.lokasi?'<span>Lokasi: '+esc(it.lokasi)+'</span>':'')+(it.batch?'<span>Batch: '+esc(it.batch)+'</span>':'')+'</div>':'')+
+      (D.jenisAktif==='aset'&&(it.lokasi||it.batch)?'<div class="meta">'+(it.lokasi?'<span>Lokasi: '+esc(it.lokasi)+'</span>':'')+(it.batch?'<span>Batch: '+esc(it.batch)+'</span>':'')+'</div>':'')+elekMeta(it)+(D.jenisAktif==='aset'&&adaElek(it.kategori)&&!(it.merek&&it.model&&it.seri)?'<div class="meta"><span style="color:var(--accent);font-weight:600">Data elektronik belum lengkap (Merek/Model/No seri). Lengkapi di Master_Aset.</span></div>':'')+
       '<div class="meta">Sudah dihitung sesi ini: <b id="totalDihitung">'+fmt((D.dasar[it.id]||{}).fisik||0)+'</b> '+esc(it.satuan)+'</div></div></div>'+
       stepFoto(D.jenisAktif==='aset'?'2. Foto bukti aset':'2. Foto bukti barang')+
       '<div class="stepbox"><div class="stephead">'+ic('list')+'3. Isi jumlah dan kondisi</div>'+kondHtml(it.satuan)+'</div>'+
@@ -1505,7 +1513,7 @@ function renderLangkah(){
       '<label class="f wide">'+(as?'Nama aset':'Nama barang')+'<input id="bNama" type="text" autocomplete="off" placeholder="'+(as?'Contoh: Kursi Kantor Hitam':'Contoh: Meja Makan Bundar Walnut')+'"></label>'+
       '<label class="f">'+(as?'Kategori':'Department')+'<select id="bKat"'+(kat?' disabled':'')+'>'+(kat?'<option>'+esc(kat)+'</option>':'<option value="">'+(as?'Pilih kategori…':'Pilih department…')+'</option>'+D.kategori.map(function(k){return '<option>'+esc(k)+'</option>'}).join(''))+'</select></label>'+
       '<label class="f">Satuan<input id="bSat" type="text" autocomplete="off" value="unit"></label>'+
-      (as?'<label class="f">Kode QR atau nomor aset (bila ada)<input id="bBar" type="text" autocomplete="off" value="'+esc(D.baru.barcode)+'"></label><label class="f">Batch number (opsional)<input id="bBatch" type="text" autocomplete="off" maxlength="60"></label>'
+      (as?'<label class="f">Kode QR atau nomor aset (bila ada)<input id="bBar" type="text" autocomplete="off" value="'+esc(D.baru.barcode)+'"></label><label class="f">Batch number (opsional)<input id="bBatch" type="text" autocomplete="off" maxlength="60"></label><div id="bElek" class="form wide" style="grid-column:1/-1;padding:0"'+(adaElek(kat)?'':' hidden')+'><label class="f">Merek (wajib)<input id="bMerek" type="text" autocomplete="off" maxlength="60"></label><label class="f">Model (wajib)<input id="bModel" type="text" autocomplete="off" maxlength="60"></label><label class="f wide">Nomor seri (wajib)<input id="bSeri" type="text" autocomplete="off" maxlength="80"></label></div>'
         :'<label class="f">Barcode (bila ada)<input id="bBar" type="text" autocomplete="off" value="'+esc(D.baru.barcode)+'"></label>')+'</div>'+
       stepFoto(as?'Foto aset':'Foto barang')+
       '<div class="stepbox"><div class="stephead">'+ic('list')+'Jumlah dan kondisi</div>'+kondHtml('')+'</div>'+
@@ -1748,7 +1756,7 @@ function renderDashTabel(){
     f.map(function(r){
       var cls=r.status==='Belum dihitung'?'Belum':r.status;
       var it=D.byId[r.id]||{};
-      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+(r.luar&&!r.baru?' <span class="chip c-Luar">Di luar stok</span>':'')+'</div><div class="meta"><span class="chip c-'+cls+'">'+esc(r.status)+'</span>'+konChips(r.kon)+'<span class="mono">'+esc(r.id)+'</span>'+(it.barcode1||it.barcode2?'<span class="mono">'+esc([it.barcode1,it.barcode2].filter(Boolean).join(' / '))+'</span>':'')+(d.sesi.jenis==='aset'?(r.lok?'<span>Lokasi: '+esc(r.lok)+'</span>':'')+(r.batch?'<span>Batch: '+esc(r.batch)+'</span>':''):'<span>'+esc(r.satuan)+'</span>')+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Foto</a>':'')+'</div></td>'+
+      return '<tr><td><div class="nm">'+esc(r.nama)+(r.baru?' <span class="chip c-Baru">Baru</span>':'')+(r.luar&&!r.baru?' <span class="chip c-Luar">Di luar stok</span>':'')+'</div><div class="meta"><span class="chip c-'+cls+'">'+esc(r.status)+'</span>'+konChips(r.kon)+'<span class="mono">'+esc(r.id)+'</span>'+(it.barcode1||it.barcode2?'<span class="mono">'+esc([it.barcode1,it.barcode2].filter(Boolean).join(' / '))+'</span>':'')+(d.sesi.jenis==='aset'?(r.lok?'<span>Lokasi: '+esc(r.lok)+'</span>':'')+(r.batch?'<span>Batch: '+esc(r.batch)+'</span>':'')+(r.merek?'<span>Merek: '+esc(r.merek)+'</span>':'')+(r.model?'<span>Model: '+esc(r.model)+'</span>':'')+(r.seri?'<span>No seri: '+esc(r.seri)+'</span>':''):'<span>'+esc(r.satuan)+'</span>')+(bukaFoto(r.foto)?'<a class="lnk" href="'+esc(r.foto)+'" target="_blank" rel="noopener noreferrer">'+ic('link')+'Foto</a>':'')+'</div></td>'+
         '<td class="n">'+fmt(r.stok)+'</td><td class="n">'+fmt(r.fisik)+'</td>'+
         '<td class="n"><b>'+sgn(r.sel)+'</b></td></tr>';
     }).join('')+'</tbody></table></div>'+(tot>500?'<p class="hint">Menampilkan 500 dari '+tot+' barang. Gunakan filter atau pencarian.</p>':''):'<p class="hint">Tidak ada data untuk filter ini.</p>';
@@ -1761,11 +1769,11 @@ function csvSel(v){
 function unduhCsv(){
   var d=D.dash;if(!d){toast('Belum ada data untuk diunduh.');return}
   var aset=d.sesi.jenis==='aset';
-  var head=aset?['Kode_Aset','Nama_Aset','Kategori','Lokasi','Batch_Number','Jumlah_Sistem','Jumlah_Fisik','Selisih','Status','Aset_Baru','Jumlah_Entri','Foto_URL','Qty_Good','Qty_Broken','Qty_Waste','Qty_Lainnya']:['ID_Barang','Nama_Barang','Department','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Di_Luar_Stok','Jumlah_Entri','Foto_URL','Qty_Good','Qty_Broken','Qty_Waste','Qty_Lainnya'];
+  var head=aset?['Kode_Aset','Nama_Aset','Kategori','Lokasi','Batch_Number','Jumlah_Sistem','Jumlah_Fisik','Selisih','Status','Aset_Baru','Jumlah_Entri','Foto_URL','Qty_Good','Qty_Broken','Qty_Waste','Qty_Lainnya','Merek','Model','No_Seri']:['ID_Barang','Nama_Barang','Department','Satuan','Stok_Sistem','Stok_Fisik','Selisih','Status','Produk_Baru','Di_Luar_Stok','Jumlah_Entri','Foto_URL','Qty_Good','Qty_Broken','Qty_Waste','Qty_Lainnya'];
   var lines=[head.map(trx).join(';')];
   d.rows.forEach(function(r){
     if(r.status==='Di luar cakupan')return;
-    if(aset){lines.push([r.id,r.nama,r.kategori,r.lok||'',r.batch||'',r.stok==null?'':r.stok,r.fisik==null?'':r.fisik,r.sel==null?'':r.sel,trx(r.status),r.baru?trx('Ya'):'',r.entri,r.foto,r.kon?r.kon.good:'',r.kon?r.kon.broken:'',r.kon?r.kon.waste:'',r.kon?r.kon.lain:''].map(csvSel).join(';'));return}
+    if(aset){lines.push([r.id,r.nama,r.kategori,r.lok||'',r.batch||'',r.stok==null?'':r.stok,r.fisik==null?'':r.fisik,r.sel==null?'':r.sel,trx(r.status),r.baru?trx('Ya'):'',r.entri,r.foto,r.kon?r.kon.good:'',r.kon?r.kon.broken:'',r.kon?r.kon.waste:'',r.kon?r.kon.lain:'',r.merek||'',r.model||'',r.seri||''].map(csvSel).join(';'));return}
     lines.push([r.id,r.nama,r.kategori,r.satuan,r.stok==null?'':r.stok,r.fisik==null?'':r.fisik,r.sel==null?'':r.sel,trx(r.status),r.baru?trx('Ya'):'',r.luar?trx('Ya'):'',r.entri,r.foto,r.kon?r.kon.good:'',r.kon?r.kon.broken:'',r.kon?r.kon.waste:'',r.kon?r.kon.lain:''].map(csvSel).join(';'));
   });
   try{
@@ -1824,7 +1832,7 @@ function renderCek(item,r){
   var tone=sel==null?'':(sel===0?'t-good':(sel>0?'t-warn':'t-bad'));
   var bc=[item.barcode1,item.barcode2].filter(Boolean).join(' / ');
   var h='<div class="card"><div class="cekhead"><div class="nm">'+esc(item.nama)+'</div>'+
-    '<div class="meta"><span class="mono">'+esc(item.id)+'</span>'+(item.kategori?'<span>'+esc(item.kategori)+'</span>':'')+(item.satuan?'<span>'+esc(item.satuan)+'</span>':'')+(as&&item.lokasi?'<span>Lokasi: '+esc(item.lokasi)+'</span>':'')+(as&&item.batch?'<span>Batch: '+esc(item.batch)+'</span>':'')+(bc?'<span class="mono">'+esc(bc)+'</span>':'')+'</div></div>'+
+    '<div class="meta"><span class="mono">'+esc(item.id)+'</span>'+(item.kategori?'<span>'+esc(item.kategori)+'</span>':'')+(item.satuan?'<span>'+esc(item.satuan)+'</span>':'')+(as&&item.lokasi?'<span>Lokasi: '+esc(item.lokasi)+'</span>':'')+(as&&item.batch?'<span>Batch: '+esc(item.batch)+'</span>':'')+(bc?'<span class="mono">'+esc(bc)+'</span>':'')+'</div>'+(as?elekMeta(item):'')+'</div>'+
     '<div class="kpis kpis3" style="margin-top:12px">'+
       '<div class="kpi"><span class="k">'+ic('box')+(as?'Jumlah sistem':'Stok sistem')+'</span><span class="v">'+stokTeks+'</span></div>'+
       '<div class="kpi"><span class="k">'+ic('check')+'Fisik terakhir</span><span class="v">'+(t?fmt(t.fisik):'–')+'</span></div>'+
@@ -2279,6 +2287,7 @@ document.addEventListener('click',function(e){
 });
 $('#langkah').addEventListener('input',function(){updateSimpan()});
 $('#langkah').addEventListener('change',function(e){
+  if(e.target.id==='bKat'){tampilElek();updateSimpan()}
   if(e.target.id==='kond'){var w=$('#kondAlasanWrap');w.hidden=e.target.value!=='Lainnya';if(!w.hidden)$('#kondAlasan').focus();updateSimpan()}
 });
 $('#langkah').addEventListener('keydown',function(e){
