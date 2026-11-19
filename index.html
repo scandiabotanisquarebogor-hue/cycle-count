@@ -483,6 +483,7 @@ a.lnk .ic{width:15px;height:15px}
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <input type="file" id="buktiFoto" accept="image/*" capture="environment" hidden>
+<input type="file" id="buktiGaleri" accept="image/*" hidden>
 <input type="file" id="bacaFoto" accept="image/*" capture="environment" hidden>
 <div id="fotoTmp" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden" aria-hidden="true"></div>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -541,7 +542,7 @@ var EN={
 'Belum ada sesi':'No sessions yet','Buat sesi pertama dengan formulir di atas.':'Create your first session using the form above.','Dashboard':'Dashboard','Selesaikan':'Finish',
 'Lihat hasil':'View results','Buka kembali':'Reopen','Selesaikan sesi ini?':'Finish this session?','Hitungan dikunci dan hasil akhir disimpan ke sheet Hasil_Sesi. Anda masih bisa membukanya kembali.':'Counting is locked and the final results are saved to the Hasil_Sesi sheet. You can still reopen it later.',
 'Perbarui Stok_Sistem di sheet Barang sesuai hasil hitung fisik (hanya barang yang sudah dihitung)':'Update Stok_Sistem in the Barang sheet to match the physical count (only items that have been counted)',
-'Ya, selesaikan':'Yes, finish','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
+'Ya, selesaikan':'Yes, finish','Dari galeri':'From gallery','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
 'Ya, buka kembali':'Yes, reopen','Isi nama sesi dulu.':'Enter a session name first.','Pilih tanggal.':'Select a date.','Menyelesaikan sesi…':'Finishing session…','Membuka kembali sesi…':'Reopening session…',
 'Sesi selesai.':'Session finished.','Sesi dibuka kembali.':'Session reopened.','Hasil stock opname akan tampil di sini.':'Stock opname results will appear here.',
 'Buat sesi di tab Sesi.':'Create a session in the Sessions tab.','Hasil per barang akan tampil di sini.':'Item results will appear here.','Memuat hasil…':'Loading results…',
@@ -1490,7 +1491,7 @@ function renderMiss(){
 function stepFoto(judul){
   return '<div class="stepbox"><div class="stephead">'+ic('camera')+judul+'</div><div class="fotorow"><div id="fotoBox" class="prev">'+
     (D.foto?'<img src="'+D.foto+'" alt="Foto bukti barang">':'<span class="hint">Belum ada foto</span>')+
-    '</div><button class="btn" type="button" id="btnBukti">'+ic('camera')+'<span>'+(D.foto?'Ulangi foto':'Ambil foto')+'</span></button></div>'+
+    '</div><button class="btn" type="button" id="btnBukti">'+ic('camera')+'<span>'+(D.foto?'Ulangi foto':'Ambil foto')+'</span></button><button class="btn ghost" type="button" id="btnGaleri">'+ic('image')+'<span>Dari galeri</span></button></div>'+
     (D.fotoWajib?'':'<p class="hint">Foto bersifat opsional.</p>')+'</div>';
 }
 function kondHtml(satuan){
@@ -2303,12 +2304,12 @@ $('#bacaFoto').addEventListener('change',function(e){
   var f=e.target.files&&e.target.files[0];e.target.value='';
   if(f)bacaDariFoto(f);
 });
-$('#buktiFoto').addEventListener('change',function(e){
+['#buktiFoto','#buktiGaleri'].forEach(function(q){$(q).addEventListener('change',function(e){
   var f=e.target.files&&e.target.files[0];e.target.value='';
   if(!f)return;
   toast('Memproses foto…');
   kecilkanFoto(f).then(setFoto,function(er){toast(errText(er))});
-});
+})});
 document.addEventListener('input',function(e){
   if(e.target.id==='dCari'){D.cariDash=e.target.value;renderDashTabel()}
 });
@@ -2341,6 +2342,7 @@ document.addEventListener('click',function(e){
   if(id==='btnBaruMiss'){D.dariKamera=false;bukaBaru(D.miss);return}
   if(id==='btnMuatBarang'){infoBarang();muatBarang();return}
   if(id==='btnBukti'){$('#buktiFoto').click();return}
+  if(id==='btnGaleri'){$('#buktiGaleri').click();return}
   if(id==='btnEditAset'){D.edAset=!D.edAset;renderEdit();if(D.edAset)$('#editAset').scrollIntoView({block:'nearest',behavior:'smooth'});return}
   if(id==='btnBatalEdit'){D.edAset=false;renderEdit();return}
   if(id==='btnSimpanEdit'){simpanEdit();return}
