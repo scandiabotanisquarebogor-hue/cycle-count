@@ -4,13 +4,13 @@
 <base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CYCLE COUNT - SCANDIA Botani</title>
+<title>Stock Opname - SCANDIA Botani</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8552B" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1F1E1D" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Cycle Count">
+<meta name="apple-mobile-web-app-title" content="Stock Opname">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
@@ -142,6 +142,13 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--bad)}
 .btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
 .btn.sm{min-height:34px;padding:4px 12px;font-size:13px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
+.jpick{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-transform:none;letter-spacing:0}
+.jpick button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px 10px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink2);cursor:pointer;font-family:inherit;text-align:center;min-height:44px}
+.jpick button svg{width:100%;max-width:130px;height:auto}
+.jpick button b{font-size:14.5px;font-weight:600;color:var(--ink)}
+.jpick button small{font-size:12px;color:var(--ink2)}
+.jpick button[aria-pressed=true]{border-color:var(--accent);background:var(--soft);color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.sfields{display:contents}.sfields[hidden]{display:none}
 .seg{display:inline-flex;flex-wrap:wrap;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .seg button{font:500 13.5px inherit;font-family:inherit;color:var(--ink2);background:none;border:0;padding:7px 12px;min-height:38px;cursor:pointer}
 .seg button+button{border-left:1.5px solid var(--line)}
@@ -294,7 +301,7 @@ a.lnk .ic{width:15px;height:15px}
 <body>
 <div class="wrap">
   <header>
-    <div class="logo"><svg class="lg" viewBox="159.9 286.1 96.0 94.0" aria-hidden="true"><path class="k" fill-rule="evenodd" d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.6"/><path d="M160.9 336.1H254.9" stroke-width="2.6"/></g></svg><div><div class="brand">SCANDIA Botani</div><h1>CYCLE COUNT</h1></div></div>
+    <div class="logo"><svg class="lg" viewBox="159.9 286.1 96.0 94.0" aria-hidden="true"><path class="k" fill-rule="evenodd" d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.6"/><path d="M160.9 336.1H254.9" stroke-width="2.6"/></g></svg><div><div class="brand">SCANDIA Botani</div><h1>Stock Opname</h1></div></div>
     <div class="hright">
       <div class="hbtns"><div class="lang" role="group" aria-label="Bahasa"><button type="button" data-lang="id" aria-pressed="true" title="Bahasa Indonesia">ID</button><button type="button" data-lang="en" aria-pressed="false" title="English">EN</button></div><button class="ibtn" id="btnPengaturan" type="button" aria-label="Pengaturan" title="Pengaturan" hidden><i data-ic="settings"></i></button><button class="ibtn" id="btnKeluar" type="button" aria-label="Keluar" title="Keluar" hidden><i data-ic="logout"></i></button></div>
       <span id="who" class="who"></span>
@@ -304,7 +311,7 @@ a.lnk .ic{width:15px;height:15px}
 
   <section id="gate" class="card authcard" hidden>
     <div class="gatelang"><div class="lang" role="group" aria-label="Bahasa"><button type="button" data-lang="id" aria-pressed="true" title="Bahasa Indonesia">ID</button><button type="button" data-lang="en" aria-pressed="false" title="English">EN</button></div></div>
-    <div class="authlogo"><svg viewBox="60 285 296 166" role="img" aria-label="SCANDIA Cycle Count"><g class="k" fill-rule="evenodd"><path d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g transform="translate(0 9)"><path d="M250.8 416.6 251.5 417.4 266.1 417.4 272.9 415.8 276.5 413.9 280.1 410.9 283.5 405.9 284.5 402.2 283.8 401.6 251.4 401.6 250.8 402.2ZM319.1 374.4 318 375.8 312 390 311.6 391.6 301.2 416 301.2 416.9 302 417.4 313.1 417.2 314.1 416 316.1 410.5 316.9 409.9 331.5 409.8 332.6 410.4 334.9 416.4 335.8 417.2 347.4 417.2 347.9 416.5 330.8 375.2 329.6 374.2ZM324.2 389.6 325 390 328.4 398 328.5 399.2 328.1 399.6 321.6 399.8 320.6 399.1 320.6 398.4ZM227.5 374.5 227.1 375.2 227.4 389.9 228.4 390.5 239.1 390.2 239.6 389.5 239.5 374.8 238.9 374.2ZM194.9 374.5 194.5 375.2 194.5 416.2 195.1 417.2 205.8 417.4 206.6 416.8 206.6 395.8 207.2 395.2 224.4 416.9 225.2 417.4 238.8 417.4 239.5 416.8 239.6 402.5 239.2 401.9 228.4 401.6 227.5 401.2 221.6 394.4 209.4 378.4 206 374.5ZM164 374.4 163 375.6 146.1 416 146.1 416.9 146.8 417.4 157.6 417.4 158.6 416.6 161 410.5 162 409.8 176.2 409.8 177.6 410.6 179.6 416.1 180.6 417.4 192.2 417.2 192.6 416.9 192.5 415.8 175.5 375.2 174.2 374.2ZM169.1 389.9 169.9 390.1 173.1 398.4 173.1 399.2 172.6 399.6 165.8 399.6 165.4 399.2 165.6 397.6ZM126.2 374.2 121.6 375.1 116.9 377 113.9 379.1 110.8 382.2 108.5 385.8 106.9 389.9 106.1 394.1 106.2 398.6 107 402.2 108.4 405.9 110.9 409.6 114.5 413.1 117.6 415.1 122.5 416.9 125.1 417.4 130.1 417.4 134.2 416.6 138.8 414.8 142.9 411.6 145.1 409 145.4 407.6 144.6 406.8 137.5 401.9 136.4 402.2 134.9 403.9 132.4 405.6 129.5 406.5 126.5 406.5 123.2 405.4 120.6 403 118.9 399.8 118.2 395.1 119.2 390.9 122 387.2 123.1 386.4 126.2 385.1 129.1 385 130.6 385.4 133.6 386.9 136.4 389.4 137.5 389.5 144.5 384.1 145.2 383.2 145.2 382.5 140.9 378 137.1 376 133.1 374.8 129.9 374.2ZM78.5 375.5 74.2 377.9 72 380.2 70.9 382.2 69.9 385.9 70 390.6 71.8 394.4 74.1 396.8 76.2 398 81.1 399.9 90.4 402.4 92.1 403.8 92.4 405.2 91.2 406.6 89.6 407.4 85.5 407.4 79.8 405.8 74.6 402.8 74.1 402.9 68.6 409.2 68.2 410.5 69.1 411.5 72.8 413.9 77 415.8 80.4 416.8 84.5 417.4 90 417.4 93.6 416.8 96.1 415.9 99 414.4 102 411.5 103.9 408 104.4 403 103.8 399.2 101.5 396 97.9 393.4 91.2 391 83.9 389.1 82.2 388 81.9 386.2 82.5 385.2 83.9 384.4 88.9 384.4 92 385.4 97.2 388 98.1 387.4 102.6 381.1 102.9 379.9 101.9 378.8 98.6 376.9 92.1 374.8 90.2 374.8 88.6 374.2 83.8 374.2ZM250.9 374.8 250.8 389.5 251.4 390.4 284 390.5 284.9 389.8 284 386.4 280.8 381 277.1 377.9 274 376.1 270.9 375 267 374.2 251.9 374.1ZM287.6 374 286.9 375.1 286.9 416.5 287.9 417.4 298.1 417.4 299 416.5 298.9 374.6 298.4 374 297.6 373.9Z"/></g></g><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.2"/><path d="M160.9 336.1H254.9" stroke-width="2.2"/></g><text class="s" x="209.5" y="448" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-size="14" font-weight="600" letter-spacing="6.4">CYCLE COUNT</text></svg></div>
+    <div class="authlogo"><svg viewBox="60 285 296 166" role="img" aria-label="SCANDIA Stock Opname"><g class="k" fill-rule="evenodd"><path d="M195.6 304.1 191.1 308.6 188.9 312.6 187.9 315.4 187.1 321.2 188.6 329.1 187.2 330.6 180.4 335.6 179.4 337.2 179.6 365.5 180.6 366 236 365.8 236.5 365 236.5 339.2 235.6 337.6 226.9 330.2 226.9 329.2 228 326.4 228.8 323 228.8 318.6 227.8 314.4 225.9 310.2 223 306.5 220.2 304.1 216.9 302.1 211.8 300.5 206.9 300.1 202.5 300.9 199.4 302ZM224.6 336.8 229.4 340.8 230 341.8 229.9 359.9 229.1 360.5 209.5 360.4 209.1 359.9 209.5 358.8 221.4 339.5 223.5 336.5ZM187.4 338.4 191.5 335.6 192.5 336.4 206.8 358.9 207 359.9 206.6 360.4 187 360.5 186.1 360 185.9 340.5 186.1 339.6ZM207.9 323.4 209.4 324.1 218.9 332.4 218.6 333.4 208.2 349.6 207.5 349.5 196.6 332.1 197.4 330.9ZM193.5 316.5 195.2 312.9 197 310.6 199.6 308.4 201.6 307.2 205.6 306 210.2 306 212.5 306.5 216.1 308.2 218 309.6 219.8 311.5 221.6 314.4 222.9 318.2 222.9 323.4 222.5 324.9 221.9 325.8 221.1 325.8 208.9 315.4 207.9 315.2 195 325 194 325.4 193.4 324.8 193 322.4 193 319Z"/><g transform="translate(0 9)"><path d="M250.8 416.6 251.5 417.4 266.1 417.4 272.9 415.8 276.5 413.9 280.1 410.9 283.5 405.9 284.5 402.2 283.8 401.6 251.4 401.6 250.8 402.2ZM319.1 374.4 318 375.8 312 390 311.6 391.6 301.2 416 301.2 416.9 302 417.4 313.1 417.2 314.1 416 316.1 410.5 316.9 409.9 331.5 409.8 332.6 410.4 334.9 416.4 335.8 417.2 347.4 417.2 347.9 416.5 330.8 375.2 329.6 374.2ZM324.2 389.6 325 390 328.4 398 328.5 399.2 328.1 399.6 321.6 399.8 320.6 399.1 320.6 398.4ZM227.5 374.5 227.1 375.2 227.4 389.9 228.4 390.5 239.1 390.2 239.6 389.5 239.5 374.8 238.9 374.2ZM194.9 374.5 194.5 375.2 194.5 416.2 195.1 417.2 205.8 417.4 206.6 416.8 206.6 395.8 207.2 395.2 224.4 416.9 225.2 417.4 238.8 417.4 239.5 416.8 239.6 402.5 239.2 401.9 228.4 401.6 227.5 401.2 221.6 394.4 209.4 378.4 206 374.5ZM164 374.4 163 375.6 146.1 416 146.1 416.9 146.8 417.4 157.6 417.4 158.6 416.6 161 410.5 162 409.8 176.2 409.8 177.6 410.6 179.6 416.1 180.6 417.4 192.2 417.2 192.6 416.9 192.5 415.8 175.5 375.2 174.2 374.2ZM169.1 389.9 169.9 390.1 173.1 398.4 173.1 399.2 172.6 399.6 165.8 399.6 165.4 399.2 165.6 397.6ZM126.2 374.2 121.6 375.1 116.9 377 113.9 379.1 110.8 382.2 108.5 385.8 106.9 389.9 106.1 394.1 106.2 398.6 107 402.2 108.4 405.9 110.9 409.6 114.5 413.1 117.6 415.1 122.5 416.9 125.1 417.4 130.1 417.4 134.2 416.6 138.8 414.8 142.9 411.6 145.1 409 145.4 407.6 144.6 406.8 137.5 401.9 136.4 402.2 134.9 403.9 132.4 405.6 129.5 406.5 126.5 406.5 123.2 405.4 120.6 403 118.9 399.8 118.2 395.1 119.2 390.9 122 387.2 123.1 386.4 126.2 385.1 129.1 385 130.6 385.4 133.6 386.9 136.4 389.4 137.5 389.5 144.5 384.1 145.2 383.2 145.2 382.5 140.9 378 137.1 376 133.1 374.8 129.9 374.2ZM78.5 375.5 74.2 377.9 72 380.2 70.9 382.2 69.9 385.9 70 390.6 71.8 394.4 74.1 396.8 76.2 398 81.1 399.9 90.4 402.4 92.1 403.8 92.4 405.2 91.2 406.6 89.6 407.4 85.5 407.4 79.8 405.8 74.6 402.8 74.1 402.9 68.6 409.2 68.2 410.5 69.1 411.5 72.8 413.9 77 415.8 80.4 416.8 84.5 417.4 90 417.4 93.6 416.8 96.1 415.9 99 414.4 102 411.5 103.9 408 104.4 403 103.8 399.2 101.5 396 97.9 393.4 91.2 391 83.9 389.1 82.2 388 81.9 386.2 82.5 385.2 83.9 384.4 88.9 384.4 92 385.4 97.2 388 98.1 387.4 102.6 381.1 102.9 379.9 101.9 378.8 98.6 376.9 92.1 374.8 90.2 374.8 88.6 374.2 83.8 374.2ZM250.9 374.8 250.8 389.5 251.4 390.4 284 390.5 284.9 389.8 284 386.4 280.8 381 277.1 377.9 274 376.1 270.9 375 267 374.2 251.9 374.1ZM287.6 374 286.9 375.1 286.9 416.5 287.9 417.4 298.1 417.4 299 416.5 298.9 374.6 298.4 374 297.6 373.9Z"/></g></g><g class="a" stroke-linecap="round" stroke-linejoin="round"><path d="M163.9 305.1V294.1a4 4 0 0 1 4 -4H178.9M236.9 290.1H247.9a4 4 0 0 1 4 4V305.1M251.9 361.1V372.1a4 4 0 0 1 -4 4H236.9M178.9 376.1H167.9a4 4 0 0 1 -4 -4V361.1" stroke-width="3.2"/><path d="M160.9 336.1H254.9" stroke-width="2.2"/></g><text class="s" x="209.5" y="448" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-size="13" font-weight="600" letter-spacing="5.2">STOCK OPNAME</text></svg></div>
     <p id="authIntro" class="hint center"></p>
     <form id="formMasuk">
       <label class="f"><span><i data-ic="user"></i>Username</span><input id="mUser" type="text" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
@@ -353,11 +360,14 @@ a.lnk .ic{width:15px;height:15px}
       <div class="card">
         <h2><i data-ic="plus"></i>Buat sesi baru</h2>
         <form id="formSesi" class="grid" autocomplete="off">
-          <div class="f" style="grid-column:1/-1"><span><i data-ic="box"></i>Jenis opname</span><div class="seg" id="sJenis" role="group" aria-label="Jenis opname"><button type="button" data-j="barang" aria-pressed="true">Barang dagang</button><button type="button" data-j="aset" aria-pressed="false">Aset toko</button></div></div>
+          <div class="f" style="grid-column:1/-1"><span><i data-ic="box"></i>Pilih jenis opname</span><div class="jpick" id="sJenis" role="group" aria-label="Jenis opname"><button type="button" data-j="barang" aria-pressed="false"><svg viewBox="0 0 120 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 72H110M10 44H110M14 12V72M106 12V72"/><rect x="24" y="22" width="22" height="22" rx="2"/><rect x="52" y="28" width="18" height="16" rx="2"/><rect x="76" y="24" width="20" height="20" rx="2"/><rect x="24" y="52" width="26" height="20" rx="2"/><rect x="58" y="56" width="16" height="16" rx="2"/></g><g stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"><path d="M82 30V38M86 30V38M90 30V38M30 58V66M34 58V66M38 58V66M43 58V66"/></g></svg><b>Barang dagang</b><small>Stok barang jualan</small></button><button type="button" data-j="aset" aria-pressed="false"><svg viewBox="0 0 120 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="12" width="52" height="34" rx="3"/><path d="M40 46V58M28 58H52M8 72H112"/><rect x="88" y="30" width="18" height="16" rx="4"/><path d="M84 56H110M97 56V66M88 72L97 66L106 72"/></g><g stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"><path d="M22 22H50M22 30H42M22 38H34"/></g></svg><b>Aset toko</b><small>Perabot dan peralatan toko</small></button></div></div>
+          <p id="sPilihHint" class="hint" style="grid-column:1/-1;margin:0">Pilih salah satu gambar di atas untuk mengisi data sesi.</p>
+          <div id="sFields" class="sfields" hidden>
           <label class="f" style="grid-column:1/-1"><span><i data-ic="tag"></i>Nama sesi</span><input id="sNama" type="text" maxlength="80" placeholder="Contoh: Stock Opname Showroom November"></label>
           <label class="f"><span><i data-ic="calendar"></i>Tanggal</span><input id="sTgl" type="date"></label>
           <label class="f"><span><i data-ic="layers"></i><b id="sCakLbl" style="font-weight:inherit">Cakupan department</b></span><select id="sCakupan"></select></label>
           <div style="grid-column:1/-1"><button class="btn" id="btnBuatSesi" type="submit"><i data-ic="plus"></i>Buat sesi</button></div>
+          </div>
         </form>
         <p class="hint">Sesi baru langsung berstatus Berjalan dan bisa dipakai di tab Hitung.</p>
       </div>
@@ -542,7 +552,7 @@ var EN={
 'Belum ada sesi':'No sessions yet','Buat sesi pertama dengan formulir di atas.':'Create your first session using the form above.','Dashboard':'Dashboard','Selesaikan':'Finish',
 'Lihat hasil':'View results','Buka kembali':'Reopen','Selesaikan sesi ini?':'Finish this session?','Hitungan dikunci dan hasil akhir disimpan ke sheet Hasil_Sesi. Anda masih bisa membukanya kembali.':'Counting is locked and the final results are saved to the Hasil_Sesi sheet. You can still reopen it later.',
 'Perbarui Stok_Sistem di sheet Barang sesuai hasil hitung fisik (hanya barang yang sudah dihitung)':'Update Stok_Sistem in the Barang sheet to match the physical count (only items that have been counted)',
-'Ya, selesaikan':'Yes, finish','Dari galeri':'From gallery','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
+'Ya, selesaikan':'Yes, finish','Pilih jenis opname':'Choose stocktake type','Stok barang jualan':'Retail stock','Perabot dan peralatan toko':'Store furniture and equipment','Pilih salah satu gambar di atas untuk mengisi data sesi.':'Pick one of the pictures above to fill in the session details.','Pilih jenis opname dulu.':'Choose a stocktake type first.','Dari galeri':'From gallery','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
 'Ya, buka kembali':'Yes, reopen','Isi nama sesi dulu.':'Enter a session name first.','Pilih tanggal.':'Select a date.','Menyelesaikan sesi…':'Finishing session…','Membuka kembali sesi…':'Reopening session…',
 'Sesi selesai.':'Session finished.','Sesi dibuka kembali.':'Session reopened.','Hasil stock opname akan tampil di sini.':'Stock opname results will appear here.',
 'Buat sesi di tab Sesi.':'Create a session in the Sessions tab.','Hasil per barang akan tampil di sini.':'Item results will appear here.','Memuat hasil…':'Loading results…',
@@ -914,7 +924,7 @@ function nomorSesi(s){var m=/(\d+)/.exec(s.id);return m?Number(m[1]):0}
 var D={kode:lsGet('cc_kode')||'',user:null,habis:false,sesi:[],kategori:[],barang:[],byId:{},idx:new Map(),idSesi:null,cakupan:'',fotoWajib:true,
   dasar:{},sel:null,baru:null,foto:null,miss:null,dariKamera:false,tunda:null,menyimpanBaru:false,
   q:Promise.resolve(),pending:0,log:[],lastOk:null,tab:'hitung',
-  cariLog:'',senterOn:false,barangSiap:false,jenisAktif:'barang',cekJenis:lsGet('cc_cj')==='aset'?'aset':'barang',sj:lsGet('cc_sj')==='aset'?'aset':'barang',
+  cariLog:'',senterOn:false,barangSiap:false,jenisAktif:'barang',cekJenis:lsGet('cc_cj')==='aset'?'aset':'barang',sj:'',
   mst:{barang:{barang:[],kategori:[],siap:false,segar:false,err:''},aset:{barang:[],kategori:[],siap:false,segar:false,err:''}},baseSiap:false,dashId:null,dash:null,dashTok:0,fr:'semua',cariDash:'',konf:null,sibuk:false};
 
 /* ---------- pengenalan barcode ---------- */
@@ -1231,7 +1241,7 @@ function idbGet(k){return idb('readonly',function(st){return st.get(k)})}
 function idbSet(k,v){return idb('readwrite',function(st){return st.put(v,k)})}
 
 function isiCakupan(){
-  var el=$('#sCakupan'),cur=el.value,j=D.sj,ka=D.mst[j].kategori;
+  var el=$('#sCakupan'),cur=el.value,j=D.sj||'barang',ka=D.mst[j].kategori;
   el.innerHTML='<option value="">'+(j==='aset'?'Semua kategori':'Semua department')+'</option>'+ka.map(function(k){return '<option>'+esc(k)+'</option>'}).join('');
   el.value=cur;
 }
@@ -1268,6 +1278,7 @@ function terapkanJenisUI(){
 function terapkanFormJenis(){
   [].forEach.call(document.querySelectorAll('#sJenis button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-j')===D.sj))});
   $('#sCakLbl').textContent=D.sj==='aset'?'Cakupan kategori':'Cakupan department';
+  $('#sFields').hidden=!D.sj;$('#sPilihHint').hidden=!!D.sj;
   isiCakupan();
 }
 function terapkanBarang(d,j){
@@ -1647,12 +1658,13 @@ function gantiSesi(baru){
 function buatSesi(){
   if(D.sibuk)return;
   var nama=$('#sNama').value.trim();
+  if(!D.sj){toast('Pilih jenis opname dulu.');return}
   if(!nama){toast('Isi nama sesi dulu.');$('#sNama').focus();return}
   if(!$('#sTgl').value){toast('Pilih tanggal.');return}
   D.sibuk=true;$('#btnBuatSesi').disabled=true;
   rpc('buatSesi',D.kode,{nama:nama,tanggal:$('#sTgl').value,cakupan:$('#sCakupan').value,jenis:D.sj}).then(function(r){
     gantiSesi(r.sesi);D.sibuk=false;$('#btnBuatSesi').disabled=false;
-    $('#sNama').value='';
+    $('#sNama').value='';D.sj='';terapkanFormJenis();
     if(!D.idSesi||D.sesi.filter(function(s){return s.status==='Berjalan'}).length===1){pakaiSesi(r.sesi.id)}
     refreshSesiUI();toast('Sesi '+r.sesi.id+' dibuat. Tekan Hitung untuk mulai.');
   },function(e){D.sibuk=false;$('#btnBuatSesi').disabled=false;toast('Gagal membuat sesi: '+errText(e))});
@@ -2239,7 +2251,7 @@ $('#cekCariBtn').addEventListener('click',cekCari);
 $('#cekKamBtn').addEventListener('click',bukaKameraCek);
 $('#sJenis').addEventListener('click',function(e){
   var b=e.target.closest('button[data-j]');if(!b)return;
-  D.sj=b.getAttribute('data-j')==='aset'?'aset':'barang';lsSet('cc_sj',D.sj);terapkanFormJenis();
+  D.sj=b.getAttribute('data-j')==='aset'?'aset':'barang';terapkanFormJenis();if(D.sj)setTimeout(function(){var n=$('#sNama');if(n&&!n.value)n.focus({preventScroll:true})},50);
 });
 $('#cekJenis').addEventListener('click',function(e){
   var b=e.target.closest('button[data-j]');if(!b)return;

@@ -1,6 +1,6 @@
 {
-  "name": "CYCLE COUNT - SCANDIA Botani",
-  "short_name": "Cycle Count",
+  "name": "Stock Opname - SCANDIA Botani",
+  "short_name": "Stock Opname",
   "description": "Stock opname dengan scan barcode, foto bukti, dan rekap otomatis.",
   "lang": "id",
   "start_url": "./",

@@ -1,5 +1,5 @@
-/* Service worker CYCLE COUNT: cangkang aplikasi tersimpan, data tetap lewat internet. */
-var VERSI = 'cc-v29';
+/* Service worker Stock Opname: cangkang aplikasi tersimpan, data tetap lewat internet. */
+var VERSI = 'cc-v30';
 var INTI = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './logo.svg', './logo-mark.svg'];
 
 self.addEventListener('install', function (e) {
