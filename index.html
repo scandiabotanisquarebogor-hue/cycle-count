@@ -552,7 +552,7 @@ var EN={
 'Belum ada sesi':'No sessions yet','Buat sesi pertama dengan formulir di atas.':'Create your first session using the form above.','Dashboard':'Dashboard','Selesaikan':'Finish',
 'Lihat hasil':'View results','Buka kembali':'Reopen','Selesaikan sesi ini?':'Finish this session?','Hitungan dikunci dan hasil akhir disimpan ke sheet Hasil_Sesi. Anda masih bisa membukanya kembali.':'Counting is locked and the final results are saved to the Hasil_Sesi sheet. You can still reopen it later.',
 'Perbarui Stok_Sistem di sheet Barang sesuai hasil hitung fisik (hanya barang yang sudah dihitung)':'Update Stok_Sistem in the Barang sheet to match the physical count (only items that have been counted)',
-'Ya, selesaikan':'Yes, finish','Pilih jenis opname':'Choose stocktake type','Stok barang jualan':'Retail stock','Perabot dan peralatan toko':'Store furniture and equipment','Pilih salah satu gambar di atas untuk mengisi data sesi.':'Pick one of the pictures above to fill in the session details.','Pilih jenis opname dulu.':'Choose a stocktake type first.','Dari galeri':'From gallery','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
+'Ya, selesaikan':'Yes, finish','Tambah ke aset yang sudah ada':'Add to an existing asset','Batal pilih aset':'Cancel choosing asset','Pilih jenis opname':'Choose stocktake type','Stok barang jualan':'Retail stock','Perabot dan peralatan toko':'Store furniture and equipment','Pilih salah satu gambar di atas untuk mengisi data sesi.':'Pick one of the pictures above to fill in the session details.','Pilih jenis opname dulu.':'Choose a stocktake type first.','Dari galeri':'From gallery','Edit data aset':'Edit asset data','Simpan data aset':'Save asset data','Kode aset (belum ada)':'Asset code (none yet)','Nama aset':'Asset name','Nomor seri':'Serial number','Data aset disimpan.':'Asset data saved.','Nama aset tidak boleh kosong.':'Asset name cannot be empty.','Hapus sesi ini?':'Delete this session?','Ya, hapus':'Yes, delete','Menghapus sesi…':'Deleting session…','Buka kembali sesi ini?':'Reopen this session?','Hasil akhir yang tersimpan akan dihapus, dan dibuat ulang saat sesi diselesaikan lagi.':'The saved final results will be deleted and regenerated when the session is finished again.',
 'Ya, buka kembali':'Yes, reopen','Isi nama sesi dulu.':'Enter a session name first.','Pilih tanggal.':'Select a date.','Menyelesaikan sesi…':'Finishing session…','Membuka kembali sesi…':'Reopening session…',
 'Sesi selesai.':'Session finished.','Sesi dibuka kembali.':'Session reopened.','Hasil stock opname akan tampil di sini.':'Stock opname results will appear here.',
 'Buat sesi di tab Sesi.':'Create a session in the Sessions tab.','Hasil per barang akan tampil di sini.':'Item results will appear here.','Memuat hasil…':'Loading results…',
@@ -653,6 +653,7 @@ EN_RE.push([/^Sesi (\S+) dihapus \((\d+) hitungan\)\.$/,'Session $1 deleted ($2 
 EN_RE.push([/^Gagal menghapus: (.+)$/,'Failed to delete: $1']);
 EN_RE.push([/^Sesi, semua hitungan dan hasil akhirnya dihapus permanen, dan foto bukti dipindah ke tempat sampah Drive\. Data master tidak berubah\.$/,'The session, all its counts and its final results are deleted permanently, and proof photos are moved to the Drive trash. Master data is not changed.']);
 EN_RE.push([/^Gagal menyimpan: (.+)$/,'Failed to save: $1']);
+EN_RE.push([/^Kode disimpan sebagai Kode QR (\d) untuk (.+)$/,'Code saved as QR code $1 for $2']);
 EN_RE.push([/^Sesi selesai pada ([^.]+)\.$/,function(m){return 'Session finished on '+m[1]+'.'}]);
 /* ---- Aset: istilah tambahan + turunan otomatis dari istilah department/Hasil_Sesi ---- */
 (function(){
@@ -661,7 +662,8 @@ EN_RE.push([/^Sesi selesai pada ([^.]+)\.$/,function(m){return 'Session finished
     'Aset ini belum ada di daftar. Jumlah sistem diisi 0 dan ditandai perlu verifikasi.':'This asset is not in the list. System quantity is set to 0 and it is flagged for verification.',
     'Nama aset':'Asset name','Contoh: Kursi Kantor Hitam':'Example: Black Office Chair','Kode QR atau nomor aset (bila ada)':'QR code or asset number (if any)',
     'Batch number (opsional)':'Batch number (optional)','Merek (wajib)':'Brand (required)','Model (wajib)':'Model (required)','Nomor seri (wajib)':'Serial number (required)','Merek (opsional)':'Brand (optional)','Model (opsional)':'Model (optional)','Nomor seri (opsional)':'Serial number (optional)','Aset elektronik: Merek, Model dan Nomor seri wajib diisi.':'Electronic asset: Brand, Model and Serial number are required.','Simpan aset baru':'Save new asset','Nama aset wajib diisi.':'Asset name is required.','Ambil foto aset dulu.':'Take the asset photo first.',
-    'Tidak cocok dengan kode aset mana pun. Cari asetnya lewat nama di bawah, atau tambahkan sebagai aset baru.':'Does not match any asset code. Find the asset by name below, or add it as a new asset.',
+    'Tidak cocok dengan kode aset mana pun. Anda bisa menambahkannya ke aset yang sudah ada, atau menambahkan sebagai aset baru.':'Does not match any asset code. You can add it to an existing asset, or add it as a new asset.',
+    'Pilih aset dari hasil pencarian di bawah. Kode ini akan disimpan ke aset yang Anda pilih.':'Pick an asset from the search results below. This code will be saved to the asset you choose.',
     'Tambah sebagai aset baru':'Add as new asset','Jenis opname':'Opname type','Barang dagang':'Merchandise','Aset toko':'Store assets','Aset':'Assets',
     'Aset terdaftar':'Registered assets','Kode aset':'Asset code','Jumlah sistem':'System quantity','Memuat daftar aset…':'Loading asset list…','Kategori':'Category'
   };
@@ -939,7 +941,7 @@ function buildIdx(){
   D.idx=new Map();D.byId={};
   D.barang.forEach(function(b){
     D.byId[b.id]=b;
-    [[D.jenisAktif==='aset'?'Kode aset':'Barcode 1',b.barcode1],['Barcode 2',b.barcode2]].forEach(function(p){
+    [[D.jenisAktif==='aset'?'Kode aset':'Barcode 1',b.barcode1],['Barcode 2',b.barcode2]].concat(D.jenisAktif==='aset'?[['Kode aset',b.id]]:[]).forEach(function(p){
       keys(p[1]).forEach(function(k){
         var arr=D.idx.get(k)||[];arr.push({item:b,slot:p[0]});D.idx.set(k,arr);
       });
@@ -950,7 +952,7 @@ function lookup(code){
   var out=[],seen={};
   keys(code).forEach(function(k){
     (D.idx.get(k)||[]).forEach(function(h){
-      var key=h.item.id+'|'+h.slot;
+      var key=h.item.id+(D.jenisAktif==='aset'?'':'|'+h.slot);
       if(!seen[key]){seen[key]=1;out.push(h)}
     });
   });
@@ -1041,13 +1043,13 @@ function pilih(item,metode,scanned){
     $('#langkah').innerHTML='<div class="warn">'+esc(item.nama)+' ada di '+(D.jenisAktif==='aset'?'kategori ':'department ')+esc(item.kategori)+', di luar cakupan sesi ini ('+esc(D.cakupan)+').</div>';
     beep(false);return;
   }
-  var miss=D.miss,simpan=$('#simpanKode')&&$('#simpanKode').checked;
+  var miss=D.miss,simpan=($('#simpanKode')&&$('#simpanKode').checked)||(D.jenisAktif==='aset'&&D.linkKode);D.linkKode=false;
   tutupKamera();
   D.sel={id:item.id,metode:metode,scanned:scanned||''};D.baru=null;D.foto=null;
   if(miss&&miss===scanned&&simpan){
     rpc('daftarkanBarcode',D.kode,{idBarang:item.id,barcode:miss}).then(function(r){
       if(r.slot===1)item.barcode1=miss;else item.barcode2=miss;
-      buildIdx();toast('Kode disimpan sebagai Barcode '+r.slot+' untuk '+item.nama);
+      buildIdx();toast(D.jenisAktif==='aset'?'Kode disimpan sebagai Kode QR '+r.slot+' untuk '+item.nama:'Kode disimpan sebagai Barcode '+r.slot+' untuk '+item.nama);
     },function(e){toast('Kode belum disimpan: '+errText(e))});
   }
   D.miss=null;$('#cari').value='';$('#hasil').innerHTML='';
@@ -1079,7 +1081,7 @@ function onScan(raw,dariKamera){
     beep(false);return;
   }
   tutupKamera();
-  D.miss=code;resetLangkah();renderMiss();beep(false);
+  D.miss=code;D.linkKode=false;resetLangkah();renderMiss();beep(false);
   $('#cari').focus();
 }
 function cariKode(){
@@ -1494,10 +1496,10 @@ function setTab(t){
 /* ---------- tab Hitung ---------- */
 function renderMiss(){
   var box=$('#miss');
-  if(!D.miss){box.innerHTML='';return}
-  box.innerHTML='<div class="miss"><div><b>Kode tidak dikenali:</b> <span class="mono">'+esc(D.miss)+'</span><br>'+(D.jenisAktif==='aset'?'Tidak cocok dengan kode aset mana pun. Cari asetnya lewat nama di bawah, atau tambahkan sebagai aset baru.':'Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat nama di bawah, atau tambahkan sebagai produk baru.')+'</div>'+
+  if(!D.miss){D.linkKode=false;box.innerHTML='';return}
+  box.innerHTML='<div class="miss"><div><b>Kode tidak dikenali:</b> <span class="mono">'+esc(D.miss)+'</span><br>'+(D.jenisAktif==='aset'?(D.linkKode?'Pilih aset dari hasil pencarian di bawah. Kode ini akan disimpan ke aset yang Anda pilih.':'Tidak cocok dengan kode aset mana pun. Anda bisa menambahkannya ke aset yang sudah ada, atau menambahkan sebagai aset baru.'):'Tidak cocok dengan Barcode 1 maupun Barcode 2. Cari barangnya lewat nama di bawah, atau tambahkan sebagai produk baru.')+'</div>'+
     (D.jenisAktif==='aset'?'':'<label><input type="checkbox" id="simpanKode"><span>Bila saya memilih barang dari pencarian, simpan kode ini ke barang tersebut (mengisi kolom barcode yang masih kosong)</span></label>')+
-    '<div class="acts" style="margin-top:0">'+(D.dariKamera?'<button class="btn sm" id="btnScanUlang" type="button">'+ic('camera')+'Scan ulang</button>':'')+'<button class="btn sm" id="btnBaruMiss" type="button">'+ic('box')+(D.jenisAktif==='aset'?'Tambah sebagai aset baru':'Tambah sebagai produk baru')+'</button><button class="btn ghost sm" id="batalMiss" type="button">'+ic('x')+'Batal</button></div></div>';
+    '<div class="acts" style="margin-top:0">'+(D.jenisAktif==='aset'?'<button class="btn sm" id="btnLinkMiss" type="button">'+ic('search')+(D.linkKode?'Batal pilih aset':'Tambah ke aset yang sudah ada')+'</button>':'')+(D.dariKamera?'<button class="btn sm" id="btnScanUlang" type="button">'+ic('camera')+'Scan ulang</button>':'')+'<button class="btn sm" id="btnBaruMiss" type="button">'+ic('box')+(D.jenisAktif==='aset'?'Tambah sebagai aset baru':'Tambah sebagai produk baru')+'</button><button class="btn ghost sm" id="batalMiss" type="button">'+ic('x')+'Batal</button></div></div>';
 }
 function stepFoto(judul){
   return '<div class="stepbox"><div class="stephead">'+ic('camera')+judul+'</div><div class="fotorow"><div id="fotoBox" class="prev">'+
@@ -2351,6 +2353,7 @@ document.addEventListener('click',function(e){
   var b=e.target.closest('button');var id=b?b.id:'';
   if(id==='btnScanUlang'){D.miss=null;renderMiss();bukaKamera();return}
   if(id==='batalMiss'){D.miss=null;renderMiss();$('#kodeIn').focus();return}
+  if(id==='btnLinkMiss'){D.linkKode=!D.linkKode;renderMiss();if(D.linkKode){var c=$('#cari');c.focus();c.scrollIntoView({block:'center',behavior:'smooth'})}return}
   if(id==='btnBaruMiss'){D.dariKamera=false;bukaBaru(D.miss);return}
   if(id==='btnMuatBarang'){infoBarang();muatBarang();return}
   if(id==='btnBukti'){$('#buktiFoto').click();return}
